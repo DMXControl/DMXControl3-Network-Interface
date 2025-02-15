@@ -1,0 +1,263 @@
+﻿syntax = "proto3";
+
+import "Common/Types/CommonTypes.proto";
+import "Common/Types/Timecode/TimecodeServiceTypes.proto";
+
+package LumosProtobuf.Timecode;
+
+message GetTimecodesResponse {
+
+	string requestId = 2;
+
+	repeated TimecodeDescriptor timecodes = 3;
+
+}
+
+message TimecodeCreationRequest {
+
+	string requestId = 2;
+	string timecodeNameTemplate = 5;
+
+	string copyFromTimecode = 10;
+}
+
+
+message TimecodeDeletionRequest {
+
+	string requestId = 1;
+
+	string timecodeId = 2;
+
+}
+
+message TimecodeDeletionResponse {
+
+	string requestId = 1;
+
+	string deletedTimecodeId = 2;
+
+}
+
+message TimecodeActionRequest {
+
+	string requestId = 2;
+
+	string timecodeId = 3;
+
+	.LumosProtobuf.Timecode.ETimecodeAction action = 4;
+}
+
+message TimecodeStateChangedMessage {
+
+	string Id = 2;
+	sint64 timeElapsed = 3;
+	int32 state = 4; 
+}
+
+message TimecodeChangedMessage {
+
+	.LumosProtobuf.EChangeType changeType = 3;
+	string timecodeId = 4;
+	TimecodeDescriptor timecodeData = 5;
+
+	repeated string properties = 6;
+	map<string,.LumosProtobuf.ObjectData> parameters = 7;
+}
+
+enum ETimecodeAction {
+
+	UNKNOWN_0 = 0;
+	PLAY = 1;
+	STOP = 2;
+	PAUSE = 3;
+	RECORD = 4;
+	CLEAR = 5;
+}
+
+message GetTracksResponse {
+
+	string requestId = 2;
+
+	repeated TrackDescriptor tracks = 3;
+
+}
+
+message TrackCreationRequest {
+
+	string requestId = 2;
+	string name = 4;
+	int32 trackType = 5;
+
+	string parentTimecodeId = 10;
+}
+
+message TrackDeletionRequest {
+
+	string requestId = 1;
+
+	string trackId = 2;
+
+}
+message TrackDeletionResponse {
+
+	string requestId = 1;
+
+	string deletedTrackId = 2;
+
+}
+
+message TrackAddChildrenRequest {
+
+	string requestId = 1;
+
+	string trackId = 2;
+	repeated string childrenIds = 3;
+	string userContextId = 4;
+	sint64 ticks = 5;
+}
+
+message TrackChangedMessage {
+
+	.LumosProtobuf.EChangeType changeType = 3;
+	string trackId = 4;
+	TrackDescriptor trackData = 5;
+
+	repeated string properties = 6;
+	map<string,.LumosProtobuf.ObjectData> parameters = 7;
+
+}
+
+message TrackEditRequest {
+	string requestId = 1;
+	string trackId = 2;
+	EEditType editType = 3;
+	string userContextId = 4;
+	repeated EditMessage editMessages = 5;
+
+	message EditMessage {
+		string id = 1;
+		string parameter=3;
+		oneof value {
+			bool newValueBool = 6;
+			sint32 newValueInt = 7;
+			sint64 newValueLong = 8;
+			float newValueFloat = 9;
+			string newValueString = 10;
+		}
+		
+		sint64 ticks = 11;
+	}
+}
+
+
+enum EEditType {
+    EMPTY = 0;
+	ADD = 1;
+	CHANGE = 2;
+	REMOVE = 3;
+	COPY = 4;
+	CUT = 5;
+	PASTE = 6;	
+}
+
+message GetMarkersResponse {
+	string requestId = 2;
+	repeated MarkerDescriptor markers = 3;
+}
+
+message MarkerCreationRequest {
+	string userContextId = 1;
+	string requestId = 2;
+	string id = 3;
+	string name = 4;
+	int32 markerType = 5;
+
+	sint64 ticks = 6;
+	sint64 ticksEnd = 7;
+
+	string parentTimecodeId = 10;
+}
+
+message MarkerDeletionRequest {
+	string requestId = 1;
+	string markerId = 2;
+}
+message MarkerDeletionResponse {
+
+	string requestId = 1;
+	string deletedMarkerId = 2;
+}
+
+message MarkerEditRequest {
+	string requestId = 1;
+	string markerId = 2;
+	EEditType editType = 3;
+	string userContextId = 4;
+	string parameter=5;
+	oneof value {
+		bool newValueBool = 6;
+		sint32 newValueInt = 7;
+		sint64 newValueLong = 8;
+		float newValueFloat = 9;
+		string newValueString = 10;
+	}
+}
+
+message MarkerChangedMessage {
+
+	.LumosProtobuf.EChangeType changeType = 3;
+	string markerId = 4;
+	MarkerDescriptor markerData = 5;
+
+	repeated string properties = 6;
+	map<string,.LumosProtobuf.ObjectData> parameters = 7;
+
+}
+
+message ActionNodeChangedMessage {
+
+	string timecodeId = 1;
+	string trackId = 2;
+	.LumosProtobuf.EChangeType changeType = 3;
+	string actionNodeId = 4;
+	ActionNodeDescriptor actionNodeData = 5;
+}
+
+message GetSnipsResponse {
+	string requestId = 2;
+	repeated SnipDescriptor snips = 3;
+}
+
+message SnipCreationRequest {
+	string requestId = 2;
+	string id = 3;
+	string name = 4;
+	string soundFileName = 5;
+	uint64 tick = 6;
+	bool selected = 7;
+	uint64 startTrim = 8;
+	uint64 endTrim = 9;	
+
+	string parentTrackId = 10;
+}
+
+message SnipDeletionRequest {
+	string requestId = 1;
+	string snipId = 2;
+}
+message SnipDeletionResponse {
+
+	string requestId = 1;
+	string deletedSnipId = 2;
+}
+
+message SnipChangedMessage {
+
+	.LumosProtobuf.EChangeType changeType = 3;
+	string snipId = 4;
+	SnipDescriptor snipData = 5;
+	
+	repeated string properties = 6;
+	map<string,.LumosProtobuf.ObjectData> parameters = 7;
+
+}

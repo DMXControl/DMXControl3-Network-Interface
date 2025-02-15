@@ -1,0 +1,27 @@
+﻿syntax = "proto3";
+
+package LumosProtobuf.Macro;
+
+message MacroDescriptor
+{
+	string id = 2;
+	string name = 3;
+	uint32 number = 6;
+	
+	repeated MacroFaderDescriptor faders = 11;
+	repeated MacroButtonDescriptor buttons = 12;
+
+	bytes bitmap = 20;
+}
+message MacroFaderDescriptor
+{
+	uint32 number = 2;
+	string label = 3;
+	double faderPosition = 4;	
+}
+message MacroButtonDescriptor
+{
+	uint32 number = 2;
+	string label = 3;
+	bool active = 4;	
+}

@@ -1,0 +1,163 @@
+﻿syntax = "proto3";
+
+import "Common/Types/CommonTypes.proto";
+import "Common/Types/Executor/ExecutorServiceTypes.proto";
+
+package LumosProtobuf.Executor;
+
+
+message GetExecutorsResponse {
+
+	string requestId = 2;
+
+	repeated ExecutorDescriptor executors = 3;
+
+}
+
+message GetExecutorPagesResponse {
+
+	string requestId = 2;
+
+	repeated ExecutorPageDescriptor executorPages = 3;
+
+}
+
+message GetExecutorMemberWrappersResponse {
+
+	string requestId = 2;
+
+	repeated ExecutorMemberWrapperDescriptor executorMemberWrappers = 3;
+
+}
+
+message SetExecutorValuesRequest {
+
+	string requestId = 2;
+	string executorId = 3;
+	string userContextId = 4;
+
+	.LumosProtobuf.ENullableBool button1 = 10;
+	.LumosProtobuf.ENullableBool button2 = 11;
+	.LumosProtobuf.ENullableBool button3 = 12;
+	.LumosProtobuf.ENullableBool button4 = 13;
+
+	oneof fader
+	{
+		double faderIncrement = 16;
+		double faderAbsolut = 14;
+	}
+	
+	string key = 30;
+}
+
+message ExecutorCreationRequest {
+
+	string requestId = 2;
+
+}
+
+message ExecutorPageCreationRequest {
+
+	string requestId = 2;
+
+	string userContextId = 4;
+
+	string copyFromPage = 7;
+	string pageNameTemplate = 8;
+}
+
+message ExecutorPageDeletionRequest {
+
+	string requestId = 2;
+
+	string executorPageId = 3;
+
+
+}
+
+message ExecutorPageDeletionResponse {
+
+	string requestId = 2;
+
+	bool deleted = 3;
+
+}
+
+message ExecutorModifyRequest {
+
+	string requestId = 2;
+	string executorId = 3;
+	EModType type = 4;
+
+	string memberId = 10;
+
+
+	enum EModType {
+		
+		UNKNOWN = 0;
+		SET = 1;
+		REMOVE = 2;
+
+	}
+
+}
+
+message ExecutorModifyResponse {
+
+	string requestId = 2;
+
+	bool executorNotFound = 3;
+	bool memberChanged = 4;
+
+}
+
+
+message ExecutorChangedMessage {
+
+	.LumosProtobuf.EChangeType changeType = 3;
+	string executorId = 4;
+	ExecutorDescriptor executorData = 5;
+	
+	repeated string properties = 6;
+	map<string,.LumosProtobuf.ObjectData> parameters = 7;
+
+}
+
+message ExecutorPageChangedMessage {
+
+	.LumosProtobuf.EChangeType changeType = 3;
+	string executorPageId = 4;
+	ExecutorPageDescriptor executorPageData = 5;
+
+	oneof change {
+	
+		string property = 6;
+		string parameter = 7;
+	
+	}
+
+	.LumosProtobuf.ObjectData newValue = 9;
+
+}
+
+message ExecutorMemberWrapperChangedMessage {
+
+	.LumosProtobuf.EChangeType changeType = 3;
+	string executorMemberWrapperId = 4;
+	ExecutorMemberWrapperDescriptor executorMemberWrapperData = 5;
+
+	string property = 6;
+
+	.LumosProtobuf.ObjectData newValue = 9;
+
+}
+
+message FixExecutorsRequest {
+
+	string requestId = 2;
+	string userContextId = 3; //Filled by Umbra
+	
+	repeated string idsToFix = 5;
+	repeated string idsToUnfix = 6;
+
+}

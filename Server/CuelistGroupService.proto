@@ -1,0 +1,20 @@
+syntax = "proto3";
+
+package LumosProtobufServer;
+
+import "Common/Types/Cuelist/CuelistGroupServiceTypes.proto";
+import "Common/Types/CommonTypes.proto";
+
+option csharp_namespace = "UmbraKernel";
+
+service CuelistGroupService {
+
+  rpc GetCuelistGroups (stream .LumosProtobuf.Cuelist.GetCuelistGroupsResponse) returns (stream .LumosProtobuf.GetMultipleRequest);
+  rpc CreateCuelistGroups (stream .LumosProtobuf.ConfirmedResponse) returns (stream .LumosProtobuf.Cuelist.CuelistGroupCreationRequest);
+  rpc DeleteCuelistGroups (stream .LumosProtobuf.Cuelist.CuelistGroupDeletionResponse) returns (stream .LumosProtobuf.Cuelist.CuelistGroupDeletionRequest);
+  rpc ModifyCuelistGroups (stream .LumosProtobuf.ConfirmedResponse) returns (stream .LumosProtobuf.Cuelist.CuelistGroupModifyRequest);
+
+  rpc SendCuelistGroupChanges (stream .LumosProtobuf.Cuelist.CuelistGroupChangedMessage) returns (.LumosProtobuf.ConfirmedResponse);
+
+}
+

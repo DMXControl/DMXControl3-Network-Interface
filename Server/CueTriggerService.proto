@@ -1,0 +1,16 @@
+syntax = "proto3";
+
+package LumosProtobufServer;
+
+import "Common/Types/Cue/CueTriggerServiceTypes.proto";
+import "Common/Types/CommonTypes.proto";
+
+option csharp_namespace = "UmbraKernel";
+
+service CueTriggerService {
+
+  rpc DoGetSceneTriggers(stream .LumosProtobuf.Cue.CueTriggersResponse) returns (stream .LumosProtobuf.GetMultipleRequest);
+
+
+}
+

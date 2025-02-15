@@ -1,0 +1,53 @@
+﻿syntax = "proto3";
+
+import "Common/Types/User/UserServiceTypes.proto";
+
+package LumosProtobuf.User;
+
+message GetUserContextResponse 
+{
+
+	string requestId = 2;
+
+	UserContextDescriptor userContext = 4;
+
+}
+
+message UserContextChangedMessage 
+{
+
+	UserContextDescriptor userContextData = 5;
+
+}
+
+message GetUsersResponse 
+{
+	string requestId = 2;
+
+	repeated UserDescriptor users = 3;
+}
+
+message GetUserPermissionsResponse
+{
+	string requestId = 2;
+
+	repeated UserPermissionDescriptor permissions = 3;
+}
+
+message CreateUserRequest
+{
+	string requestId = 2;
+}
+
+message DeleteUserRequest
+{
+	string requestId = 2;
+}
+
+message ModifyUserRequest
+{
+	string requestId = 2;
+
+	string userId = 3;
+
+}

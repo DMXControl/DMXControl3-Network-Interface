@@ -1,0 +1,19 @@
+syntax = "proto3";
+
+package LumosProtobufClient;
+
+import "Common/Types/Settings/MainSwitchServiceTypes.proto";
+import "Common/Types/CommonTypes.proto";
+
+option csharp_namespace = "UmbraClient";
+
+service MainSwitchClient {
+
+	rpc GetMainSwitches(.LumosProtobuf.GetMultipleRequest) returns (.LumosProtobuf.GetMainSwitchesResponse);
+
+	rpc SetMainSwitch(.LumosProtobuf.MainSwitchSetRequest) returns (.LumosProtobuf.ConfirmedResponse);
+
+	rpc RecieveMainSwitchChanges(.LumosProtobuf.GetRequest) returns (stream .LumosProtobuf.MainSwitchChangedMessage);
+
+}
+

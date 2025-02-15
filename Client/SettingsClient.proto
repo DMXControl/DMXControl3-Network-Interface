@@ -1,0 +1,30 @@
+syntax = "proto3";
+
+package LumosProtobufClient;
+
+import "Common/Types/SettingsServiceTypes.proto";
+import "Common/Types/CommonTypes.proto";
+
+option csharp_namespace = "UmbraClient";
+
+service SettingsClient {
+
+	rpc GetDefaultConfiguration(.LumosProtobuf.GetDefaultConfigurationRequest) returns (.LumosProtobuf.GetDefaultConfigurationResponse);
+
+	rpc GetRegisteredSettings (.LumosProtobuf.GetRequest) returns (.LumosProtobuf.GetRegisteredSettingsResponse);
+
+	rpc RegisterSetting(.LumosProtobuf.RegisterSettingRequest) returns (.LumosProtobuf.ConfirmedResponse);
+
+	rpc GetSetting (.LumosProtobuf.GetSettingRequest) returns (.LumosProtobuf.GetSettingResponse);
+	rpc GetSettingType (.LumosProtobuf.GetSettingRequest) returns (.LumosProtobuf.GetSettingTypeResponse);
+
+	rpc GetDynamicEnumValues (.LumosProtobuf.GetSettingRequest) returns (.LumosProtobuf.SettingsDynamicEnumData);
+
+	rpc SetSetting (.LumosProtobuf.SetSettingRequest) returns (.LumosProtobuf.ConfirmedResponse);
+
+	rpc ResetApplicationSettings (.LumosProtobuf.ActionRequest) returns (.LumosProtobuf.ConfirmedResponse);
+
+	rpc ReceiveSettingChanges (.LumosProtobuf.GetRequest) returns (stream .LumosProtobuf.SettingChangedMessage);
+	rpc ReceiveDefaultConfigurationChanges (.LumosProtobuf.GetRequest) returns (stream .LumosProtobuf.DefaultConfigurationChangeMessage);
+}
+

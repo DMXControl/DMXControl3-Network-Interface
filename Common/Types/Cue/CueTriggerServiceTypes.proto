@@ -1,0 +1,29 @@
+﻿syntax = "proto3";
+
+//import "Common/Types/CommonTypes.proto";
+
+package LumosProtobuf.Cue;
+
+message TriggerObjectData {
+
+	string name = 2;
+	string regex = 3;
+	repeated string examples = 4;
+
+}
+
+message TriggerValueData {
+
+	string trigger = 2;
+	string value = 3;
+
+}
+
+message CueTriggersResponse {
+
+	string requestId = 2;
+
+	repeated TriggerObjectData triggers = 3;
+
+}
+

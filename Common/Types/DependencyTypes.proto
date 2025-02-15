@@ -1,0 +1,35 @@
+syntax = "proto3";
+
+package LumosProtobuf;
+
+message DependencyData {
+
+	string Id = 3;
+	string Type = 4;
+	string Name = 5;
+
+	repeated DependencyData children = 6;
+	repeated DependencyObject dependencies = 7;
+
+}
+
+message DependencyObject {
+
+	string Id = 3;
+	string Type = 4;
+	string Name = 5;
+	
+	repeated DependencySolution possibleSolutions = 6;
+	DependencySolution solution = 7;
+
+}
+
+message DependencySolution {
+
+	string Id = 3;
+	string Description = 4;
+	string Solution = 5;
+
+}
+
+

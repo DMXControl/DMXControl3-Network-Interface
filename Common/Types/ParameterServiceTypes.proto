@@ -1,0 +1,107 @@
+syntax = "proto3";
+
+package LumosProtobuf;
+
+import "Common/Types/CommonTypes.proto";
+import "Common/Types/ValueTypes.proto";
+
+message GenericParameterData {
+
+	string name = 2;
+	string parameterValueType_AQ = 3; //Assembly Qualified Type Name of Type of Parameter Value
+	string type = 4; //Type, e.g. Device, DeviceGroup, ...
+	string subtype = 5; //Subtype within a type, e.g. Electricity Parameters within an Device
+
+	sint32 saveOrder = 7;
+	int32 valueType = 8; //EUIValueType Enum Value
+	bool nullable = 9;
+
+	repeated EnumValue enumValues = 15;
+
+	int32 options = 16; //EGenericParameterOptions Enum Value, using int due to Flags
+	string displayName = 17;
+
+	ParameterCategory rootCategory = 20;
+	ParameterCategory category = 21;
+
+	bool isTranslated = 22;
+	string description = 23;
+	string unit = 24;
+
+	ObjectData upperBound = 30;
+	ObjectData lowerBound = 31;
+
+	map<string,string> metadata = 40;
+
+	message EnumValue {
+	
+		oneof value{
+			
+			ObjectData obj = 1;
+			IEnumObjectData ienum = 2;
+		
+		}
+	
+	}
+}
+
+message ParameterCategory {
+
+	string id = 2;
+	string name = 3;
+	ParameterCategory subCategory = 4;
+	bool expanded = 5;
+
+}
+
+message GetParametersRequest {
+
+	string type = 4;
+	string id = 5;
+
+	bool includingValues = 6;
+	string userContextId = 7; //Used for Attachable Parameters
+
+	repeated string nameFilter = 8;
+}
+
+message GetParametersResponse {
+
+	string type = 4;
+	string id = 5;
+
+	repeated GenericParameterData parameters = 8;
+
+	map<string, ObjectData> parameterValues = 9; //Optional Map of current Parameter Values
+
+}
+
+message GetParameterValueRequest 
+{
+	string id = 5;
+	GenericParameterData parameter = 6;
+	string userContextId = 7; //Used for Attachable Parameters
+
+}
+
+message GetParameterValueResponse 
+{
+	string id = 5;
+	GenericParameterData parameter = 6;
+
+	ObjectData value = 8;
+
+}
+
+message SetTestParameterValueRequest {
+
+	string id = 5;
+	GenericParameterData parameter = 6;
+	string userContextId = 7; //Used for Attachable Parameters
+
+	ObjectData value = 8;
+
+}
+
+
+

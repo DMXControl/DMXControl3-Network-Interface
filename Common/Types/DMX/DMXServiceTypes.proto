@@ -1,0 +1,65 @@
+syntax = "proto3";
+
+import "Common/Types/CommonTypes.proto";
+
+package LumosProtobuf;
+
+message GetDMXRequest {
+
+	int32 dmxOutStart = 1; //1-n
+	int32 dmxOutStop = 2; //1-n
+	int32 dmxInStart = 3; //1-n
+	int32 dmxInStop = 4; //1-n
+
+	string requestId = 5;
+}
+
+message SetDMXRequest {
+
+	string requestId = 1;
+
+	string source = 3;
+	repeated int32 dmxChannels = 4;
+	bytes dmxValues = 5;
+
+}
+
+message ClearDMXRequest {
+
+	string requestId = 1;
+
+	string source = 3;
+}
+
+message DMXResponse {
+
+	string requestId = 1;
+
+	bool inValues = 2;
+	repeated int32 dmxChannels = 4;
+	bytes dmxValues = 5;
+
+	repeated .LumosProtobuf.DMXSourceData sources = 6;
+}
+
+message DMXIn2OutMappingRequestResponse {
+	
+	string requestId = 1;
+	repeated DMXIn2OutMappingData mapping = 2;
+}
+
+message DMXSourceData {
+
+	string name = 1;
+	string id = 2;
+	repeated int32 dmxChannels = 3;
+
+}
+
+message DMXIn2OutMappingData {
+
+	DMXAddressData inAddress = 1;
+	DMXAddressData outAddress = 2;
+	int32 mappingMode = 3; //EInMappingMode
+
+}

@@ -1,0 +1,31 @@
+syntax = "proto3";
+
+package LumosProtobufClient;
+
+import "Common/Types/User/UserServiceTypes.proto";
+import "Common/Types/User/UserServiceCRUDTypes.proto";
+import "Common/Types/Executor/ExecutorServiceCRUDTypes.proto";
+import "Common/Types/CommonTypes.proto";
+
+option csharp_namespace = "UmbraClient";
+
+service UserClient {
+	rpc GetUserContext (.LumosProtobuf.GetMultipleRequest) returns (.LumosProtobuf.User.GetUserContextResponse);
+	rpc ReceiveUserContextChanges (.LumosProtobuf.GetRequest) returns (stream .LumosProtobuf.User.UserContextChangedMessage);
+
+	rpc Bind(.LumosProtobuf.User.UserContextRequest) returns (.LumosProtobuf.User.UserContextResponse);
+	rpc Destroy(.LumosProtobuf.User.UserContextDestructionRequest) returns (.LumosProtobuf.ConfirmedResponse);
+	
+	//Devices
+	rpc SelectDevicesAndGroups (.LumosProtobuf.GetMultipleRequest) returns (.LumosProtobuf.ConfirmedResponse);
+
+	//Executors
+	rpc SelectExecutorPage (.LumosProtobuf.GetMultipleRequest) returns (.LumosProtobuf.ConfirmedResponse);
+	rpc SelectExecutor (.LumosProtobuf.GetMultipleRequest) returns (.LumosProtobuf.ConfirmedResponse);
+	rpc FixExecutors (.LumosProtobuf.Executor.FixExecutorsRequest) returns (.LumosProtobuf.ConfirmedResponse);
+
+	//Timecodes
+	rpc SelectTimecode (.LumosProtobuf.GetMultipleRequest) returns (.LumosProtobuf.ConfirmedResponse);
+	rpc SelectTrack (.LumosProtobuf.GetMultipleRequest) returns (.LumosProtobuf.ConfirmedResponse);
+}
+

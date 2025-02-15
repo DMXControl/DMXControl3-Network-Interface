@@ -1,0 +1,15 @@
+syntax = "proto3";
+
+package LumosProtobufClient;
+
+import "Common/Types/Cue/CueTriggerServiceTypes.proto";
+import "Common/Types/CommonTypes.proto";
+
+option csharp_namespace = "UmbraClient";
+
+service CueTriggerClient {
+
+	rpc GetCueTriggers(.LumosProtobuf.GetMultipleRequest) returns (.LumosProtobuf.Cue.CueTriggersResponse);
+
+}
+

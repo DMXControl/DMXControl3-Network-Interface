@@ -1,0 +1,74 @@
+syntax = "proto3";
+
+package LumosProtobuf;
+
+import "Common/Types/CommonTypes.proto";
+
+message PowerSourceDescriptor {
+
+	string id = 2;
+	uint32 number = 3;
+	repeated string subSources = 4;
+	repeated string consumers = 5;
+	string parentSource = 6;
+	string name = 7;
+
+	uint32 possibleAmps = 10;
+	bool displayed = 11;
+	double sumUsageAmps = 12;
+}
+
+message GetPowerSourcesResponse {
+
+	string requestId = 2;
+	repeated PowerSourceDescriptor powerSources = 3;
+
+}
+
+message PowerSourceCreationRequest {
+
+	string requestId = 2;
+	string powerSourceNameTemplate = 3;
+
+}
+
+message PowerSourceDeletionRequest {
+
+	string powerSourceId = 2;
+
+}
+
+message PowerSourceModificationRequest {
+
+	string requestId = 2;
+
+	string powerSourceId = 6;
+	repeated string subSources = 3;
+	repeated string consumers = 4;
+	EChangeType type = 5;
+
+}
+
+message PowerSourceChangedMessage {
+
+	EChangeType changeType = 3;
+	string powerSourceId = 4;
+	PowerSourceDescriptor powerSourceData = 5;
+
+	oneof change {
+	
+		string property = 6;
+		string parameter = 7;
+	
+	}
+
+	ObjectData newValue = 9;
+
+}
+
+message PowerSourceConsumptionChangeMessage {
+
+	map<string, double> changedConsumptionAmps = 2;
+	map<string, double> changedConsumptionWatts = 3;
+
+}

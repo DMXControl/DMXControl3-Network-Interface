@@ -1,0 +1,130 @@
+syntax = "proto3";
+
+package LumosProtobuf;
+
+import "Common/Types/UmbraServiceTypes.proto";
+
+enum EMonitorSlotType 
+{ 
+	INCREMENTAL = 0;
+	INCREMENTAL_PER_TIME = 1;
+	PERCENT = 2;
+	ABSOLUTE = 3;
+	DISTINCT_VALUES = 4;
+	DISTINCT_VALUES_PER_TIME = 5;
+} 
+
+message MonitorSlotData {
+
+	string name = 2;
+	string user = 3;
+	int32 id = 4;
+	EMonitorSlotType type = 5;
+
+	double value = 10;
+	double valueBackup = 11;
+	bool useAverage = 12;
+	int32 distinctValues = 13;
+	double average = 14;
+
+	double min = 20;
+	double max = 21;
+	double minValue = 22;
+	double maxValue = 23;
+}
+
+message GetMonitorSlotsResponse {
+
+	string requestId = 2;
+
+	repeated MonitorSlotData slots = 3;
+
+}
+
+message DMXStatisticsResponse {
+
+	int32 dmxValuesPerSecond = 2;
+	double dmxFrameRate = 3;
+
+}
+
+message TransferStatisticData {
+
+	string name = 2;
+	string provider = 3;
+
+	int64 transferedBytes = 4;
+	int64 totalMessages = 5;
+	double bytesPerSecondCurrent = 6;
+	double bytesPerSecondMaximum = 7;
+
+	double messagesPerSecondCurrent = 8;
+	double messagesPerSecondMaximum = 9;
+}
+
+message TransferStatisticsResponse {
+
+	string requestId = 2;
+
+	repeated TransferStatisticData statistics = 3;
+
+}
+
+message End2EndLatencyRequestResponse {
+
+	string requestId = 2;
+
+	bytes testData = 3;
+
+}
+
+enum EMessageDirection 
+{
+	BOTH = 0;
+	REQUEST = 1;
+	RESPONSE = 2;
+}
+
+enum ERPCType
+{
+	SINGLE = 0;
+	MULTI_REQUEST = 1;
+	MULTI_RESPONSE = 2;
+	BIDIRECTION = 3;
+}
+
+message TransferMonitorRequest {
+
+	string requestId = 2;
+	repeated MessageFilter filter = 3;
+	bool sendAsJson = 4;
+
+	message MessageFilter
+	{
+		EMessageDirection direction = 2;
+		string rpcNameRegex = 3;
+		string sourceRuntimeIDRegex = 4;
+
+		//Used to negate the Filter Result
+		bool negate = 5;
+	}
+}
+
+message TransferMonitorMessage {
+
+	string rpcName = 2;
+	ClientInfo source = 3;
+	EMessageDirection direction = 4;
+	ERPCType rpcType = 5;
+
+	oneof message 
+	{
+		bytes protobufMessage = 42;
+		string jsonMessage = 43;
+	}
+
+	string protobufType_AQ = 41;
+
+}
+
+

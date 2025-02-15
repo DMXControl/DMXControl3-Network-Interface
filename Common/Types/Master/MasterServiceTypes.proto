@@ -1,0 +1,58 @@
+﻿syntax = "proto3";
+
+import "Common/Types/ValueTypes.proto";
+import "Common/Types/CommonTypes.proto";
+import "Common/Types/DependencyTypes.proto";
+
+package LumosProtobuf.Master;
+
+enum EMasterType {
+
+	UNKNOWN = 0;
+	GRAND = 1;
+	GROUP = 2;
+	DEVICE = 3;
+	SPECIAL = 4;
+	PARAMETER = 21;
+	COLOR = 22;
+	POSITION = 23;
+	SPEED = 30;
+
+}
+
+message MasterDescriptor {
+
+	string masterId = 2;
+	string name = 3;
+	uint32 number = 4;
+
+	EMasterType type = 5;
+	string displayName = 6;
+
+	oneof masterValue {
+		double intensity = 10;
+		double parameter = 11;
+		double speed = 12;
+		LumosColorData color = 13;
+		LumosPositionData position = 14;
+	}
+	
+	map<string, MasterFaderDescriptor> faders = 31;
+	map<string, MasterButtonDescriptor> buttons = 32;
+}
+message MasterFaderDescriptor {
+
+	string masterId = 2;
+	string name = 3;
+	oneof faderValue
+	{
+		double increment = 4;
+		double absolut = 5;
+	}
+}
+message MasterButtonDescriptor {
+
+	string masterId = 2;
+	string name = 3;
+	bool ButtonValue = 4;	
+}

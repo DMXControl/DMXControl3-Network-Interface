@@ -1,0 +1,17 @@
+syntax = "proto3";
+
+package LumosProtobufServer;
+
+import "Common/Types/PluginManagementTypes.proto";
+import "Common/Types/CommonTypes.proto";
+
+option csharp_namespace = "UmbraKernel";
+
+service PluginManagementService {
+
+	rpc SendPlugins(stream .LumosProtobuf.GetPluginsResponse) returns (stream .LumosProtobuf.GetPluginsRequest);
+	rpc SendIsPluginEnabled(stream .LumosProtobuf.EnableDisablePluginRequestResponse) returns (stream .LumosProtobuf.EnableDisablePluginRequestResponse);
+	rpc DoSetPluginEnabled(stream .LumosProtobuf.ConfirmedResponse) returns (stream .LumosProtobuf.EnableDisablePluginRequestResponse);
+
+}
+

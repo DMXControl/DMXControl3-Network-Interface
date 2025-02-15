@@ -1,0 +1,41 @@
+﻿syntax = "proto3";
+
+package LumosProtobuf;
+
+enum EPluginType {
+
+	EPluginType_UNKNOWN = 0;
+	EPluginType_KERNEL = 1;
+	EPluginType_GUI = 2;
+
+}
+
+message PluginMetadata {
+
+	string id = 2;
+	string name = 3;
+	EPluginType type = 4;
+
+}
+
+message GetPluginsRequest {
+
+	string requestId = 2;
+	repeated string pluginIds = 3; //Leave empty for all
+
+}
+
+message GetPluginsResponse {
+
+	string requestId = 2;
+	repeated PluginMetadata plugins = 3;
+
+}
+
+message EnableDisablePluginRequestResponse {
+
+	string requestId = 2;
+	string pluginId = 3;
+	bool enabled = 4;
+
+}

@@ -1,0 +1,24 @@
+syntax = "proto3";
+
+package LumosProtobuf;
+
+//import "Common/Types/CommonTypes.proto";
+import "Common/Types/UmbraServiceTypes.proto";
+
+message BroadcastMessage {
+
+	string requestId = 2;
+	string senderName = 3;
+	repeated string receiverHostnames = 4;
+	EClientType receiverType = 5;
+	string messageType = 6;
+
+	oneof message {
+	
+		string stringContent = 10;
+		bytes rawContent = 11;
+	
+	}
+
+}
+

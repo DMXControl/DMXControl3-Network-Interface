@@ -1,0 +1,21 @@
+syntax = "proto3";
+
+package LumosProtobufClient;
+
+import "Common/Types/ElectricityServiceTypes.proto";
+import "Common/Types/CommonTypes.proto";
+
+option csharp_namespace = "UmbraClient";
+
+service ElectricityClient {
+
+	rpc GetPowerSources (.LumosProtobuf.GetMultipleRequest) returns (.LumosProtobuf.GetPowerSourcesResponse);
+
+	rpc CreatePowerSource(.LumosProtobuf.PowerSourceCreationRequest) returns (.LumosProtobuf.ConfirmedResponse);
+	rpc DeletePowerSource(.LumosProtobuf.PowerSourceDeletionRequest) returns (.LumosProtobuf.ConfirmedResponse);
+	rpc ModifyPowerSource(.LumosProtobuf.PowerSourceModificationRequest) returns (.LumosProtobuf.ConfirmedResponse);
+
+	rpc ReceivePowerSourceChanges (.LumosProtobuf.GetRequest) returns (stream .LumosProtobuf.PowerSourceChangedMessage);
+	rpc ReceivePowerSourceConsumptionChanges (.LumosProtobuf.GetRequest) returns (stream .LumosProtobuf.PowerSourceConsumptionChangeMessage);
+}
+

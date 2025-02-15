@@ -1,0 +1,36 @@
+syntax = "proto3";
+
+package LumosProtobufClient;
+
+//import "Common/Types/Executor/ExecutorServiceTypes.proto";
+import "Common/Types/Executor/ExecutorServiceCRUDTypes.proto";
+import "Common/Types/CommonTypes.proto";
+
+option csharp_namespace = "UmbraClient";
+
+service ExecutorClient {
+
+	rpc GetExecutors(.LumosProtobuf.GetMultipleRequest) returns (.LumosProtobuf.Executor.GetExecutorsResponse);
+	rpc GetExecutorPages(.LumosProtobuf.GetMultipleRequest) returns (.LumosProtobuf.Executor.GetExecutorPagesResponse);
+	rpc GetExecutorMemberWrappers(.LumosProtobuf.GetMultipleRequest) returns (.LumosProtobuf.Executor.GetExecutorMemberWrappersResponse);
+	
+    //Not allowed anymore since 3.3 due to Executor Refactoring pgrote 15.08.2021
+	//rpc CreateExecutor(.LumosProtobuf.Executor.ExecutorCreationRequest) returns (.LumosProtobuf.ConfirmedResponse);
+	rpc CreateExecutorPage(.LumosProtobuf.Executor.ExecutorPageCreationRequest) returns (.LumosProtobuf.ConfirmedResponse);
+	//rpc CreateExecutorPageSet(.LumosProtobuf.Executor.ExecutorPageSetCreationRequest) returns (.LumosProtobuf.ConfirmedResponse);
+	
+    //Not allowed anymore since 3.3 due to Executor Refactoring pgrote 15.08.2021
+	//rpc DeleteExecutor(.LumosProtobuf.Executor.ExecutorDeletionRequest) returns (.LumosProtobuf.Executor.ExecutorDeletionResponse);
+	rpc DeleteExecutorPage(.LumosProtobuf.Executor.ExecutorPageDeletionRequest) returns (.LumosProtobuf.Executor.ExecutorPageDeletionResponse);
+	
+	rpc ModifyExecutor(.LumosProtobuf.Executor.ExecutorModifyRequest) returns (.LumosProtobuf.Executor.ExecutorModifyResponse);
+	//Not allowed anymore since 3.3 due to Executor Refactoring pgrote 15.08.2021
+	//rpc ModifyExecutorPage(.LumosProtobuf.Executor.ExecutorPageModifyRequest) returns (.LumosProtobuf.Executor.ExecutorPageModifyResponse);
+
+	rpc SetExecutorValues(.LumosProtobuf.Executor.SetExecutorValuesRequest) returns (.LumosProtobuf.ConfirmedResponse);
+
+	rpc ReceiveExecutorChanges(.LumosProtobuf.GetRequest) returns (stream .LumosProtobuf.Executor.ExecutorChangedMessage);
+	rpc ReceiveExecutorPageChanges(.LumosProtobuf.GetRequest) returns (stream .LumosProtobuf.Executor.ExecutorPageChangedMessage);
+	rpc ReceiveExecutorMemberWrapperChanges(.LumosProtobuf.GetRequest) returns (stream .LumosProtobuf.Executor.ExecutorMemberWrapperChangedMessage);
+}
+

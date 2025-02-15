@@ -1,0 +1,36 @@
+syntax = "proto3";
+
+package LumosProtobufServer;
+
+import "Common/Types/Project/ProjectServiceTypes.proto";
+import "Common/Types/CommonTypes.proto";
+
+option csharp_namespace = "UmbraKernel";
+
+service ProjectService {
+
+	rpc SendProjects(stream .LumosProtobuf.GetProjectsResponse) returns (stream .LumosProtobuf.GetMultipleRequest);
+	rpc DoCreateProject(stream .LumosProtobuf.ProjectCreationResponse) returns (stream .LumosProtobuf.ProjectCreationRequest);
+	rpc DoDeleteProject(stream .LumosProtobuf.ConfirmedResponse) returns (stream .LumosProtobuf.ProjectDeletionRequest);
+	rpc DoModifyProject(stream .LumosProtobuf.ConfirmedResponse) returns (stream .LumosProtobuf.ProjectModifyRequest);
+
+	rpc DoImportProject(stream .LumosProtobuf.ImportProjectResponse) returns (stream .LumosProtobuf.ImportProjectRequest);
+	rpc DoExportProject(stream .LumosProtobuf.ExportProjectResponse) returns (stream .LumosProtobuf.ExportProjectRequest);
+
+	rpc SendProjectTodos(stream .LumosProtobuf.GetProjectTodoResponse) returns (stream .LumosProtobuf.GetMultipleRequest);
+	rpc DoCreateProjectTodo(stream .LumosProtobuf.ConfirmedResponse) returns (stream .LumosProtobuf.ProjectTodoCreationRequest);
+	rpc DoModifyProjectTodo(stream .LumosProtobuf.ConfirmedResponse) returns (stream .LumosProtobuf.ProjectTodoModifyRequest);
+	rpc DoDeleteProjectTodo(stream .LumosProtobuf.ConfirmedResponse) returns (stream .LumosProtobuf.ProjectTodoDeletionRequest);
+
+	rpc SendProjectState(stream .LumosProtobuf.GetProjectStateRespose) returns (stream .LumosProtobuf.GetRequest);
+	rpc SendProjectDirty(stream .LumosProtobuf.ProjectDirtyResponse) returns (stream .LumosProtobuf.ProjectDirtyRequest);
+	rpc SendProjectWarning(stream .LumosProtobuf.ProjectWarningResponse) returns (stream .LumosProtobuf.ProjectWarningRequest);
+
+	rpc DoCloseProject(stream .LumosProtobuf.ProjectChangeStatusResponse) returns (stream .LumosProtobuf.CloseProjectVersionRequest);
+	rpc DoLoadProject(stream .LumosProtobuf.ProjectChangeStatusResponse) returns (stream .LumosProtobuf.LoadProjectVersionRequest);
+	rpc DoSaveProject(stream .LumosProtobuf.ProjectChangeStatusResponse) returns (stream .LumosProtobuf.SaveProjectVersionRequest);
+
+	rpc SendProjectTodoChanges(stream .LumosProtobuf.ProjectTodoChangedMessage) returns (.LumosProtobuf.ConfirmedResponse);
+	rpc SendProjectChanges(stream .LumosProtobuf.ProjectChangedMessage) returns (.LumosProtobuf.ConfirmedResponse);
+}
+

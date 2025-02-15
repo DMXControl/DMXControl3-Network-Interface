@@ -1,0 +1,349 @@
+syntax = "proto3";
+
+package LumosProtobuf;
+
+import "Common/Types/Device/DeviceServiceTypes.proto";
+import "Common/Types/CommonTypes.proto";
+import "Common/Types/DependencyTypes.proto";
+
+message SetProgrammerValueRequest {
+
+	string groupId = 1;
+	string propertyId = 2;
+	string userContextId = 3;
+
+	oneof value {
+		DevicePropertyValue dpv = 10;
+		FannedPropertyValue fpv = 11;
+
+		EGroupHandling groupHandling = 15;
+		int32 fanningGroupSize = 16;
+		bool relative = 17;
+	}
+
+}
+
+message SetProgrammerAttachableRequestResponse {
+
+	oneof targetId 	{
+		string groupId = 1;
+		string deviceId = 2;
+	}
+
+	string propertyId = 3;
+	string userContextId = 4;
+
+	string requestId = 5;
+
+	AttachableData attachable = 10;
+
+}
+
+message DeleteProgrammerAttachableRequest {
+
+	string attachableId = 1;
+	string userContextId = 2;
+	string requestId = 3;
+
+}
+
+message DeleteProgrammerValueRequest {
+
+	string requestId = 2;
+	string userContextId = 3;
+
+	string deviceId = 4;
+	string entryId = 5;
+	repeated string propertyIds = 6; //Optional
+	repeated int32 propertyTypes = 7; //Optional
+
+	string groupId = 8;
+
+	enum EClearMode {
+	
+		DELETE = 0;
+		CLEAR = 1;
+		UNDO = 2;
+		CLEAR_SELECTED = 3;
+		CLEAR_GROUP = 4;
+	}
+
+	EClearMode Mode = 10;
+
+}
+
+message SetProgrammerOutputRequest {
+
+	string requestId = 2;
+	string userContextId = 3;
+
+	oneof value {
+	
+		EOutputMode Mode = 5;
+		ProgrammerFilterPredicate predicate = 6;
+	
+	}
+
+}
+
+message ProgrammerSnapshotsRequest {
+
+	string requestId = 2;
+	string name = 3;
+	EModType type = 4;
+	string userContextId = 5;
+
+	enum EModType {
+	
+		WRITE = 0;
+		LOAD = 1;
+		CLEAR = 2;
+	
+	}
+
+}
+
+message GetProgrammerSnapshotsRequestResponse {
+
+	string requestId = 2;
+	string userContextId = 3;
+	repeated string snapshots = 4;
+
+}
+
+message EditCueInProgrammerRequest {
+
+	string requestId = 2;
+	string userContextId = 3;
+	string cuelistId = 4;
+	string cueId = 5;
+	bool blind = 6;
+}
+
+enum EOutputMode
+{
+	ALL = 0;
+	FILTER = 1;
+	HIDDEN = 2;
+}
+
+enum EViewMode
+{
+	VALUE = 0;
+	DELAY = 1;
+	FADE = 2;
+}
+
+message CueStateRequest {
+
+	string requestId = 2;
+	
+	EViewMode viewMode = 5;
+
+	oneof source {
+	
+		string userContextId = 3;
+		string cueId = 4;
+	
+	}
+
+}
+
+message CueStateResponse {
+
+	string requestId = 2;
+
+	EViewMode viewMode = 4;
+
+	repeated GroupState groupStates = 3;
+
+}
+
+message AttachableStateRequest {
+
+	string requestId = 2;
+	string userContextId = 3;
+	repeated string includedDevices = 4;
+}
+
+message AttachableStateResponse {
+
+	string requestId = 2;
+	repeated .LumosProtobuf.AttachableState attachableStates = 3;
+
+}
+
+message CopyProgrammerValuesRequest {
+
+	string requestId = 2;
+
+	string fromUserContextId = 3;
+	string fromGroupId = 4;
+
+	string targetUserContextId = 10;
+	string targetGroupId = 11;
+
+}
+
+
+message ProgrammerFilterPredicate {
+
+	string userContextId = 2; // The user context id
+	repeated string includedDeviceIds = 3;
+	repeated string includedGroupIds = 4;
+	repeated string includedPropertyIds = 5;
+
+	repeated PropertyValueSource destinationSources = 7;
+}
+
+message PropertyValueSource {
+
+	PropertyValueSource parent = 2;
+	string displayText = 3;
+	string id = 4;
+	int32 type = 5; //EPropertyValueSourceType
+
+	string groupId = 10;
+	string propertyId = 11;
+	string deviceId = 12;
+	string devicePropertyId = 13;
+
+	bool used = 20;
+}
+
+
+message DeviceState {
+
+	string id = 2;
+	string name = 3;
+	string propertyId = 4;
+	string propertyName = 5;
+	int32 propertyType = 6; //EPropertyType 
+
+	string entryId = 7;
+	bool saved = 8;
+
+	string groupId = 9;
+	string groupPropertyId = 10;
+	string groupName = 11;
+
+	bool dirty = 20;
+	string fromPreset = 21;
+	bool selected = 22;
+
+	oneof value {
+		DevicePropertyValue dpv = 30;
+		ObjectData objectValue = 31;
+		FannedPropertyValue fpv = 32;
+	}
+
+}
+
+message GroupState {
+
+	string id = 2;
+	string name = 3;
+	string propertyId = 4;
+	string propertyName = 5;
+	int32 propertyType = 6; //EPropertyType 
+
+	string entryId = 7;
+	bool saved = 8;
+
+	bool temporary = 13;
+	repeated DeviceState deviceStates = 14;
+
+	bool dirty = 20;
+	string fromPreset = 21;
+	bool selected = 22;
+
+	oneof value {
+		DevicePropertyValue dpv = 30;
+		ObjectData objectValue = 31;
+		FannedPropertyValue fpv = 32;
+	}
+
+}
+
+message AttachableState {
+
+	repeated string deviceProperties = 2;
+	string deviceGroup = 3;
+
+}
+
+message ProgrammerChangeMessage { 
+
+	string userContextId = 3;
+
+	enum EChangeType {
+		Content = 0;
+		ContentSaved = 1;
+		ContentChanged = 2;
+		Deleted = 3;
+
+		OutputMode = 10;
+		Snapshots = 11;
+		Property = 12;
+	
+		GroupSize = 20;
+		GroupHandling = 21;
+		Relative = 22;
+	}
+
+	EChangeType type = 2;
+	repeated string snapshots = 4; 
+	EOutputMode mode = 5;
+
+	string entryId = 10;
+	string devicePropertyId = 11;
+	string deviceGroupId = 12;
+
+	string propertyName = 14;
+	ObjectData newValue = 13;
+	
+}
+
+message ProgrammerPropertyRequestResponse {
+
+	string requestId = 2;
+	string userContextId = 6;
+
+	string propertyName = 3;
+
+	oneof result {
+	
+		bool notFound = 4;
+		ObjectData value = 5;
+	
+	}
+
+}
+
+message UpdateOriginOfProgrammerRequest {
+
+	string requestId = 2;
+	string userContextId = 3;
+
+	ProgrammerFilterPredicate predicate = 4;
+	bool clearProgrammer = 5;
+
+	DependencyData dependencies = 6; //Can be null in 1st call
+}
+
+message UpdateOriginOfProgrammerResponse {
+
+	string requestId = 2;
+	
+	oneof response 
+	{
+		bool ok = 3;
+
+		DependencyData dependencies = 4;
+
+		string error = 5;
+	}
+
+}
+
+

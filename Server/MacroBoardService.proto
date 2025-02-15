@@ -1,0 +1,26 @@
+syntax = "proto3";
+
+package LumosProtobufServer;
+
+import "Common/Types/Input/MacroBoard/MacroBoardServiceCRUDTypes.proto";
+import "Common/Types/CommonTypes.proto";
+
+option csharp_namespace = "UmbraKernel";
+
+service MacroBoardService {
+
+	rpc SendMacroBoards(stream .LumosProtobuf.Input.GetMacroBoardsResponse) returns (stream .LumosProtobuf.GetMultipleRequest);
+	rpc SendMacroBoardProfiles(stream .LumosProtobuf.Input.GetMacroBoardProfilesResponse) returns (stream .LumosProtobuf.GetMultipleRequest);
+	rpc SendMacroBoardProfileTemplates(stream .LumosProtobuf.Input.GetMacroBoardProfilesResponse) returns (stream .LumosProtobuf.GetMultipleRequest);
+
+
+	rpc DoCreateMacroBoardProfile(stream .LumosProtobuf.ConfirmedResponse) returns (stream .LumosProtobuf.Input.MacroBoardProfileCreationRequest);
+	rpc DoDeleteMacroBoardProfile(stream .LumosProtobuf.Input.MacroBoardProfileDeletionResponse) returns (stream .LumosProtobuf.Input.MacroBoardProfileDeletionRequest);
+	rpc DoChangeMacroBoardProfile(stream .LumosProtobuf.ConfirmedResponse) returns (stream .LumosProtobuf.Input.MacroBoardProfileChangeRequest);
+
+	rpc DoCreateOrUpdateOrDeleteMacroBoardProxy(stream .LumosProtobuf.ConfirmedResponse) returns (stream .LumosProtobuf.Input.MacroBoardProxyRequest); 
+
+	rpc SendMacroBoardChanges(stream .LumosProtobuf.Input.MacroBoardChangedMessage) returns (.LumosProtobuf.ConfirmedResponse);
+	rpc SendMacroBoardProfileChanges(stream .LumosProtobuf.Input.MacroBoardProfileChangedMessage) returns (.LumosProtobuf.ConfirmedResponse);
+}
+

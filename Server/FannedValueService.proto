@@ -1,0 +1,17 @@
+syntax = "proto3";
+
+package LumosProtobufServer;
+
+import "Common/Types/Cue/FannedValueServiceTypes.proto";
+import "Common/Types/CommonTypes.proto";
+
+option csharp_namespace = "UmbraKernel";
+
+service FannedValueService {
+
+  rpc DoGetFannedValues(stream .LumosProtobuf.Cue.FannedValuesResponse) returns (stream .LumosProtobuf.Cue.FannedValuesRequest);
+
+  rpc CheckIsValidParameteredFannedValue (stream .LumosProtobuf.ConfirmedResponse) returns (stream .LumosProtobuf.Cue.ValidParameteredFannedValueRequest);
+
+}
+

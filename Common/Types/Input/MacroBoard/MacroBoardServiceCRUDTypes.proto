@@ -1,0 +1,119 @@
+﻿syntax = "proto3";
+
+package LumosProtobuf.Input;
+
+import "Common/Types/Input/MacroBoard/MacroBoardServiceTypes.proto";
+import "Common/Types/CommonTypes.proto";
+
+
+
+message GetMacroBoardsResponse
+{
+	string requestId = 2;
+
+	repeated MacroBoardDescriptor macroBoards = 3;
+}
+
+message GetMacroBoardProfilesResponse
+{
+	string requestId = 2;
+
+	repeated MacroBoardProfileDescriptor profiles = 3;
+	bool templateProfiles = 4;
+}
+
+message GetSelectedProfileResponse
+{
+	string requestId = 2;
+	string boardId = 3;
+
+	string profileId = 4;
+}
+
+message MacroBoardProfileCreationRequest
+{
+	string requestId = 2;
+
+	oneof source {
+		string copyFromProfile = 10;
+		string copyFromTemplate = 12;
+		MacroBoardDescriptor macroBoard = 13;
+		MacroBoardProfileSize customProfileSize = 14;
+	}
+	string profileNameTemplate = 11;
+
+	message MacroBoardProfileSize {
+		uint32 width = 1;
+		uint32 height = 2;
+	}
+}
+
+message MacroBoardProfileDeletionRequest
+{
+	string requestId = 2;
+
+	string profileId = 3;
+
+}
+
+message MacroBoardProfileChangeRequest
+{
+	string requestId = 2;
+	string profileId = 3;
+
+	oneof change
+	{
+		string name = 10;
+		uint32 number = 11;
+	}
+
+	repeated MacroBoardButtonPressed buttonPressed = 20;
+}
+
+message MacroBoardProfileDeletionResponse {
+	string requestId = 2;
+	bool deleted = 3;
+}
+
+message MacroBoardProxyRequest
+{
+	string requestId = 2;
+	string macroBoardId = 3;
+
+	LumosProtobuf.EChangeType changeType = 4;
+
+	MacroBoardDescriptor macroBoard = 10;
+	repeated MacroBoardButtonPressed buttonPressed = 11;
+
+	string userContextId = 6;
+	string runtimeId = 7;
+}
+
+message MacroBoardChangedMessage
+{
+	.LumosProtobuf.EChangeType changeType = 3;
+	string macroBoardId = 4;
+	MacroBoardDescriptor macroBoardData = 5;
+
+	oneof change {
+		string property = 6;
+		string parameter = 7;
+		string selectedProfile = 9;
+	}
+	.LumosProtobuf.ObjectData newValue = 8;
+}
+
+message MacroBoardProfileChangedMessage
+{
+	.LumosProtobuf.EChangeType changeType = 3;
+	string macroBoardProfileId = 4;
+	MacroBoardProfileDescriptor macroBoardProfileData = 5;
+
+	oneof change {
+		string property = 6;
+		string parameter = 7;
+	}
+	.LumosProtobuf.ObjectData newValue = 8;
+
+	repeated string usedByMacroBoards = 20;
+}

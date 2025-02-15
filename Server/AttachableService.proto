@@ -1,0 +1,24 @@
+syntax = "proto3";
+
+package LumosProtobufServer;
+
+import "Common/Types/AttachableServiceTypes.proto";
+import "Common/Types/CommonTypes.proto";
+
+option csharp_namespace = "UmbraKernel";
+
+service AttachableService {
+
+  rpc SendAttachables(stream .LumosProtobuf.GetAttachablesResponse) returns (stream .LumosProtobuf.GetMultipleRequest); 
+
+  rpc CanAttachTo(stream .LumosProtobuf.CanAttachAttachableToResponse) returns (stream .LumosProtobuf.CanAttachAttachableToRequest); 
+
+  rpc ModifyAttachablePreset (stream .LumosProtobuf.ConfirmedResponse) returns (stream .LumosProtobuf.ModifyAttachablePresetRequest);
+  rpc SendAttachablePreset (stream .LumosProtobuf.GetAttachablePresetResponse) returns (stream .LumosProtobuf.GetRequest);
+
+  rpc SendEffectVisualization(stream .LumosProtobuf.GetEffectVisualizationDataResponse) returns (stream .LumosProtobuf.GetEffectVisualizationDataRequest);
+  rpc SendEffectVisualizationVectors(stream .LumosProtobuf.GetEffectVisualizationVectorsResponse) returns (stream .LumosProtobuf.GetEffectVisualizationVectorsRequest);
+
+  rpc SendAttachableChanges(stream .LumosProtobuf.AttachableChangeMessage) returns (.LumosProtobuf.ConfirmedResponse);
+}
+

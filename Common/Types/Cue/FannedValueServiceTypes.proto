@@ -1,0 +1,43 @@
+﻿syntax = "proto3";
+
+//import "Common/Types/CommonTypes.proto";
+import "Common/Types/Device/DeviceServiceTypes.proto";
+
+package LumosProtobuf.Cue;
+
+enum EFannedValueType {
+
+	UNKNOWN_3 = 0;
+	CONTAINER = 1;
+	OPERATOR = 2;
+	CONTAINERTYPE = 3;
+
+}
+
+message FannedValuesRequest {
+
+	string requestId = 2;
+
+	EFannedValueType type = 3;
+
+}
+
+message FannedValuesResponse {
+
+	string requestId = 2;
+
+	EFannedValueType type = 3;
+
+	repeated string results = 4;
+
+}
+
+message ValidParameteredFannedValueRequest {
+
+	string requestId = 2;
+
+	.LumosProtobuf.FannedPropertyValue fpv = 3;
+	int32 uiValueType = 4;
+
+}
+

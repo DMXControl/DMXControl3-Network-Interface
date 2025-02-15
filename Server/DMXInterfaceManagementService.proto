@@ -1,0 +1,35 @@
+syntax = "proto3";
+
+package LumosProtobufServer;
+
+import "Common/Types/DMX/DMXInterfaceManagementTypes.proto";
+import "Common/Types/CommonTypes.proto";
+
+option csharp_namespace = "UmbraKernel";
+
+service DMXInterfaceManagementService {
+
+	rpc SendAvailableInterfaces(stream .LumosProtobuf.GetInterfacesResponse) returns (stream .LumosProtobuf.GetRequest);
+	rpc SendUsedInterfaces(stream .LumosProtobuf.GetInterfacesResponse) returns (stream .LumosProtobuf.GetMultipleRequest);
+
+	rpc SendInterfaceEnabled(stream .LumosProtobuf.EnableDisableDMXInterfaceResponse) returns (stream .LumosProtobuf.GetRequest);
+	rpc DoSetInterfaceEnabled(stream .LumosProtobuf.EnableDisableDMXInterfaceResponse) returns (stream .LumosProtobuf.EnableDisableDMXInterfaceRequest);
+
+	rpc SendInterfaceAddress(stream .LumosProtobuf.GetSetDMXInterfaceAddressRequestResponse) returns (stream .LumosProtobuf.GetSetDMXInterfaceAddressRequestResponse);
+	rpc DoSetInterfaceAddress(stream .LumosProtobuf.ConfirmedResponse) returns (stream .LumosProtobuf.GetSetDMXInterfaceAddressRequestResponse);
+
+	rpc SendComment(stream .LumosProtobuf.GetSetDMXInterfaceCommentRequestResponse) returns (stream .LumosProtobuf.GetSetDMXInterfaceCommentRequestResponse);
+	rpc DoSetComment(stream .LumosProtobuf.ConfirmedResponse) returns (stream .LumosProtobuf.GetSetDMXInterfaceCommentRequestResponse);
+
+	rpc SendIsInterfaceAvailable(stream .LumosProtobuf.IsDMXInterfaceAvailableResponse) returns (stream .LumosProtobuf.GetRequest);
+	rpc DoAddInterface(stream .LumosProtobuf.AddDMXInterfaceResponse) returns (stream .LumosProtobuf.AddDMXInterfaceRequest);
+	rpc DoDeleteInterface(stream .LumosProtobuf.ConfirmedResponse) returns (stream .LumosProtobuf.DeleteInterfaceRequest);
+
+	rpc SendInterfaceParameters(stream .LumosProtobuf.GetInterfaceParametersResponse) returns (stream .LumosProtobuf.GetRequest);
+	rpc SendInterfaceParameter(stream .LumosProtobuf.GetSetTestInterfaceParameterValueRequestResponse) returns (stream .LumosProtobuf.GetSetTestInterfaceParameterValueRequestResponse);
+	rpc DoSetInterfaceParameter(stream .LumosProtobuf.ConfirmedResponse) returns (stream .LumosProtobuf.GetSetTestInterfaceParameterValueRequestResponse);
+	rpc DoTestInterfaceParameter(stream .LumosProtobuf.ConfirmedResponse) returns (stream .LumosProtobuf.GetSetTestInterfaceParameterValueRequestResponse);
+
+	rpc SendInterfaceStateChanges(stream .LumosProtobuf.DMXInterfaceStateChangedMessage) returns (.LumosProtobuf.ConfirmedResponse);
+}
+

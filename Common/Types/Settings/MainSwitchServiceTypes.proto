@@ -1,0 +1,39 @@
+syntax = "proto3";
+
+package LumosProtobuf;
+
+
+message MainSwitchData {
+
+	string mainSwitchId = 2;
+	string name = 3;
+
+	bool enabledState = 4;
+}
+
+message GetMainSwitchesResponse {
+
+	string requestId = 2;
+
+	repeated MainSwitchData mainSwitches = 3;
+
+}
+
+message MainSwitchSetRequest {
+
+	string mainSwitchId = 2;
+
+	oneof value {
+		bool enabledState = 3;
+		bool toggle = 4;
+	}
+}
+
+message MainSwitchChangedMessage {
+
+	string mainSwitchId = 2;
+
+	bool enabledState = 3;
+
+}
+

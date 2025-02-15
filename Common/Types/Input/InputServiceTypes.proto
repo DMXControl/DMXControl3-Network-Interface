@@ -1,0 +1,189 @@
+﻿syntax = "proto3";
+
+package LumosProtobuf.Input;
+
+import "Common/Types/ParameterServiceTypes.proto";
+import "Common/Types/CommonTypes.proto";
+import "Common/Types/ValueTypes.proto";
+
+
+message BankDescriptor {
+
+	string id = 2;
+	string name = 3;
+	uint32 number = 4;
+
+	bool active = 5;
+
+	repeated string connectionSetIds = 10;
+
+}
+
+
+message ConnectionSetDescriptor {
+
+	string id = 2;
+	string name = 3;
+	
+	bool active = 5;
+	sint32 state = 6; //EGraphState due to Flags required
+
+	repeated .LumosProtobuf.Input.NodeMetadataData nodes = 10;
+	bool containsNodes = 11;
+
+}
+
+enum ENodeType
+{
+	UNKNOWN = 0;
+	INPUT = 1;
+	OUTPUT = 2;
+	WORKER = 3;
+}
+
+message NodeMetadataData {
+
+	GraphNodeIDData id = 2;
+	string name = 3;
+	string memberInputValue = 4;
+	ENodeType type = 5;
+	string typeId = 6;
+	string description = 7;
+	.LumosProtobuf.ParameterCategory category = 8;
+	repeated PortMetadataData ports = 9;
+
+	.LumosProtobuf.PointData position = 19;
+	bool hidden = 20;
+}
+
+message PortMetadataData {
+
+	GraphNodePortIDData id = 2;
+	string displayName = 3;
+	string shortName = 4;
+	string description = 5;
+	string shortDescription = 6;
+	bool isInput = 7;
+	bool isDefaultHidden = 8;
+	repeated GraphNodePortIDData connectedPorts = 9;
+
+	string lastValue = 20;
+	.LumosProtobuf.ParameterCategory category = 21;
+
+}
+
+message GraphNodeIDData {
+
+	string graphId = 2;
+	string nodeId = 3;
+
+}
+
+message GraphNodePortIDData {
+
+	string portId = 2;
+	GraphNodeIDData nodeId = 3;
+
+}
+
+message InputClassProviderDescriptor {
+
+	string id = 2;
+	string displayName = 3;
+
+	repeated .LumosProtobuf.Input.InputElementDescriptor sourceElements = 4;
+	repeated .LumosProtobuf.Input.InputElementDescriptor sinkElements = 5;
+}
+
+message InputElementDescriptor {
+
+	string id = 2;
+	string displayName = 3;
+
+	.LumosProtobuf.ParameterCategory category = 4;
+
+	.LumosProtobuf.Input.IoInformationDescriptor ioInfo = 5;
+}
+
+message IoInformationDescriptor {
+
+	.LumosProtobuf.Input.EWellKnownInputType autoGraphIoType = 2;
+
+	repeated .LumosProtobuf.Input.EWellKnownInputType additionalSupportedIoTypes = 3;
+
+	.LumosProtobuf.ObjectData min = 4;
+	.LumosProtobuf.ObjectData max = 5;
+
+
+}
+
+message InputSinkDescriptor {
+
+	InputElementDescriptor element = 2;
+
+	.LumosProtobuf.Input.EFeedbackType providesFeedback = 3;
+
+	//IoInformationDescriptor ioInfo = 4;
+}
+
+message InputSourceDescriptor {
+
+	InputElementDescriptor element = 2;
+
+	.LumosProtobuf.Input.EFeedbackType receivesFeedback = 3;
+
+	//IoInformationDescriptor ioInfo = 4;
+}
+
+message PortValue
+{
+	GraphNodePortIDData portId = 1;
+	string value = 2;
+}
+
+enum EFeedbackType {
+
+	NONE = 0; //No Feedback
+	INDEPENDENT = 1; // Independent Feedback (e.g. a Button with a LED, the LED is not related to the Button)
+	COUPLED = 2; // Input and Feedback are physically coupled (e.g. Motorfader)
+
+}
+
+enum EWellKnownInputType
+{
+	UNKNOWN_INPUT_TYPE = 0;
+	/// <summary>
+	/// Of Type double or LumosDouble, or any other numeric type (int, byte,....)
+	/// </summary>
+	NUMERIC = 1;
+	/// <summary>
+	/// Of Type bool or LumosBoolean
+	/// </summary>
+	BOOL = 2;
+	/// <summary>
+	/// Of Type Color, EnumColor or LumosColor
+	/// </summary>
+	COLOR = 3;
+	/// <summary>
+	/// Of Type Position
+	/// </summary>
+	POSITION = 4;
+
+	TIMECODE = 11;
+	/// <summary>
+	/// Of Type ulong, incrementing with each Beat
+	/// </summary>
+	BEAT = 12;
+	/// <summary>
+	/// Of Type DateTime
+	/// </summary>
+	REALTIME = 13;
+	/// <summary>
+	/// Of Type string, can be an ID or Text or whatever
+	/// </summary>
+	STRING = 14;
+	/// <summary>
+	/// Of Type Bitmap or Image
+	/// </summary>
+	BITMAP = 15;
+}

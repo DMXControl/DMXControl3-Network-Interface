@@ -1,0 +1,96 @@
+﻿syntax = "proto3";
+
+import "Common/Types/Executor/ExecutorServiceTypes.proto";
+import "Common/Types/CommonTypes.proto";
+
+package LumosProtobuf.User;
+
+message UserContextRequest {
+
+	string requestId = 2;
+
+	string username = 5;
+	string passwordHash = 6;
+
+}
+
+message UserContextResponse {
+
+	string requestId = 2;
+
+	int32 boundSessions = 3;
+	.LumosProtobuf.User.UserContextDescriptor userContextData = 4;
+	string username = 5;
+
+	oneof result {
+		string userContextId = 6; //Success
+		.LumosProtobuf.TranslateableData error = 7; //Wildcard Random Error
+		.LumosProtobuf.User.UserContextResponse.EBindError bindError = 8; //Some known Errors
+	}
+
+	enum EBindError
+	{
+		UNKNOWN = 0;
+		BLOCKED = 1;
+		INVALID_CREDENTIALS = 2;
+	}
+
+}
+
+message UserContextDestructionRequest {
+
+	string requestId = 2;
+
+	string userContextId = 3; //Filled by Umbra
+
+}
+message UserContextDescriptor {
+
+	string id = 3;
+	string name = 4;
+	
+	string selectedDeviceGroup = 11;
+	repeated string selectedDeviceGroups = 12;
+	
+	string  selectedExecutorPage = 21;
+	.LumosProtobuf.Executor.ExecutorPageDescriptor dynamicExecutorPage = 22;
+	string selectedExecutor = 23;
+	repeated string fixedExecutors = 24;
+	
+	string selectedTimecode = 31;
+	string selectedTrack = 32;
+}
+
+message UserDescriptor {
+
+	string id = 2;
+	string name = 3;
+	string description = 4;
+
+	repeated UserPermissionDescriptor permissions = 10;
+
+}
+
+message UserPermissionDescriptor {
+
+	string claim = 2;
+	string description = 3;
+
+	repeated EPermissionAction possibleActions = 4;
+	repeated UserPermissionDescriptor subPermissions = 10;
+
+}
+
+enum EPermissionAction
+{
+	None = 0;
+	Read = 1;
+	Create = 2;
+	Update = 3;
+	Delete = 4;
+	Execute = 5;
+	Configure = 6;
+	Enable = 7;
+	Disable = 8;
+
+}

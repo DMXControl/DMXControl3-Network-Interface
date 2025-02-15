@@ -1,0 +1,22 @@
+syntax = "proto3";
+
+package LumosProtobufServer;
+
+import "Common/Types/Cue/CueServiceTypes.proto";
+import "Common/Types/CommonTypes.proto";
+
+option csharp_namespace = "UmbraKernel";
+
+service CueService {
+
+	rpc DoSetCueValue (stream .LumosProtobuf.ConfirmedResponse) returns (stream .LumosProtobuf.Cue.SetCueValueRequest);
+	rpc DoSetCueEntryValue (stream .LumosProtobuf.ConfirmedResponse) returns (stream .LumosProtobuf.Cue.SetCueEntryValueRequest);
+	rpc DoGetCueStates (stream .LumosProtobuf.Cue.GetCueStateResponse) returns (stream .LumosProtobuf.Cue.GetCueStateRequest);
+
+	rpc DoDeleteCue (stream .LumosProtobuf.ConfirmedResponse) returns (stream .LumosProtobuf.Cue.CueDeletionRequest);
+	rpc DoMoveCue (stream .LumosProtobuf.ConfirmedResponse) returns (stream .LumosProtobuf.Cue.CueMoveRequest);
+	rpc DoCopyCue (stream .LumosProtobuf.ConfirmedResponse) returns (stream .LumosProtobuf.Cue.CueCopyRequest);
+
+	rpc SendCueChanges (stream .LumosProtobuf.Cue.CueChangedMessage) returns (.LumosProtobuf.ConfirmedResponse);
+}
+

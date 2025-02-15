@@ -1,0 +1,132 @@
+﻿syntax = "proto3";
+
+package LumosProtobuf.Resource;
+
+import "Common/Types/Resource/ResourceManagementTypes.proto";
+
+message AllResourcesRequestResponse {
+
+	string requestId = 2;
+	bool onlyDiff = 3; //Returns only Resources that exist in Project and Application Store and differ
+	bool compareContent = 4; //Only usefull if onlyDiff is true
+
+	oneof type {
+	
+		EResourceDataType dataType = 6;
+		EResourceType resourceType = 7;
+	
+	}
+
+	repeated ResourceData result = 10;
+
+}
+
+message ResourceExistsRequest {
+
+	string requestId = 1;
+
+	EResourceContentType contentType = 3;
+	string name = 4;
+
+	oneof type {
+	
+		EResourceDataType dataType = 6;
+		EResourceType resourceType = 7;
+	
+	}
+
+}
+
+message ResourceLoadRequest {
+
+	string requestId = 1;
+
+	EResourceContentType contentType = 3;
+	EResourceSource source = 8;
+	string name = 4;
+	int32 ioFlags = 5; //EIOFlags
+
+	oneof type {
+	
+		EResourceDataType dataType = 6;
+		EResourceType resourceType = 7;
+	
+	}
+
+}
+
+message ResourceLoadResponse {
+
+	string requestId = 1;
+
+	EResourceContentType contentType = 3;
+	string name = 4;
+	int32 ioFlags = 5; //EIOFlags
+
+	oneof type {
+	
+		EResourceDataType dataType = 6;
+		EResourceType resourceType = 7;
+	
+	}
+
+	bool found = 10;
+	int64 totalLength = 13;
+
+	oneof result {
+		ResourceData resource = 11;
+		string streamId = 12;
+	}
+} 
+
+message ResourceSaveRequest {
+
+	string requestId = 2;
+
+	string name = 4;
+
+	oneof type {
+	
+		EResourceDataType dataType = 6;
+		EResourceType resourceType = 7;
+	
+	}
+
+	oneof value {
+		bytes rawData = 11;
+		string streamId = 12;
+		ManagedTreeItemData managedItem = 13;
+		bool removeReferenceInProject = 14; //Only usefull together with "dataType" to remove reference from project and prefer HDD lookup
+	}
+
+	bool userImported = 20;
+}
+
+message StreamDataRequest {
+
+	string streamId = 1;
+	int32 bytesToRead = 2;
+
+	bytes dataToWrite = 10;
+
+	sint64 crcValue = 11;
+
+	bool closeInBackend = 12;
+}
+
+message StreamDataResponse {
+
+	string streamId = 1;
+
+	int64 streamPosition = 6;
+	int64 totalLength = 7;
+	bytes dataToRead = 10;
+
+	sint64 crcValue = 11;
+
+	bool closedInBackend = 12;
+
+	int64 streamingTime = 13;
+	int64 backendFlushTime = 14;
+}
+

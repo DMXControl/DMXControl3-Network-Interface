@@ -1,0 +1,48 @@
+﻿syntax = "proto3";
+
+//import "Common/Types/CommonTypes.proto";
+
+package LumosProtobuf;
+
+message ManualBeatIntervalRequestResponse {
+
+	string requestId = 2;
+
+	sint32 interval = 3; 
+	bool enabled = 4;
+	bool enabledSet = 5;
+
+}
+
+message ManualBeatLearnRequest {
+
+	string requestId = 2;
+	string runtimeId = 3;
+
+	sint64 time = 4;
+	bool resetFactor = 5;
+}
+
+message ManualBeatSyncRequest {
+
+	string requestId = 2;
+
+	sint64 time = 4;
+}
+
+message ManualBeatFactorRequestResponse {
+
+	string requestId = 2;
+
+	double factor = 3;
+
+}
+
+message ManualBeatMessage {
+
+	uint64 beat = 2;
+
+	sint32 interval = 3;
+	double factor = 4;
+
+}

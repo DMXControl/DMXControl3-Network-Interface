@@ -1,0 +1,19 @@
+syntax = "proto3";
+
+package LumosProtobufServer;
+
+import "Common/Types/Settings/MainSwitchServiceTypes.proto";
+import "Common/Types/CommonTypes.proto";
+
+option csharp_namespace = "UmbraKernel";
+
+service MainSwitchService {
+
+  rpc SendMainSwitches(stream .LumosProtobuf.GetMainSwitchesResponse) returns (stream .LumosProtobuf.GetMultipleRequest);
+
+  rpc DoSetMainSwitch(stream .LumosProtobuf.ConfirmedResponse) returns (stream .LumosProtobuf.MainSwitchSetRequest);
+
+  rpc SendMainSwitchChanges(stream .LumosProtobuf.MainSwitchChangedMessage) returns (.LumosProtobuf.ConfirmedResponse);
+
+}
+

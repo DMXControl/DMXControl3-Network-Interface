@@ -1,0 +1,19 @@
+syntax = "proto3";
+
+package LumosProtobufServer;
+
+import "Common/Types/RDM/RDMServiceCRUDTypes.proto";
+import "Common/Types/CommonTypes.proto";
+
+option csharp_namespace = "UmbraKernel";
+
+service RDMService {
+	rpc SendRDMDevices(stream .LumosProtobuf.RDM.GetRDMDevicesResponse) returns (stream .LumosProtobuf.GetMultipleRequest);
+	rpc DoDiscovery(stream .LumosProtobuf.ConfirmedResponse) returns (stream .LumosProtobuf.GetRequest);
+	rpc DoRequestDeviceInfo(stream .LumosProtobuf.ConfirmedResponse) returns (stream .LumosProtobuf.GetRequest);
+	rpc DoRequestSensors(stream .LumosProtobuf.ConfirmedResponse) returns (stream .LumosProtobuf.GetRequest);
+	rpc DoRequestParameters(stream .LumosProtobuf.ConfirmedResponse) returns (stream .LumosProtobuf.GetRequest);
+
+	rpc SendRDMDeviceChanges(stream .LumosProtobuf.RDM.RDMDeviceChangedMessage) returns (.LumosProtobuf.ConfirmedResponse);
+}
+

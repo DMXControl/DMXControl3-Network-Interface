@@ -1,0 +1,78 @@
+﻿syntax = "proto3";
+
+import "Common/Types/Device/DeviceServiceTypes.proto";
+import "Common/Types/Cue/CueServiceTypes.proto";
+
+package LumosProtobuf;
+
+message CanAttachPresetToRequest {
+
+	string requestId = 2;
+
+	oneof targetId {
+	
+		string deviceId = 3;
+		string deviceGroupId = 4;
+	
+	}
+
+	string presetId = 6;
+
+}
+
+message CanAttachPresetToResponse {
+
+	string requestId = 1;
+
+	repeated string propertyIds = 2;
+
+}
+
+message InvokePresetRequest {
+
+	string requestId = 2;
+	string userContextId = 3;
+
+	oneof targetId {
+	
+		string deviceId = 6;
+		string deviceGroupId = 7;
+	
+	}
+
+	string propertyId = 8;
+
+	string presetId = 9;
+
+	bool forceInvokeAll = 10;
+}
+
+message EditPresetInProgrammerRequest {
+
+	string requestId = 2;
+	string userContextId = 3;
+
+	string presetId = 4;
+
+	bool blind = 5;
+
+}
+
+message PresetDescriptor {
+
+	string presetId = 2;
+	string name = 3;
+
+	.LumosProtobuf.FannedPropertyValue delay = 10;
+	.LumosProtobuf.FannedPropertyValue delayDown = 11;
+	.LumosProtobuf.FannedPropertyValue fade = 12;
+	.LumosProtobuf.FannedPropertyValue fadeDown = 13;
+
+	bool isPropertyPreset = 4;
+
+	repeated .LumosProtobuf.Cue.CueEntryDescriptor entries = 20;
+
+}
+
+
+

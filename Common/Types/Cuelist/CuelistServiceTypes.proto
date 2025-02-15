@@ -1,0 +1,263 @@
+syntax = "proto3";
+
+package LumosProtobuf.Cuelist;
+
+//import "Common/Types/ValueTypes.proto";
+import "Common/Types/CommonTypes.proto";
+import "Common/Types/DependencyTypes.proto";
+import "Common/Types/Device/DeviceServiceTypes.proto";
+import "Common/Types/Cue/CueServiceTypes.proto";
+import "Common/Types/ProgrammerServiceTypes.proto";
+import "Common/Types/Cue/CueTriggerServiceTypes.proto";
+
+enum ESceneListState
+{
+	STOPPED = 0;
+	PAUSED = 1;
+	RUNNING = 2;
+}
+
+message CuelistDescriptor {
+
+	string name = 1;
+	string id = 2;
+	uint32 number = 3;
+
+	ESceneListState state = 4;
+
+	double intensity = 11;
+	double fadeFactor = 12;
+	double speedFactor = 13;
+	double tempFader = 14;
+
+	int32 index = 15;
+	int32 nextIndex = 16;
+	int32 previousIndex = 17;
+
+	repeated .LumosProtobuf.Cue.CueDescriptor cues = 20;
+	bool containsCues = 21;
+
+	.LumosProtobuf.FannedPropertyValue goBackTime = 41;
+	.LumosProtobuf.FannedPropertyValue goToTime = 42;
+	.LumosProtobuf.FannedPropertyValue releaseTime = 43;
+	int64 duration = 44;
+	int32 releaseMode = 51; //ESceneListReleaseMode
+	int32 playMode = 52; //ESceneListPlayMode
+	sint32 priority = 53; 
+	int32 options = 54; //ESceneListOptions
+	int32 goNextBehaviour = 55; //EGoNextBehavior
+	int32 columnsVisible = 56; //ESceneListColumnsVisible
+
+	bool isPartOfTimecodeShow = 62;
+}
+
+message GetCuelistsResponse {
+
+	string requestId = 1;
+
+	repeated CuelistDescriptor cuelists = 2;
+
+}
+
+message CuelistCreationRequest {
+
+	string requestId = 1;
+
+	string copyFromCuelist = 10;
+	string cuelistNameTemplate = 11;
+
+}
+
+
+message CuelistDeletionRequest {
+
+	string requestId = 1;
+
+	string cuelistId = 2;
+
+	.LumosProtobuf.DependencyData dependencies = 4;
+
+}
+
+message CuelistDeletionResponse {
+
+	string requestId = 1;
+
+	oneof response 
+	{
+		string deletedCuelistId = 2;
+		string error = 3;
+		.LumosProtobuf.DependencyData dependencies = 4;
+	}
+}
+
+message SetCuelistValueRequest {
+
+	string requestId = 2;
+	string cuelistId = 3;
+
+	oneof value {
+	
+		double intensity = 11;
+		double fadeFactor = 12;
+		double speedFactor = 13;
+		double tempFader = 14;
+
+	}
+}
+
+message CuelistActionRequest {
+
+	string requestId = 2;
+	string cuelistId = 3;
+
+	int32 index = 4; //Use for some Actions e.g GoTo
+	EAction action = 5;
+
+	enum EAction {
+	
+		NONE = 0;
+		PLAY = 1;
+		PAUSE = 2;
+		STOP = 3;
+		GO_BACK = 4;
+		GO_TO = 5;
+		GO_NEXT = 6;
+		GO = 7;
+		LOAD = 8;
+		REASSIGN_SCENE_NUMBERS = 9;
+
+
+	}
+
+}
+
+message SpecialCueInsertRequest
+{
+	string requestId = 2;
+	string cuelistId = 3;
+	string userContextId = 4;
+
+	sint32 index = 5;
+	int32 specialEnum = 6; //Casted to Enum Value, depending on specialCue Case
+
+	oneof specialCue {
+	
+		string presetId = 10;
+		string audio = 11;
+		string otherCuelistId = 12;
+		string sum = 13;
+		string psum = 14;
+
+	}
+
+}
+
+message CueAddFromProgrammerRequest
+{
+	string requestId = 2;
+	string cuelistId = 3;
+	string userContextId = 4;
+
+	.LumosProtobuf.ProgrammerFilterPredicate predicate = 5;
+	EAddType type = 6;
+	int32 index = 7;
+
+	LumosProtobuf.Cue.TriggerValueData triggerValue = 8;
+
+	enum EAddType {
+		
+		NONE = 0;
+		ADD = 1;
+		INSERT = 2;
+		REPLACE = 3;
+		MERGE = 4;
+		APPEND = 5;
+		SUBTRACT = 6;
+
+
+	}
+
+}
+
+message GetPropertyValueSourceRequest {
+
+	string requestId = 2;
+	string userContextId = 3;
+
+	string cuelistId = 4;
+	int32 index = 5;
+
+}
+
+message GetPropertyValueSourceResponse {
+
+	string requestId = 2;
+
+	bool notFound = 4;
+	repeated .LumosProtobuf.PropertyValueSource sources = 3;
+
+}
+
+message AllCuelistActionRequest {
+
+	string requestId = 2;
+
+	EAction action = 3;
+
+	//AL 2020-07-04: Right now we only have 1 action, but this way we can enhance in future
+	enum EAction {
+	
+		NONE = 0;
+		STOP = 1;
+
+	}
+
+}
+
+message AllCuelistActionResponse {
+
+	string requestId = 2;
+
+	repeated string invokedCuelistIds = 3;
+	repeated string skippedCuelistIds = 4;
+	repeated string errorCuelistIds = 5;
+
+}
+
+message CuelistChangedMessage {
+
+	.LumosProtobuf.EChangeType changeType = 3;
+	string cuelistId = 4;
+	CuelistDescriptor cuelistData = 5;
+
+	repeated string properties = 6;
+	map<string, .LumosProtobuf.ObjectData> parameters = 7;
+
+}
+
+message CuelistProgressStateResponse
+{
+	string requestId = 2;
+
+	CuelistProgressStateChangeMessage message = 3;
+
+	bool notFound = 4;
+}
+
+message CuelistProgressStateChangeRequest
+{
+	repeated string cuelistIds = 2;
+}
+
+message CuelistProgressStateChangeMessage
+{
+	string cuelistId = 2;
+	
+	ESceneListState cuelistState = 3;
+
+	map<int32, .LumosProtobuf.Cue.CueProgressStateMessage> cueProgressState = 10;
+}
+
+
+

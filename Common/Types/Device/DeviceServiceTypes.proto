@@ -1,0 +1,439 @@
+syntax = "proto3";
+
+package LumosProtobuf;
+
+import "Common/Types/ValueTypes.proto";
+import "Common/Types/CommonTypes.proto";
+
+enum EValueType {
+	
+	NULL_1 = 0;
+	CURRENT_OUTPUT = 1;
+	CURRENT_PROPERTYVALUE = 2;
+	CURRENT_PROPERTYVALUE_VALUE = 3;
+	PROGRAMMER = 4;
+	
+}
+
+enum EDescriptorType {
+
+	NULL_2 = 0;
+	PROPERTY = 1;
+	SUBPROPERTY = 4;
+	GROUP = 2;
+	TYPE = 3;
+	SUBTYPE = 5;
+
+}
+
+message DescriptorRequest {
+	string groupId = 1;
+	string deviceId = 2;
+	string propertyId = 3;
+	EDescriptorType type = 4;
+}
+
+message DescriptorResponse {
+
+	string groupId = 1;
+	string deviceId = 2;
+	string propertyId = 3;
+	EDescriptorType type = 4;
+
+	oneof desc {
+		
+		DevicePropertyDescriptor prop = 10;
+		DeviceSubPropertyDescriptor sub = 13;
+		DeviceGroupDescriptor group = 11;
+		PropertyTypeDescriptor proptype = 12;
+	}
+
+}
+
+message DevicePropertyValueRequest {
+	string deviceOrGroupId = 1;
+	string propertyId = 2;
+	
+	//Used for Programmer
+	string userContextId = 4;
+
+	EValueType type = 3;
+}
+
+message DevicePropertyValueBulkRequest {
+
+	string requestId = 2;
+
+	repeated DevicePropertyValueRequest requests = 3;
+
+}
+
+message DevicePropertyValueResponse {
+
+	string deviceOrGroupId = 1;
+	string propertyId = 2;
+
+	EValueType type = 3;
+
+	//Used for Programmer
+	string userContextId = 4;
+
+	oneof pv {
+	
+		DevicePropertyValue dpv = 10;
+		PropertyValueData propertyValue = 11;
+		FannedPropertyValue fpv = 12;
+
+	}
+
+}
+
+message DevicePropertyValueBulkResponse {
+
+	string requestId = 2;
+
+	repeated DevicePropertyValueResponse responses = 3;
+
+}
+
+message DevicePropertyValue {
+	
+	string deviceId = 1;
+	string propertyId = 2;
+
+	oneof value 
+	{
+		double doubleValue = 10;
+		LumosColorData color = 11;
+		LumosBooleanData boolValue = 12;
+		LumosPositionData position = 13;
+		LumosStrobeData strobe = 14;
+		LumosMatrixData matrix = 16;
+		LumosRadixData radix = 17;
+		LumosDoubleData lumosDouble = 18;
+		LumosGoboData gobo = 19;
+		string stringValue = 20;
+		double kelvinValue = 21;
+		LumosBladesData bladesValue = 22;
+
+		ObjectData fallback = 40;
+	}
+}
+
+message FannedPropertyValue { //Can be Fanned Values or Parameters
+
+	string operator = 1;
+	string propertyTypeAQ = 2;
+	int32 uiValueType = 3;
+
+	repeated DevicePropertyValue fannedValues = 5;
+	repeated string parameterValues = 6;
+	
+}
+
+enum EGroupHandling {
+	CONCAT_GROUPS = 0;
+	GROUP_IS_DEVICE = 1;
+	PARALLEL_GROUPS = 2;
+}
+
+message PropertyValueData {
+	
+	oneof value {
+		DevicePropertyValue dpv = 1;
+		FannedPropertyValue fpv = 2;
+
+	}
+
+	EGroupHandling groupHandling = 10;
+
+	int32 fanningGroupSize = 11;
+	bool readonly = 12;
+	bool relative = 14;
+
+	repeated AttachableContext attachables = 13;
+}
+
+message AttachableContext {
+
+	AttachableData attachable = 1;
+	string attachedToSubProperty = 2;
+
+}
+
+message AttachableData {
+
+	string id = 1;
+	bool isFannedClone = 2;
+	string parentId = 3;
+	string type = 4;
+	string name = 5;
+	string attachableGroup = 6;
+	string attachableSortGroup = 12;
+
+	string imageFile = 7;
+	bool supportsAnimation = 8;
+	int32 cardinality = 9;
+	bool cardinalitySet = 10;
+	bool disabled = 11;
+
+	string displayName = 21;
+	string savedId = 22;
+		
+}
+
+message DeviceDescriptor {
+
+	string name = 1;
+	string id = 2;
+	uint32 number = 3;
+
+	repeated DeviceBeamDescriptor beams = 6;
+	repeated DeviceDescriptor subdevices = 7;
+
+	string vendor = 10;
+	string model = 11;
+	string author = 12;
+	string type = 13;
+	string mode = 14;
+	bool enabled = 15;
+	bool isWrappingDevice = 16;
+	bool isProxyDevice = 19;
+	bool canAddSubDevice = 18;
+
+	string parentDeviceId = 17; //In Case of Sub Device
+
+	string deviceImage = 20;
+	repeated ProcedureMetadataData procedures = 21;
+
+}
+
+message DeviceGroupDescriptor {
+	
+	string name = 1;
+	string id = 2;
+	uint32 number = 3;
+
+	repeated DevicePropertyDescriptor properties = 6;
+	repeated string deviceIds = 7;
+	repeated string deviceIdsWithoutSubgroups = 8;
+	repeated string groupIds = 9;
+	repeated string deviceAndGroupIds = 10;
+
+	bool temporary = 16;
+	bool hasGroupMaster = 17;
+
+	string groupImage = 20;
+	repeated ProcedureMetadataData procedures = 21;
+}
+
+message DeviceBeamDescriptor {
+
+	string name = 1;
+	string id = 2;
+	string parentDeviceId = 4;
+
+	uint32 beamNumber = 3;
+
+	repeated DevicePropertyDescriptor properties = 7;
+}
+
+message DevicePropertyDescriptor {
+
+	string name = 1;
+	string id = 2;
+
+	int32 propertyType = 3; //EPropertyType Enum
+	//PropertyValueValue currentValue = 4;
+
+	string displayName = 5;
+	PropertyTypeDescriptor type = 6;
+	string parentBeamId = 7;
+
+	repeated DeviceSubPropertyDescriptor subproperties = 9;
+
+	string devicePropertyType_AQ = 12; //AssemblyQualified Name
+	bool isGlobal = 20;
+
+	.LumosProtobuf.HalDevicePropertyMetadataData halMetadata = 21;
+}
+
+message DeviceSubPropertyDescriptor {
+
+	string name = 1;
+	string id = 2;
+	oneof parent {
+	
+		string parentSubProperty = 4;
+		string parentProperty = 5;
+	}
+
+	int32 propertyType = 3; //EPropertyType Enum
+	//PropertyValueValue currentValue = 4;
+
+	string displayName = 7;
+	PropertyTypeDescriptor type = 6;
+
+	repeated DeviceSubPropertyDescriptor subproperties = 8;
+
+	bool hidden = 9;
+	string subPropertyCategory = 10;
+	int32 displaySortOrder = 11;
+
+	string devicePropertyType_AQ = 12; //AssemblyQualified Name
+}
+
+message PropertyTypeDescriptor {
+
+	string name = 1;
+	string id = 2;
+	bool addRelativePossible = 3;
+
+	bool boundedType = 4;
+	bool enumType = 5;
+	bool boolType = 6;
+
+	bool allowZero = 7;
+	bool allowZeroSet = 8;
+
+	DevicePropertyValue lowerBound = 9;
+
+	DevicePropertyValue upperBound = 11;
+
+	string trueText = 13;
+	string falseText = 14;
+
+	bool checkBounds = 15;
+	bool supportsImageList = 16;
+
+	bool fixedEnumValues = 17;
+	bool fixedEnumValuesSet = 18;
+
+	bool canBeEmpty = 19;
+	bool canBeEmptySet = 20;
+
+	repeated IEnumObjectData enumValues = 21;
+}
+
+message DeviceMetadataData {
+
+	string vendor = 4;
+	string model = 5;
+	string author = 6;
+	string type = 7;
+	string xmlFile = 8;
+	int32 addressCount = 9;
+	string comment = 10;
+	
+	bool subDevice = 11;
+	string mode = 12;
+	int32 ddfSource = 13;
+
+	int32 ddfLibId = 14;
+	bool ddfLibIdSet = 15;
+
+	string dmxcVersion = 20;
+	string ddfVersion = 21;
+
+	string metadataId = 40;
+	bool singleDevice = 41;
+}
+
+message AvailableDevicesResponse {
+
+	string requestId = 1;
+
+	repeated DeviceMetadataData availableDevices = 2;
+	repeated string errorDevices = 3;
+}
+
+message ProcedureMetadataData {
+
+	string name = 2;
+	string icon = 3;
+	string smallIcon = 4;
+	bool singleExecution = 5;
+	string id = 6;
+
+}
+
+message GlobalFunctionRequestResponse {
+
+	string requestId = 2;
+	bool setValue = 3;
+
+	oneof specialFunction {
+	
+		bool blackout = 5;
+		HighlightData highlight = 6;
+		bool freeze = 7;
+		int32 fogState = 8; //EFogControl State
+	
+	}
+
+}
+
+message ProcedureExecutionRequest {
+
+	string requestId = 2;
+	ProcedureMetadataData procedure = 3;
+
+	string executionSource = 4;
+	bool notOnFreeze = 5; //If true, won't run on Freeze
+
+	repeated string targetDeviceGroupIds = 7;
+	repeated string targetDeviceIds = 8;
+
+}
+
+message ProcedureExecutionMessage {
+
+	string parentDeviceId = 2;
+	ProcedureMetadataData procedure = 3;
+
+	EExecutionType type = 4;
+	string errorMessage = 5;
+
+	enum EExecutionType {
+	
+		UNKNOWN = 0;
+		STARTED = 1;
+		RAN_TO_COMPLETION = 2;
+		FAULTED = 3;
+		CANCELLED = 4;
+
+	}
+}
+
+message HighlightData {
+
+	string userContextId = 3;
+	string id = 4;
+
+	oneof value {
+		bool enabled = 6;
+		EHighliteItem itemType = 5;
+	}
+	
+	enum EHighliteItem {
+	
+		UNKNOWN = 0;
+		DEVICE = 1;
+		DEVICEGROUP = 2;
+		PRESET = 3;
+	
+	}
+}
+
+message HalDevicePropertyMetadataData {
+
+	string name = 2;
+	sint32 dmxChannel = 3;
+	sint32 fineChannel = 4;
+	sint32 ultraChannel = 5;
+	sint32 ultraFineChannel = 6;
+
+	repeated HalDevicePropertyMetadataData children = 7;
+
+}
+

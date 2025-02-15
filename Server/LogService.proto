@@ -1,0 +1,18 @@
+syntax = "proto3";
+
+package LumosProtobufServer;
+
+import "Common/Types/LogServiceTypes.proto";
+import "Common/Types/CommonTypes.proto";
+
+option csharp_namespace = "UmbraKernel";
+
+service LogService {
+
+  rpc SendLogDataChanges(stream .LumosProtobuf.LogData) returns (.LumosProtobuf.ConfirmedResponse);
+  rpc SendUserNotifications(stream .LumosProtobuf.UserNotificationData) returns (.LumosProtobuf.ConfirmedResponse);
+
+  rpc SendLogData(stream .LumosProtobuf.GetLogDataResponse) returns (stream .LumosProtobuf.GetLogDataRequest);
+
+}
+

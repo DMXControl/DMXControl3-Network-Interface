@@ -1,0 +1,170 @@
+syntax = "proto3";
+
+package LumosProtobuf;
+
+import "Common/Types/Device/DeviceServiceTypes.proto";
+//import "Common/Types/ParameterServiceTypes.proto";
+import "Common/Types/CommonTypes.proto";
+
+message GetAttachablesResponse {
+
+	string requestId = 2;
+	repeated AttachableData attachables = 1;
+
+} 
+
+message CanAttachAttachableToRequest {
+
+	string requestId = 1;
+
+	oneof targetId {
+	
+		string deviceId = 3;
+		string deviceGroupId = 4;
+	
+	}
+
+	string propertyId = 5;
+
+	AttachableData attachable = 2;
+}
+
+message CanAttachAttachableToResponse {
+
+	string requestId = 1;
+
+	repeated string propertyIds = 2;
+	bool canAttach = 3;
+
+}
+
+message ModifyAttachablePresetRequest {
+
+	string requestId = 2;
+	AttachableParameterBag bag = 3;
+	EModType type = 4;
+	string newName = 5;
+	string id = 6;
+
+	enum EModType {
+		
+		UNKNOWN = 0;
+		ADD = 1;
+		DELETE = 2;
+		CHANGE = 3;
+	
+	}
+}
+
+message GetAttachablePresetResponse {
+
+	string requestId = 2;
+	.LumosProtobuf.AttachableParameterBag bag = 3;
+
+}
+
+message AttachableParameterBag {
+
+	AttachableData source = 2;
+	map<string,ObjectData> parameters = 3;
+
+}
+
+message GetEffectVisualizationDataRequest {
+
+	string requestId = 2;
+
+	int32 steps = 3;
+
+	oneof source {
+	
+		NewEffectParams newEffect = 4;
+		EffectVisualizationFromProgrammerParams fromProgrammer = 5;
+	
+	}
+
+	message NewEffectParams {
+	
+		AttachableData meta = 2;
+		AttachableParameterBag parameters = 3;
+	
+	}
+}
+
+message GetEffectVisualizationDataResponse {
+
+	string requestId = 2;
+
+	EffectVisualizationData result = 3;
+		
+}
+
+message GetEffectVisualizationVectorsRequest {
+
+	string requestId = 2;
+
+	EffectVisualizationFromProgrammerParams params = 3;
+	
+}
+
+message GetEffectVisualizationVectorsResponse {
+
+	string requestId = 2;
+
+	repeated EffectVisualizationVector vectors = 3;
+	
+} 
+
+message EffectVisualizationFromProgrammerParams {
+	
+	string userContextId = 2;
+	string groupId = 3;
+	string propertyId = 4;
+	string effectId = 5;
+	
+}
+
+message EffectVisualizationData {
+
+	string name = 2;
+	string id = 3;
+	int32 cardinality = 4;
+	double periodicTime = 5;
+	repeated EffectVisualizationEntry fannedVisuData = 6;
+
+}
+
+message EffectVisualizationEntry {
+
+	double phase = 2;
+	int64 timestamp = 3;
+	TwoDimArrayData visu = 4;
+
+}
+
+message EffectVisualizationVector {
+
+	double time = 2;
+	double periodTime = 3;
+	double frequency = 4;
+	double phase = 5;
+	repeated double vector = 6;
+
+}
+
+message AttachableChangeMessage {
+
+	EChangeType type = 2;
+	string savedAttachableId = 3;
+	string groupName = 4;
+
+	oneof change {
+	
+		string property = 6;
+		string parameter = 7;
+	
+	}
+
+}
+
+

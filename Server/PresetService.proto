@@ -1,0 +1,28 @@
+syntax = "proto3";
+
+package LumosProtobufServer;
+
+import "Common/Types/Preset/PresetServiceTypes.proto";
+import "Common/Types/Preset/PresetServiceCRUDTypes.proto";
+import "Common/Types/CommonTypes.proto";
+
+option csharp_namespace = "UmbraKernel";
+
+service PresetService {
+
+	rpc SendPresets (stream .LumosProtobuf.GetPresetsResponse) returns (stream .LumosProtobuf.GetMultipleRequest);
+
+	rpc CheckCanAttachTo(stream .LumosProtobuf.CanAttachPresetToResponse) returns (stream .LumosProtobuf.CanAttachPresetToRequest);
+
+	rpc DoInvokePreset(stream .LumosProtobuf.ConfirmedResponse) returns (stream .LumosProtobuf.InvokePresetRequest);
+	rpc DoEditPresetInProgrammer(stream .LumosProtobuf.ConfirmedResponse) returns (stream .LumosProtobuf.EditPresetInProgrammerRequest);
+
+	rpc DeletePresets(stream .LumosProtobuf.PresetDeletionResponse) returns (stream .LumosProtobuf.PresetDeletionRequest);
+	rpc CreatePresets(stream .LumosProtobuf.ConfirmedResponse) returns (stream .LumosProtobuf.PresetCreationRequest);
+
+	rpc DoMergeAppendProgrammer(stream .LumosProtobuf.ConfirmedResponse) returns (stream .LumosProtobuf.PresetMergeAppendRequest);
+	rpc DoReplaceSubtractProgrammer(stream .LumosProtobuf.PresetReplaceSubtractResponse) returns (stream .LumosProtobuf.PresetReplaceSubtractRequest);
+
+	rpc SendPresetChanged(stream .LumosProtobuf.PresetChangedMessage) returns (.LumosProtobuf.ConfirmedResponse);
+}
+

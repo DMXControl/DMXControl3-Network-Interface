@@ -1,0 +1,58 @@
+syntax = "proto3";
+
+package LumosProtobufCommon;
+
+import "Common/Types/UmbraServiceTypes.proto";
+import "Common/Types/CommonTypes.proto";
+import "Common/Types/BroadcastServiceTypes.proto";
+
+option csharp_namespace = "UmbraCommon";
+
+
+ //These functions need to be implemented by connected clients. The provided functions ensure communication with Umbra. The Services are only available to connected clients
+service ConnectedClientService {
+
+  //Informs Umbra that Connected Client is ready to work / process Messages (mandatory to call once after connect)
+  rpc ReportReadyToWork (.LumosProtobuf.UmbraClientReadyToWorkNotification) returns (.LumosProtobuf.ConfirmedResponse);
+
+  //Simple Ping that is triggered by Umbra to check whether Clients are still alive and measure latency (mandatory to implement, otherwise Umbra will drop you after ~5 mins)
+  rpc Ping (stream .LumosProtobuf.PingPong) returns (stream .LumosProtobuf.PingPong);
+
+  //Broadcast Function to Send Messages to all Clients in the Network and receive Messages sent by other clients (optional if you don't want to send / receive)
+  rpc SendBroadcast (stream .LumosProtobuf.BroadcastMessage) returns (stream .LumosProtobuf.BroadcastMessage);
+
+  //Used by Umbra to trigger client side operations (e.g. shutdown Kernel) (optional)
+  rpc ProcessClientControls (stream .LumosProtobuf.ConfirmedResponse) returns (stream .LumosProtobuf.ClientControlRequest);
+
+  //Used to retreive Client information (with this every client can ask for other client information) (optional)
+  rpc GetClientProgramInfo (.LumosProtobuf.GetRequest) returns (.LumosProtobuf.UmbraClientProgramInfoResponse);
+
+  //Used to trigger client side operations (optional)
+  rpc ControlClient (.LumosProtobuf.ClientControlRequest) returns (.LumosProtobuf.ConfirmedResponse);
+
+  //Receive Information when a client state changes (connect, disconnect, ready-2-work changed,....) (optional)
+  rpc ReceiveClientChanges (.LumosProtobuf.GetRequest) returns (stream .LumosProtobuf.UmbraClientInfoMessage);
+}
+
+//These functions are used to Login and Logoff to Umbra. They can be called without being connected, obviously :-D
+service ClientService {
+
+	rpc Login (.LumosProtobuf.UmbraLoginRequest) returns (.LumosProtobuf.UmbraLoginResponse);
+	rpc Logoff (.LumosProtobuf.UmbraLogoffRequest) returns (.LumosProtobuf.UmbraLogoffResponse);
+
+}
+
+//These functions are used to communicate with potential Umbra servers during discovery. They can be called without being connected.
+service DMXCNetService {
+
+	//Send Information to Umbra Server, that the client exists (mandatory if discovery is a thing).rpc Returns requests for Network Property changes (e.g. new NetworkID)
+	rpc InformClientExists(.LumosProtobuf.InformClientExistsRequest) returns (.LumosProtobuf.InformClientExistsResponse);
+
+	//Set another Clients Network Property (not used by clients other then the GUI)
+	rpc SetClientParameter(.LumosProtobuf.SetNetworkPropertyRequest) returns (.LumosProtobuf.ConfirmedResponse);
+
+	//Retreive Umbra Information (optional)
+	rpc GetUmbraNetworkInfo(.LumosProtobuf.GetRequest) returns (.LumosProtobuf.UmbraNetworkInfoResponse);
+
+}
+

@@ -1,0 +1,198 @@
+﻿syntax = "proto3";
+
+package LumosProtobuf;
+
+import "Common/Types/CommonTypes.proto";
+import "Common/Types/ParameterServiceTypes.proto";
+
+message GetInterfacesResponse {
+
+	string requestId = 2;
+	repeated LumosExtendedDMXInterfaceMetadata interfaces = 3;
+
+}
+
+enum EEnableResult
+{
+	EEnableResult_UNKNOWN = 0;
+	EEnableResult_OK = 1;
+	EEnableResult_ERROR = 2;
+	EEnableResult_CONFIG_ERROR = 3;
+	EEnableResult_TIMEOUT = 4;
+	EEnableResult_NOCHANGE = 5;
+}
+
+message EnableDisableDMXInterfaceRequest {
+
+	string requestId = 2;
+	string interfaceId = 3;
+	bool enabled = 4;
+	ETarget target = 5;
+
+	enum ETarget {
+	
+		UNKNOWN = 0;
+		INTERFACE = 1;
+		INPUTPORT = 2;
+		OUTPUTPORT = 3;
+	
+	}
+
+	sint32 port = 6;
+}
+
+message EnableDisableDMXInterfaceResponse {
+
+	string requestId = 2;
+	bool interfaceNotFound = 10;
+
+	string interfaceId = 3;
+	bool interfaceEnabled = 4;
+	ENullableBool rdmEnabled = 7;
+	EEnableResult result = 11;
+
+	map<int32,bool> outputPortState = 5;
+	map<int32,bool> inputPortState = 6;
+
+	map<int32,ENullableBool> outputPortRdmState = 8;
+}
+
+message IsDMXInterfaceAvailableResponse {
+
+	string requestId = 2;
+	string interfaceId = 3;
+	ENullableBool available = 4;
+
+}
+
+message GetSetDMXInterfaceCommentRequestResponse {
+
+	string interfaceId = 3;
+	int32 port = 4;
+
+	string comment = 5;
+}
+
+message GetSetDMXInterfaceAddressRequestResponse {
+
+	string requestId = 2;
+	string interfaceId = 3;
+	int32 address = 4;
+	EPorttype portType = 5;
+
+	enum EPorttype {
+	
+		UNKNOWN = 0;
+		INPUTPORT = 2;
+		OUTPUTPORT = 3;
+	
+	}
+
+	sint32 port = 6;
+}
+
+message AddDMXInterfaceRequest {
+
+	string requestId = 2;
+	.LumosProtobuf.DMXInterfaceMetadata interface = 3;
+
+}
+
+message AddDMXInterfaceResponse {
+
+	string requestId = 2;
+	.LumosProtobuf.LumosExtendedDMXInterfaceMetadata interface = 3;
+
+}
+
+message DeleteInterfaceRequest {
+
+	string requestId = 2;
+	string interfaceId = 3;
+
+}
+
+message GetInterfaceParametersResponse {
+
+	string requestId = 2;
+
+	repeated GenericParameterData parameters = 3;
+
+}
+
+message GetSetTestInterfaceParameterValueRequestResponse {
+
+	string interfaceId = 3;
+	string parameterName = 4;
+
+	ObjectData value = 5;
+}
+
+message DMXInterfaceMetadata {
+
+	string interfaceId = 8;
+	string vendorId = 2;
+	string modelId = 3;
+	string vendor = 4;
+	string model = 5;
+	string description = 6;
+	string serialNr = 7;
+
+	repeated .LumosProtobuf.DMXPortMetadata portMetadata = 10;
+	bool openConfiguration = 11;
+	bool genericInterface = 12;
+
+	int32 genericInstanceNumber = 13;
+	bool genericInstanceNumberSet = 14;
+
+	bool hasRDM = 20;
+}
+
+message LumosExtendedDMXInterfaceMetadata {
+
+	DMXInterfaceMetadata interfaceData = 2;
+
+	bool unusableInterface = 3;
+	bool available = 4;
+
+	int64 heartbeatsReceived = 10;
+	bool heartbeatsReceivedSet = 11;
+
+	int32 heartbeatRestarts = 12;
+	bool heartbeatRestartsSet = 13;
+
+	map<string, string> additionalMetadata = 20;
+}
+
+message DMXPortMetadata {
+
+	int32 port = 2;
+	bool isOutput = 3;
+	bool isInput = 4;
+	bool isDuplex = 5;
+
+}
+
+message DMXInterfaceStateChangedMessage {
+
+	string interfaceId = 2;
+
+	oneof change {
+	
+		bool working = 3;
+		bool enabled = 4;
+		bool available = 6;
+	
+	}
+
+	bool rdm = 11;
+	sint32 port = 10;
+	EType type = 12;
+
+	enum EType //Don't change numbers!
+	{ 
+		Interface = 0;
+		Input = 1; 
+		Output = 2;
+	}
+}

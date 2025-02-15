@@ -1,0 +1,17 @@
+syntax = "proto3";
+
+package LumosProtobufServer;
+
+import "Common/Types/Audio/AudioServiceTypes.proto";
+import "Common/Types/CommonTypes.proto";
+
+option csharp_namespace = "UmbraKernel";
+
+service AudioService {
+
+	rpc SendAllAudioMetadata(stream .LumosProtobuf.AllAudioMetadataResponse) returns (stream .LumosProtobuf.GetMultipleRequest);
+
+	rpc DoControlAudio(stream .LumosProtobuf.ConfirmedResponse) returns (stream .LumosProtobuf.ControlAudioRequest);
+
+}
+

@@ -1,0 +1,44 @@
+﻿syntax = "proto3";
+
+package LumosProtobuf.Input;
+
+//import "Common/Types/ParameterServiceTypes.proto";
+//import "Common/Types/CommonTypes.proto";
+
+
+message MacroBoardDescriptor {
+
+	string id = 2;
+	uint32 width = 3;
+	uint32 height = 4;
+
+}
+
+message MacroBoardProfileDescriptor {
+
+	string id = 2;
+	uint32 number = 3;
+	string name = 4;
+
+	uint32 width = 5;
+	uint32 height = 6;
+
+	repeated MacroBoardButtonPressed pressed = 15;
+
+	repeated ButtonImage buttonImages = 20;
+
+	message ButtonImage
+	{
+		uint32 x = 2;
+		uint32 y = 3;
+		bytes image = 4;
+	}
+}
+
+message MacroBoardButtonPressed
+{
+	uint32 x = 2;
+	uint32 y = 3;
+	bool pressed = 4;
+}
+

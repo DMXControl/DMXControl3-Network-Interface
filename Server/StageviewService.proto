@@ -1,0 +1,24 @@
+syntax = "proto3";
+
+package LumosProtobufServer;
+
+import "Common/Types/StageView/StageViewServiceTypes.proto";
+import "Common/Types/StageView/StageViewServiceCRUDTypes.proto";
+import "Common/Types/CommonTypes.proto";
+
+option csharp_namespace = "UmbraKernel";
+
+service StageViewService {
+
+  rpc SendStageViews (stream .LumosProtobuf.GetStageViewsResponse) returns (stream .LumosProtobuf.GetMultipleRequest);
+  
+  rpc DoCreateStageView (stream .LumosProtobuf.ConfirmedResponse) returns (stream .LumosProtobuf.StageViewCreationRequest);
+  
+  rpc DoDeleteStageView (stream .LumosProtobuf.StageViewDeletionResponse) returns (stream .LumosProtobuf.StageViewDeletionRequest);
+  
+  rpc DoModifyStageView (stream .LumosProtobuf.ConfirmedResponse) returns (stream .LumosProtobuf.StageViewModifyRequest);
+
+  rpc SendStageViewChanges (stream .LumosProtobuf.StageViewChangedMessage) returns (.LumosProtobuf.ConfirmedResponse);
+
+}
+

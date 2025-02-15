@@ -1,0 +1,30 @@
+syntax = "proto3";
+
+package LumosProtobufServer;
+
+import "Common/Types/SettingsServiceTypes.proto";
+import "Common/Types/CommonTypes.proto";
+
+option csharp_namespace = "UmbraKernel";
+
+service SettingsService {
+
+  rpc SendDefaultConfiguration(stream .LumosProtobuf.GetDefaultConfigurationResponse) returns (stream .LumosProtobuf.GetDefaultConfigurationRequest);
+
+  rpc SendRegisteredSettings (stream .LumosProtobuf.GetRegisteredSettingsResponse) returns (stream .LumosProtobuf.GetRequest);
+
+  rpc DoRegisterSetting(stream .LumosProtobuf.ConfirmedResponse) returns (stream .LumosProtobuf.RegisterSettingRequest);
+
+  rpc SendSetting (stream .LumosProtobuf.GetSettingResponse) returns (stream .LumosProtobuf.GetSettingRequest);
+  rpc SendSettingType (stream .LumosProtobuf.GetSettingTypeResponse) returns (stream .LumosProtobuf.GetSettingRequest);
+
+  rpc SendDynamicEnumValues (stream .LumosProtobuf.SettingsDynamicEnumData) returns (stream .LumosProtobuf.GetSettingRequest);
+
+  rpc DoSetSetting (stream .LumosProtobuf.ConfirmedResponse) returns (stream .LumosProtobuf.SetSettingRequest);
+
+  rpc DoResetApplicationSettings (stream .LumosProtobuf.ConfirmedResponse) returns (stream .LumosProtobuf.ActionRequest);
+
+  rpc SendSettingChanges (stream .LumosProtobuf.SettingChangedMessage) returns (.LumosProtobuf.ConfirmedResponse);
+  rpc SendDefaultConfigurationChanges (stream .LumosProtobuf.DefaultConfigurationChangeMessage) returns (.LumosProtobuf.ConfirmedResponse);
+}
+

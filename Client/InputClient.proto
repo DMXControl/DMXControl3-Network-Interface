@@ -1,0 +1,46 @@
+syntax = "proto3";
+
+package LumosProtobufClient;
+
+//import "Common/Types/Input/InputServiceTypes.proto";
+import "Common/Types/Input/InputServiceCRUDTypes.proto";
+import "Common/Types/CommonTypes.proto";
+
+option csharp_namespace = "UmbraClient";
+
+service InputClient {
+
+	rpc CreateBank(.LumosProtobuf.Input.BankCreationRequest) returns (.LumosProtobuf.Input.BankCreationResponse);
+	rpc DeleteBank(.LumosProtobuf.Input.BankDeletionRequest) returns (.LumosProtobuf.ConfirmedResponse);
+
+	rpc CreateConnectionSet(.LumosProtobuf.Input.ConnectionSetCreationRequest) returns (.LumosProtobuf.Input.ConnectionSetCreationResponse);
+	rpc DeleteConnectionSet(.LumosProtobuf.Input.ConnectionSetDeletionRequest) returns (.LumosProtobuf.ConfirmedResponse);
+	rpc MoveConnectionSet(.LumosProtobuf.Input.ConnectionSetMoveRequest) returns (.LumosProtobuf.ConfirmedResponse);
+	rpc ModifyConnectionSet(.LumosProtobuf.Input.ConnectionSetModifyRequest) returns (.LumosProtobuf.Input.ConnectionSetModifyResponse);
+	
+	rpc CreateOrReplacePort(.LumosProtobuf.Input.PortCreationOrReplaceRequest) returns (.LumosProtobuf.Input.PortCreationOrReplaceResponse);
+
+	rpc CreateOrUpdateOrDeleteSinkProxy(.LumosProtobuf.Input.InputSinkProxyRequest) returns (.LumosProtobuf.ConfirmedResponse);
+	rpc CreateOrUpdateOrDeleteSourceProxy(.LumosProtobuf.Input.InputSourceProxyRequest) returns (.LumosProtobuf.ConfirmedResponse);
+
+	rpc GetAvailableNodes(.LumosProtobuf.GetRequest) returns (.LumosProtobuf.Input.GetAvailableNodesResponse);
+	rpc GetInputClassProviders(.LumosProtobuf.GetMultipleRequest) returns (.LumosProtobuf.Input.GetInputClassProvidersResponse);
+
+	rpc GetBanks(.LumosProtobuf.GetMultipleRequest) returns (.LumosProtobuf.Input.GetBanksResponse);
+	rpc GetConnectionSets(.LumosProtobuf.GetMultipleRequest) returns (.LumosProtobuf.Input.GetConnectionSetResponse);
+	rpc GetInputSinks(.LumosProtobuf.GetMultipleRequest) returns (.LumosProtobuf.Input.GetInputSinksResponse);
+	rpc GetInputSources(.LumosProtobuf.GetMultipleRequest) returns (.LumosProtobuf.Input.GetInputSourcesResponse);
+
+	rpc GetConnectionSetPreviewValues(.LumosProtobuf.GetRequest) returns (.LumosProtobuf.Input.ConnectionSetPreviewValuesResponse);
+
+	rpc ReceiveConnectionSetProcessedMessages(stream .LumosProtobuf.Input.ConnectionSetProcessedRequest) returns (stream .LumosProtobuf.Input.ConnectionSetProcessedMessage);
+	rpc ReceiveInputSinkChanges(.LumosProtobuf.GetRequest) returns (stream .LumosProtobuf.Input.InputSinkChangedMessage);
+	rpc ReceiveInputSourceChanges(.LumosProtobuf.GetRequest) returns (stream .LumosProtobuf.Input.InputSourceChangedMessage);
+	rpc ReceiveInputClassProviderChanges(.LumosProtobuf.GetRequest) returns (stream .LumosProtobuf.Input.InputClassProviderChangedMessage);
+	rpc ReceiveBankChanges(.LumosProtobuf.GetRequest) returns (stream .LumosProtobuf.Input.BankChangedMessage);
+	rpc ReceiveConnectionSetChanges(.LumosProtobuf.GetRequest) returns (stream .LumosProtobuf.Input.ConnectionSetChangedMessage);
+
+	rpc ReceiveSinkProxyChanges(.LumosProtobuf.GetRequest) returns (stream .LumosProtobuf.Input.InputSinkProxyValuesChangedMessage);
+
+}
+

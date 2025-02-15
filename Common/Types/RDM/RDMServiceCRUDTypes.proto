@@ -1,0 +1,26 @@
+﻿syntax = "proto3";
+
+import "Common/Types/CommonTypes.proto";
+import "Common/Types/RDM/RDMServiceTypes.proto";
+
+package LumosProtobuf.RDM;
+
+message GetRDMDevicesResponse {
+	string requestId = 2;
+	repeated RDMDeviceDescriptor rdmDevices = 3;
+}
+
+
+message RDMDeviceChangedMessage {
+	.LumosProtobuf.EChangeType changeType = 3;
+	string rdmDeviceId = 4;
+	RDMDeviceDescriptor rdmDeviceData = 5;
+
+	oneof change {	
+		string property = 6;
+		string parameter = 7;	
+	}
+
+	.LumosProtobuf.ObjectData newValue = 9;
+}
+

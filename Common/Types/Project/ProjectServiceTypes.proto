@@ -1,0 +1,578 @@
+syntax = "proto3";
+
+package LumosProtobuf;
+
+import "Common/Types/CommonTypes.proto";
+import "Common/Types/Resource/ResourceManagementTypes.proto";
+import "Common/Types/UmbraServiceTypes.proto";
+
+enum EProjectState {
+
+	EProjectState_UNDEFINED = 0;
+	EProjectState_LOADING = 1;
+	EProjectState_CLOSING = 2;
+	EProjectState_CLOSED = 3;
+	EProjectState_LOADED = 4;
+
+}
+
+//Be carefull with renaming => JSON Serialization in ProjectStore!!!
+message ProjectVersionID {
+
+	string guid = 2; //Global ID. This is the same for all Project Versions
+	int32 major = 3;
+	int32 minor = 4;
+	int32 revision = 5;
+
+}
+
+//Be carefull with renaming => JSON Serialization in ProjectStore!!!
+message ProjectVersionData {
+
+	ProjectVersionID id = 2;
+	
+	int64 lastSaveDateUTC = 7;
+	int64 lastLoadDateUTC = 9;
+
+	string versionDescription = 8;
+
+	bool isAutosave = 10;
+	bool isDeleteLocked = 11;
+
+	.LumosProtobuf.EItemInfoSeveraty error = 30;
+	TranslateableData errorMessage = 31;
+}
+
+//Be carefull with renaming => JSON Serialization in ProjectStore!!!
+message ProjectGlobalData {
+
+	string guid = 1;
+	string projectName = 2;
+	string author = 3;
+	string projectDescription = 4;
+
+	bool isFavorite = 21;
+	repeated string tags = 20;
+
+	.LumosProtobuf.EItemInfoSeveraty error = 30;
+	TranslateableData errorMessage = 31;
+
+	string legacyImportedProjectHash = 40;
+}
+
+//Be carefull with renaming => JSON Serialization in ProjectStore!!!
+message ProjectData {
+
+	ProjectGlobalData global = 2;
+	repeated ProjectVersionData versions = 3;
+
+}
+
+/*
+message ProjectData {
+
+	string id = 2;
+	int32 projectFileVersion = 3;
+
+	.LumosProtobuf.ProjectMetadata metadata = 5;
+
+	EProjectState state = 6;
+	string projectFileName = 7;
+
+}
+*/
+
+message ProjectTodoDescriptor {
+
+	string id = 2;
+	string name = 3;
+	TranslateableData nameTranslatable = 13;
+
+	string text = 4;
+	TranslateableData textTranslatable = 14;
+
+	string category = 5;
+
+	int32 priority = 6;
+	bool done = 7;
+
+
+}
+
+message GetProjectsResponse {
+
+	string requestId = 2;
+
+	ProjectVersionID currentLoadedProjectVersion = 3;
+	repeated ProjectData projects = 4;
+
+}
+
+
+/*
+message GetProjectDataResponse {
+
+	string requestId = 2;
+
+	ProjectData project = 3;
+
+}
+
+message SetProjectMetadataRequest {
+
+	string requestId = 2;
+
+	ProjectMetadata data = 3;
+
+}
+*/
+
+message GetProjectTodoResponse {
+
+	string requestId = 2;
+
+	repeated ProjectTodoDescriptor todos = 3;
+
+}
+
+message GetProjectStateRespose {
+
+	string requestId = 2;
+
+	bool isLoaded = 3;
+	bool isClosed = 4;
+	EProjectState state = 5;
+	int32 projectFileVersion = 6;
+
+}
+
+message ProjectTodoCreationRequest {
+
+	string requestId = 2;
+
+	string nameTemplate = 3;
+	string category = 5;
+	string text = 4;
+
+}
+
+message ProjectTodoModifyRequest {
+
+	string requestId = 2;
+
+	string todoId = 8;
+
+	oneof change {
+	
+		string name = 3;
+		string text = 4;
+		string category = 5;
+
+		int32 priority = 6;
+		bool done = 7;
+
+	}
+
+}
+
+message ProjectTodoDeletionRequest {
+
+	string requestId = 2;
+
+	repeated string todoId = 3;
+
+}
+
+message ProjectTodoChangedMessage {
+
+	EChangeType changeType = 3;
+	string todoId = 4;
+	ProjectTodoDescriptor todo = 5;
+
+}
+
+message ProjectCreationRequest {
+
+	string requestId = 2;
+
+	ProjectGlobalData initialData = 9;
+	ProjectVersionID copyFrom = 10;
+	bool copyAllVersions = 11;
+}
+
+message ProjectCreationResponse {
+
+	string requestId = 2;
+
+	oneof result {
+		ProjectData createdProject = 3;
+		TranslateableData error = 11;
+	}
+}
+
+message ProjectDeletionRequest {
+
+	string requestId = 2;
+
+	ProjectVersionID versionToDelete = 10;
+	bool deleteAllVersions = 11;
+}
+
+message ProjectModifyRequest {
+
+	string requestId = 2;
+
+	ProjectVersionID versionToModify = 10;
+
+	repeated AttributeChange changes = 20;
+
+	repeated string tagsToSet = 30;
+	bool changeTags = 31;
+
+	message AttributeChange 
+	{
+		oneof attribute {
+
+			string projectName = 20;
+			string description = 21;
+			string author = 22;
+			bool isDeleteLocked = 23;
+			bool isFavorite = 24;
+		}
+	}
+
+}
+
+message ProjectChangedMessage {
+
+	EChangeType changeType = 3;
+	
+	oneof ChangedData
+	{
+		ProjectGlobalData project = 4;
+		ProjectVersionData version = 5;
+	}
+}
+
+message CloseProjectVersionRequest {
+
+	string requestId = 2;
+
+}
+
+message LoadProjectVersionRequest {
+
+	string requestId = 2;
+	ProjectVersionID versionToLoad = 3;
+
+}
+
+enum ESaveProjectVersionIncrement {
+
+	ESaveProjectVersionIncrement_None = 0;
+	ESaveProjectVersionIncrement_Minor = 1;
+	ESaveProjectVersionIncrement_Major = 2;
+
+}
+
+message SaveProjectVersionRequest {
+
+	string requestId = 2;
+
+	bool isAutosave = 6;
+	ENullableBool resetDirty = 7;
+	ESaveProjectVersionIncrement incrementVersion = 8;
+
+	repeated LumosProtobuf.Resource.ResourceReference clientReferences = 14;
+
+}
+
+message ProjectChangeStatusResponse {
+
+	string requestId = 2;
+	EStatus status = 3;
+	TranslateableData statusDescription = 4;
+
+	//Saved Version as Result
+	ProjectVersionID savedVersion = 5;
+	
+	//Exception
+	TranslateableData exceptionMessage = 10;
+	.LumosProtobuf.Resource.EErrorType exceptionError = 11;
+	repeated .LumosProtobuf.Resource.IOErrorData ioErrors = 12; 
+	EExceptionType exceptionType = 14;
+
+	//In case of rejection by client
+	ClientProgramInfo rejectedClientProgramInfo = 15;
+
+	//Used to return the collected Errors to the caller
+	repeated .LumosProtobuf.Resource.IOErrorData clientIoErrors = 13; 
+
+	//Progress Reporting
+	double progressPercent = 20; //From 0 to 1
+	bool progressPercentSet = 21;
+	EProgressStatus progressStatus = 22;
+ 
+	enum EStatus 
+	{
+		UNKNOWN = 0;
+		EXCEPTION = 1;
+		CLIENT_EXCEPTION = 6;
+
+		CONCURRENT_IO = 9;
+
+		ASK_CLIENTS = 2;
+		INFORM_CLIENTS_BEFORE = 7;
+		INFORM_CLIENTS_AFTER = 8;
+		CLIENT_REJECT = 3;
+		WORKING = 4;
+		DONE = 5;
+	}
+
+	enum EExceptionType
+	{
+		UNKNOWN_0 = 0;
+		IO = 1;
+		PERMISSION = 2;
+		PROJECT = 3;
+	}
+
+}
+
+message ProjectChangeConfirmationRequest {
+
+	string requestId = 2;
+
+	ClientInfo source = 4;
+
+	EConfirmationType type = 3;
+
+}
+
+message ProjectChangeConfirmationResponse {
+
+	string requestId = 2;
+
+	bool Ok = 3;
+
+}
+
+enum EConfirmationType {
+	
+	EConfirmationType_UNKNOWN = 0;
+	EConfirmationType_ASK_CLOSE = 2;
+	EConfirmationType_ASK_LOAD = 3;
+
+}
+
+enum EProgressStatus
+{
+	EProgressStatus_UNKNOWN = 0;
+
+	EProgressStatus_FILE_COPY = 1;
+	EProgressStatus_COMPRESSING = 2;
+	EProgressStatus_DECOMPRESSING = 3;
+	EProgressStatus_COMPUTATION = 4;
+	EProgressStatus_CLEANUP = 5;
+	EProgressStatus_DATA_COLLECTION = 6;
+	EProgressStatus_CONNECTING = 7;
+	EProgressStatus_WAITING = 8;
+}
+
+message ProjectChangeInformationRequest {
+
+	string requestId = 2;
+
+	ClientInfo source = 4;
+
+	EProjectInformType type = 3;
+
+	ENullableBool resetDirty = 7;
+
+}
+
+message ProjectChangeInformationResponse {
+
+	string requestId = 2;
+
+	bool Ok = 3;
+	bool Done = 4;
+
+	TranslateableData statusDescription = 5;
+	//Progress Reporting
+	double progressPercent = 20; //From 0 to 1
+	bool progressPercentSet = 21;
+	EProgressStatus progressStatus = 22;
+
+	repeated .LumosProtobuf.Resource.IOErrorData ioErrors = 10; 
+
+	// Used in BeforeSave to ask clients for additional References
+	repeated LumosProtobuf.Resource.ResourceReference references = 14;
+}
+
+enum EProjectInformType {
+
+	EProjectInformType_UNKNOWN = 0;
+
+	EProjectInformType_INFORM_BEFORE_CLOSE = 11;
+	EProjectInformType_INFORM_BEFORE_LOAD = 12;
+	EProjectInformType_INFORM_BEFORE_SAVE = 13;
+
+	EProjectInformType_INFORM_AFTER_CLOSE = 21;
+	EProjectInformType_INFORM_AFTER_LOAD = 22;
+	EProjectInformType_INFORM_AFTER_SAVE = 23;
+
+	EProjectInformType_INFORM_AFTER_LOAD_ERROR = 30;
+
+}
+
+/*
+message ProjectStoreHDDUsage {
+
+	EProjectStoreFolder Folder = 2;
+
+	map<string, int64> PerProjectSum = 3;
+
+	int64 FreeSpace = 4;
+
+}
+
+enum EProjectStoreFolder
+{
+	PROJECT_STORE = 0;
+	AUTOSAVE = 1;
+}
+*/
+
+message ProjectDirtyRequest {
+
+	string requestId = 2;
+
+	bool quickResponse = 3;
+
+}
+
+message ProjectDirtyResponse {
+
+	string requestId = 2;
+
+	bool dirty = 3;
+	bool quickResponse = 6;
+
+	repeated DirtyData dirtyWhere = 4;
+
+	int32 timeouts = 5;
+
+
+	message DirtyData {
+		ClientInfo client = 2;
+		repeated ItemInfoData  dirtyItems = 3;
+
+	}
+
+}
+
+message ProjectWarningRequest {
+
+	string requestId = 2;
+
+	bool quickResponse = 3;
+
+}
+
+message ProjectWarningResponse {
+
+	string requestId = 2;
+
+	bool warning = 3;
+	bool quickResponse = 6;
+
+	repeated WarningData warningWhere = 4;
+
+	int32 timeouts = 5;
+
+
+	message WarningData {
+		ClientInfo client = 2;
+		repeated ItemInfoData  warningItems = 3;
+
+	}
+
+}
+
+message ItemInfoData {
+
+	TranslateableData text = 2;
+	TranslateableData description = 3;
+	EItemInfoSeveraty severaty = 4;
+
+}
+
+enum EItemInfoSeveraty {
+	EItemInfoSeveraty_None = 0;
+	EItemInfoSeveraty_Minor = 1;
+	EItemInfoSeveraty_Medium = 2;
+	EItemInfoSeveraty_Major = 3;
+	EItemInfoSeveraty_Critical = 4;
+	EItemInfoSeveraty_Meltdown = 5;
+}
+
+message ImportProjectRequest {
+
+	string requestId = 2;
+
+	string tempFileName = 3;
+	string originalNameOfImportedFile = 5;
+
+	bool createNewOnDuplicate = 4;
+
+}
+
+message ImportProjectResponse {
+
+	string requestId = 2;
+
+	EProjectImportResult result = 10;
+	ProjectData importedData = 12;
+	TranslateableData error = 11;
+
+	//Progress Reporting
+	double progressPercent = 20; //From 0 to 1
+	bool progressPercentSet = 21;
+	TranslateableData progressDescription = 22;
+}
+
+enum EProjectImportResult {
+
+	EProjectImportResult_Done = 0;
+	EProjectImportResult_Error = 1;
+	EProjectImportResult_Duplicate = 2;
+	EProjectImportResult_MetadataRequired = 3;
+	EProjectImportResult_Progress = 4;
+}
+
+message ExportProjectRequest {
+
+	string requestId = 2;
+
+	ProjectVersionID toExport = 3;
+	bool exportEverything = 4;
+
+}
+
+message ExportProjectResponse {
+
+	string requestId = 2;
+
+	oneof result {
+		string tempFileName = 10;
+		TranslateableData error = 11;
+		bool progress = 12;
+	}
+
+	//Progress Reporting
+	double progressPercent = 20; //From 0 to 1
+	bool progressPercentSet = 21;
+	TranslateableData progressDescription = 22;
+
+}

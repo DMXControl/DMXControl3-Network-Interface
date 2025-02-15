@@ -1,0 +1,40 @@
+syntax = "proto3";
+
+package LumosProtobufClient;
+
+import "Common/Types/Device/DeviceServiceTypes.proto";
+import "Common/Types/ProgrammerServiceTypes.proto";
+import "Common/Types/CommonTypes.proto";
+
+option csharp_namespace = "UmbraClient";
+
+service ProgrammerClient {
+
+  rpc GetProgrammerValue( .LumosProtobuf.DevicePropertyValueRequest) returns (.LumosProtobuf.DevicePropertyValueResponse);
+
+  rpc SetProgrammerValue(.LumosProtobuf.SetProgrammerValueRequest) returns (.LumosProtobuf.DevicePropertyValueResponse);
+
+  rpc SetProgrammerAttachable(.LumosProtobuf.SetProgrammerAttachableRequestResponse) returns (.LumosProtobuf.SetProgrammerAttachableRequestResponse);
+
+  rpc DeleteProgrammerAttachable(.LumosProtobuf.DeleteProgrammerAttachableRequest) returns ( .LumosProtobuf.ConfirmedResponse);
+
+  rpc DeleteProgrammerValue (.LumosProtobuf.DeleteProgrammerValueRequest) returns (.LumosProtobuf.ConfirmedResponse);
+
+  rpc GetProgrammerState(.LumosProtobuf.CueStateRequest) returns (.LumosProtobuf.CueStateResponse);
+  rpc GetAttachableState(.LumosProtobuf.AttachableStateRequest) returns (.LumosProtobuf.AttachableStateResponse);
+
+  rpc SetProgrammerOutput(.LumosProtobuf.SetProgrammerOutputRequest) returns (.LumosProtobuf.ConfirmedResponse);
+
+  rpc EditCueInProgrammer(.LumosProtobuf.EditCueInProgrammerRequest) returns (.LumosProtobuf.ConfirmedResponse);
+  rpc ModProgrammerSnapshot(.LumosProtobuf.ProgrammerSnapshotsRequest) returns (.LumosProtobuf.ConfirmedResponse);
+  rpc GetSnapshots(.LumosProtobuf.GetProgrammerSnapshotsRequestResponse) returns (.LumosProtobuf.GetProgrammerSnapshotsRequestResponse);
+
+  rpc CopyProgrammerValues(.LumosProtobuf.CopyProgrammerValuesRequest) returns (.LumosProtobuf.ConfirmedResponse);
+
+  rpc GetProgrammerProperty(.LumosProtobuf.ProgrammerPropertyRequestResponse) returns (.LumosProtobuf.ProgrammerPropertyRequestResponse);
+  rpc UpdateOriginOfProgrammer(.LumosProtobuf.UpdateOriginOfProgrammerRequest) returns (.LumosProtobuf.UpdateOriginOfProgrammerResponse);
+
+  rpc ReceiveProgrammerChanges(.LumosProtobuf.GetRequest) returns (stream .LumosProtobuf.ProgrammerChangeMessage);
+
+}
+

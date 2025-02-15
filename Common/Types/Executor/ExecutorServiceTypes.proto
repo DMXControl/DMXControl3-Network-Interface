@@ -1,0 +1,63 @@
+﻿syntax = "proto3";
+
+//import "Common/Types/CommonTypes.proto";
+import "Common/Types/ValueTypes.proto";
+
+package LumosProtobuf.Executor;
+
+message ExecutorDescriptor
+{
+	string id = 2;
+	string name = 3;
+	string executorMemberId = 4;
+	string executorMemberType = 5;
+	uint32 number = 6;
+
+	
+	ColorData color = 7;
+
+	double faderPosition = 10;
+	bool button1Active = 11;
+	bool button2Active = 12;
+	bool button3Active = 13;
+	bool button4Active = 14;
+
+	string faderKey = 20;
+	string button1Key = 21;
+	string button2Key = 22;
+	string button3Key = 23;
+	string button4Key = 24;
+
+	string faderDisplayName = 30;
+	string button1DisplayName = 31;
+	string button2DisplayName = 32;
+	string button3DisplayName = 33;
+	string button4DisplayName = 34;
+}
+
+message ExecutorPageDescriptor {
+
+	string id = 2;
+	uint32 pageNumber = 3;
+	string name = 4;
+	int32 executorCount = 5;
+
+	repeated string executorIds = 10;
+
+
+}
+
+message ExecutorMemberWrapperDescriptor {
+
+	string id = 2;
+
+	string executorMemberId = 4;
+	string executorMemberType = 5;
+
+
+
+}
+
+
+
+

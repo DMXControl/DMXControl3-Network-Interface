@@ -1,0 +1,33 @@
+syntax = "proto3";
+
+package LumosProtobufServer;
+
+import "Common/Types/Cuelist/CuelistServiceTypes.proto";
+import "Common/Types/CommonTypes.proto";
+
+option csharp_namespace = "UmbraKernel";
+
+service CuelistService {
+
+  rpc GetCuelists (stream .LumosProtobuf.Cuelist.GetCuelistsResponse) returns (stream .LumosProtobuf.GetMultipleRequest);
+  rpc CreateCuelists (stream .LumosProtobuf.ConfirmedResponse) returns (stream .LumosProtobuf.Cuelist.CuelistCreationRequest);
+  rpc DeleteCuelists (stream .LumosProtobuf.Cuelist.CuelistDeletionResponse) returns (stream .LumosProtobuf.Cuelist.CuelistDeletionRequest);
+
+  rpc DoSetCuelistValue (stream .LumosProtobuf.ConfirmedResponse) returns (stream .LumosProtobuf.Cuelist.SetCuelistValueRequest);
+  rpc DoCuelistAction (stream .LumosProtobuf.ConfirmedResponse) returns (stream .LumosProtobuf.Cuelist.CuelistActionRequest);
+  rpc DoInsertSpecialCue(stream .LumosProtobuf.ConfirmedResponse) returns (stream .LumosProtobuf.Cuelist.SpecialCueInsertRequest);
+  rpc DoAddProgrammerCue(stream .LumosProtobuf.ConfirmedResponse) returns (stream .LumosProtobuf.Cuelist.CueAddFromProgrammerRequest);
+
+  rpc GetPropertyValueSources (stream .LumosProtobuf.Cuelist.GetPropertyValueSourceResponse) returns (stream .LumosProtobuf.Cuelist.GetPropertyValueSourceRequest);
+
+  rpc GetCuelistProgress(stream .LumosProtobuf.Cuelist.CuelistProgressStateResponse) returns (stream .LumosProtobuf.GetRequest);
+
+  rpc SendCuelistChanges (stream .LumosProtobuf.Cuelist.CuelistChangedMessage) returns (.LumosProtobuf.ConfirmedResponse);
+  rpc SendCuelistProgressChanges (stream .LumosProtobuf.Cuelist.CuelistProgressStateChangeMessage) returns (stream .LumosProtobuf.Cuelist.CuelistProgressStateChangeRequest);
+
+
+  //All Cuelist
+  rpc DoAllCuelistAction (stream .LumosProtobuf.Cuelist.AllCuelistActionResponse) returns (stream .LumosProtobuf.Cuelist.AllCuelistActionRequest);
+
+}
+

@@ -1,0 +1,19 @@
+syntax = "proto3";
+
+package LumosProtobufClient;
+
+import "Common/Types/ParameterServiceTypes.proto";
+import "Common/Types/CommonTypes.proto";
+
+option csharp_namespace = "UmbraClient";
+
+service ParameterClient {
+
+  rpc GetParameters(.LumosProtobuf.GetParametersRequest) returns (.LumosProtobuf.GetParametersResponse); 
+
+  rpc GetParameterValue(.LumosProtobuf.GetParameterValueRequest) returns (.LumosProtobuf.GetParameterValueResponse);
+  rpc SetParameterValue(.LumosProtobuf.SetTestParameterValueRequest) returns (.LumosProtobuf.ConfirmedResponse);
+  rpc TestParameterValue(.LumosProtobuf.SetTestParameterValueRequest) returns (.LumosProtobuf.ConfirmedResponse);
+}
+
+

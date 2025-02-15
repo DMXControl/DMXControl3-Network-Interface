@@ -1,0 +1,73 @@
+syntax = "proto3";
+
+package LumosProtobuf;
+
+//import "Common/Types/CommonTypes.proto";
+import "Common/Types/ValueTypes.proto";
+
+message GetAffinityClassesResponse {
+
+	string requestId = 2;
+
+	repeated string classNames = 3;
+
+}
+
+message GetAffinityClassReferenceListResponse {
+
+	string className = 2;
+
+	repeated IEnumObjectData referenceList = 3;
+
+}
+
+message GetAffinityListRequestResponse {
+
+	string className = 2;
+	string referenceObjectId = 4;
+
+	repeated IEnumObjectData affinityList = 3;
+	repeated double affinityValues = 5;
+
+}
+
+message SetUserDefinedAffinityListRequest {
+
+	string className = 2;
+	string referenceObjectId = 4;
+
+	string itemListId = 5; //Can be empty to "unset"
+}
+
+message GetUserDefinedAffinityListsResponse {
+
+	string className = 2;
+
+	repeated string referenceObjectIds = 4;
+	repeated string itemListIds = 5;
+
+}
+
+/*
+message MoveAffinityObjectsRequest {
+
+	string requestId = 2;
+	string className = 3;
+	string referenceObjectId = 4;
+
+	repeated string affinityObjectIds = 5;
+	sint32 moveDelta = 6; //- or + values depending on direction
+
+}
+
+message ResetAffinityObjectsRequest {
+
+	string className = 3;
+	oneof value
+	{
+		string referenceObjectId = 4;
+		bool all = 5;
+	}
+
+}
+*/

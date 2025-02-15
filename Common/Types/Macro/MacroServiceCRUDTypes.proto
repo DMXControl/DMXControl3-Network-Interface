@@ -1,0 +1,55 @@
+﻿syntax = "proto3";
+
+import "Common/Types/CommonTypes.proto";
+import "Common/Types/Macro/MacroServiceTypes.proto";
+
+package LumosProtobuf.Macro;
+
+message GetMacrosResponse {
+	string requestId = 2;
+	repeated MacroDescriptor macros = 3;
+}
+
+message MacroCreationRequest {
+	string requestId = 2;
+}
+message MacroSetButtonStateRequest {
+	string requestId = 2;
+	string macroId = 3;
+	uint32 buttonNumber = 4;
+	bool active = 5;
+}
+message MacroSetFaderStateRequest {
+	string requestId = 2;
+	string macroId = 3;
+	uint32 faderNumber = 4;
+	oneof faderPosition
+	{
+		double increment = 5;
+		double absolut = 6;
+	}
+}
+
+message MacroDeletionRequest {
+	string requestId = 2;
+	string macroId = 3;
+}
+
+message MacroDeletionResponse {
+	string requestId = 2;
+	bool deleted = 3;
+}
+
+message MacroChangedMessage {
+	.LumosProtobuf.EChangeType changeType = 3;
+	string macroId = 4;
+	MacroDescriptor macroData = 5;
+
+	oneof change {	
+		string property = 6;
+		string parameter = 7;	
+	}
+
+	.LumosProtobuf.ObjectData newValue = 9;
+}
+

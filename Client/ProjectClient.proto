@@ -1,0 +1,42 @@
+syntax = "proto3";
+
+package LumosProtobufClient;
+
+import "Common/Types/Project/ProjectServiceTypes.proto";
+import "Common/Types/CommonTypes.proto";
+
+option csharp_namespace = "UmbraClient";
+
+service ProjectClient {
+
+	//Projects
+	rpc GetProjects(.LumosProtobuf.GetMultipleRequest) returns (.LumosProtobuf.GetProjectsResponse);
+	rpc CreateProject(.LumosProtobuf.ProjectCreationRequest) returns (.LumosProtobuf.ProjectCreationResponse);
+	rpc DeleteProject(.LumosProtobuf.ProjectDeletionRequest) returns (.LumosProtobuf.ConfirmedResponse);
+	rpc ModifyProject(.LumosProtobuf.ProjectModifyRequest) returns (.LumosProtobuf.ConfirmedResponse);
+
+	rpc ImportProject(.LumosProtobuf.ImportProjectRequest) returns (stream .LumosProtobuf.ImportProjectResponse);
+	rpc ExportProject(.LumosProtobuf.ExportProjectRequest) returns (stream .LumosProtobuf.ExportProjectResponse);
+
+	//ProjectToDos
+	rpc GetProjectTodos(.LumosProtobuf.GetMultipleRequest) returns (.LumosProtobuf.GetProjectTodoResponse);
+	rpc CreateProjectTodo(.LumosProtobuf.ProjectTodoCreationRequest) returns (.LumosProtobuf.ConfirmedResponse);
+	rpc ModifyProjectTodo(.LumosProtobuf.ProjectTodoModifyRequest) returns (.LumosProtobuf.ConfirmedResponse);
+	rpc DeleteProjectTodo(.LumosProtobuf.ProjectTodoDeletionRequest) returns (.LumosProtobuf.ConfirmedResponse);
+
+	rpc GetProjectState(.LumosProtobuf.GetRequest) returns (.LumosProtobuf.GetProjectStateRespose);
+	rpc GetProjectDirty(.LumosProtobuf.ProjectDirtyRequest) returns (.LumosProtobuf.ProjectDirtyResponse);
+	rpc GetProjectWarning(.LumosProtobuf.ProjectWarningRequest) returns (.LumosProtobuf.ProjectWarningResponse);
+
+	rpc CloseProjectVersion(.LumosProtobuf.CloseProjectVersionRequest) returns (stream .LumosProtobuf.ProjectChangeStatusResponse);
+	rpc LoadProjectVersion(.LumosProtobuf.LoadProjectVersionRequest) returns (stream .LumosProtobuf.ProjectChangeStatusResponse);
+	rpc SaveProjectVersion(.LumosProtobuf.SaveProjectVersionRequest) returns (stream .LumosProtobuf.ProjectChangeStatusResponse);
+
+	rpc ReceiveProjectChangeConfirmationRequests(stream .LumosProtobuf.ProjectChangeConfirmationResponse) returns (stream .LumosProtobuf.ProjectChangeConfirmationRequest);
+	rpc ReceiveProjectChangeInformationRequests(stream .LumosProtobuf.ProjectChangeInformationResponse) returns (stream .LumosProtobuf.ProjectChangeInformationRequest);
+	rpc ReceiveProjectDirtyRequests(stream .LumosProtobuf.ProjectDirtyResponse) returns (stream .LumosProtobuf.ProjectDirtyRequest);
+	rpc ReceiveProjectWarningRequests(stream .LumosProtobuf.ProjectWarningResponse) returns (stream .LumosProtobuf.ProjectWarningRequest);
+	rpc ReceiveProjectTodoChanges(.LumosProtobuf.GetRequest) returns (stream .LumosProtobuf.ProjectTodoChangedMessage);
+	rpc ReceiveProjectChanges(.LumosProtobuf.GetRequest) returns (stream .LumosProtobuf.ProjectChangedMessage);
+}
+

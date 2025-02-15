@@ -1,0 +1,96 @@
+syntax = "proto3";
+
+package LumosProtobuf.Cuelist;
+
+//import "Common/Types/ValueTypes.proto";
+import "Common/Types/CommonTypes.proto";
+import "Common/Types/DependencyTypes.proto";
+
+message CuelistGroupDescriptor {
+
+	string name = 1;
+	string id = 2;
+	uint32 number = 3;
+
+	repeated string cuelistIds = 7;
+
+}
+
+message GetCuelistGroupsResponse {
+
+	string requestId = 1;
+
+	repeated CuelistGroupDescriptor cuelistgroups = 2;
+
+}
+
+message CuelistGroupCreationRequest {
+
+	string requestId = 1;
+
+	string copyFromGroup = 10;
+	string groupNameTemplate = 11;
+
+}
+
+
+message CuelistGroupDeletionRequest {
+
+	string requestId = 1;
+
+	string cuelistGroupId = 2;
+
+	.LumosProtobuf.DependencyData dependencies = 4;
+
+}
+
+message CuelistGroupDeletionResponse {
+
+	string requestId = 1;
+
+	oneof response 
+	{
+		string deletedCuelistGroupId = 2;
+		.LumosProtobuf.DependencyData dependencies = 4;
+	}
+}
+
+message CuelistGroupModifyRequest {
+
+	string requestId = 1;
+
+	string cuelistGroupId = 2;
+
+	EModType type = 3;
+
+	repeated string cuelistIds = 6;
+	int32 targetIndex = 11;
+
+	enum EModType {
+		
+		UNKNOWN = 0;
+		ADD = 1;
+		REMOVE = 2;
+		MOVE = 3;
+		MOVE_ALL = 4;
+	
+	}
+
+}
+
+message CuelistGroupChangedMessage {
+
+	.LumosProtobuf.EChangeType changeType = 3;
+	string cuelistGroupId = 4;
+	CuelistGroupDescriptor cuelistGroupData = 5;
+
+	oneof change {
+	
+		string property = 6;
+		string parameter = 7;
+	
+	}
+
+	.LumosProtobuf.ObjectData newValue = 9;
+
+}

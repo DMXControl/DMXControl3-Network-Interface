@@ -1,0 +1,17 @@
+syntax = "proto3";
+
+package LumosProtobufClient;
+
+import "Common/Types/PluginManagementTypes.proto";
+import "Common/Types/CommonTypes.proto";
+
+option csharp_namespace = "UmbraClient";
+
+service PluginManagementClient {
+
+	rpc GetPlugins(.LumosProtobuf.GetPluginsRequest) returns (.LumosProtobuf.GetPluginsResponse);
+	rpc IsPluginEnabled(.LumosProtobuf.EnableDisablePluginRequestResponse) returns (.LumosProtobuf.EnableDisablePluginRequestResponse);
+	rpc SetPluginEnabled(.LumosProtobuf.EnableDisablePluginRequestResponse) returns (.LumosProtobuf.ConfirmedResponse);
+
+}
+

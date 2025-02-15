@@ -1,0 +1,106 @@
+﻿syntax = "proto3";
+
+package LumosProtobuf;
+
+//import "Common/Types/ParameterServiceTypes.proto";
+import "Common/Types/CommonTypes.proto";
+import "Common/Types/ValueTypes.proto";
+
+message ItemListDescriptor {
+
+	string id = 2;
+	string listType = 3;
+	string listTypeDisplay = 5;
+	string name = 4;
+	string itemType_AQ = 6;
+
+	bool isDefault = 8;
+
+	repeated IEnumObjectData items = 10;
+
+}
+
+message GetPossibleItemsResponse {
+
+	string requestId = 2;
+
+	bool found = 4;
+	repeated IEnumObjectData possibleItems = 3;
+
+}
+
+message GetItemListsResponse {
+
+	string requestId = 2;
+
+	repeated ItemListDescriptor itemLists = 3;
+	
+}
+
+message GetAvailableItemListTypesResponse {
+
+	string requestId = 2;
+
+	map<string,string> availableItemListTypes = 3;
+
+}
+
+message ItemListCreationRequest {
+
+	string requestId = 2;
+
+	string listType = 3;
+
+	string itemListNameTemplate = 10;
+	string copyFromItemList = 11;
+
+}
+
+message ItemListDeletionRequest {
+
+	string itemListId = 2;
+
+}
+
+message ItemListModifyRequest {
+
+	string requestId = 2;
+
+	string itemListId = 3;
+
+	EModType type = 4;
+
+	repeated IEnumObjectData toAdd = 10;
+	repeated int32 toRemove = 11;
+
+	int32 moveFrom = 12;
+	int32 moveTo = 13;
+
+	enum EModType {
+	
+		UNKNOWN = 0;
+		ADD = 1;
+		REMOVE = 2;
+		MOVE = 3;
+		CLEAR = 4;
+		REDEFINE = 5; //Like clear + add
+	}
+
+}
+
+message ItemListChangedMessage {
+
+	EChangeType changeType = 3;
+	string itemListId = 4;
+	ItemListDescriptor itemListData = 5;
+
+	oneof change {
+	
+		string property = 6;
+		string parameter = 7;
+	
+	}
+
+	ObjectData newValue = 9;
+
+}

@@ -1,0 +1,217 @@
+﻿syntax = "proto3";
+
+//import "Common/Types/CommonTypes.proto";
+import "Common/Types/Device/DeviceServiceTypes.proto";
+import "Common/Types/Cue/CueTriggerServiceTypes.proto";
+import "Common/Types/ProgrammerServiceTypes.proto";
+
+package LumosProtobuf.Cue;
+
+enum EFadeChangeType
+{
+	UNKNOWN = 0;
+	FADE_IN = 1;
+	FADE_OUT = 2;
+	AUTOPREPARE = 3;
+	PAUSE = 4;
+	WAIT = 10;
+	RELEASE = 11;
+}
+
+enum ESceneType
+{
+	SCENE = 0;
+	PRESET_REFERENCE = 1;
+	SCENELIST_REFERENCE = 2;
+	ACTION = 3;
+	AUDIO = 4;
+}
+
+enum ESceneEntryType
+{
+	ENTRY = 0;
+	PRESET_REFERENCE_ENTRY = 1;
+}
+
+message CueNumberData
+{
+	repeated int32 number = 2;
+}
+
+message CueDescriptor
+{
+	string cueId = 2;
+	string name = 3;
+
+	bool enabled = 4;
+	bool autoprepareEnabled = 5;
+	TriggerValueData triggerValue = 6;
+	string comment = 7;
+	bool takeFades = 8;
+
+	int32 cueIndex = 9;
+	.LumosProtobuf.Cue.ESceneType type = 10;
+	string parentContainerId = 11;
+	CueNumberData cueNumber = 12;
+
+	repeated .LumosProtobuf.Cue.CueEntryDescriptor entries = 13;
+
+	.LumosProtobuf.FannedPropertyValue delay = 20;
+	.LumosProtobuf.FannedPropertyValue delayDown = 21;
+	.LumosProtobuf.FannedPropertyValue fade = 22;
+	.LumosProtobuf.FannedPropertyValue fadeDown = 23;
+
+	int64 absoluteStartTime = 30;
+	int64 absoluteFadeTime = 31;
+	int64 absoluteDelayTime = 32;
+	int64 absoluteTimeTillNextCue = 33;
+	int64 absoluteTriggerTime = 34;
+
+	int64 delayTimeLeft = 41;
+	int64 fadeTimeLeft = 42;
+	int64 durationTimeLeft = 43;
+}
+
+message CueEntryDescriptor
+{
+	string entryId = 2;
+	string parentEntryContainerId = 6;
+	string parentParentContainerId = 7;
+
+	.LumosProtobuf.Cue.ESceneEntryType type = 3;
+
+	string deviceGroupId = 4;
+	string devicePropertyId = 5;
+
+	.LumosProtobuf.FannedPropertyValue delay = 20;
+	.LumosProtobuf.FannedPropertyValue fade = 22;
+	map<string, int64> deviceDelay = 23;
+	map<string, int64> deviceFade = 24;
+}
+
+message SetCueValueRequest {
+	
+	string requestId = 2;
+	string cueId = 40;
+	string parentContainerId = 41;
+
+	oneof value {
+	
+		string name = 3;
+		bool enabled = 4;
+		bool autoprepareEnabled = 5;
+		TriggerValueData triggerValue = 6;
+		string comment = 7;
+		bool takeFades = 8;
+		CueNumberData cueNumber = 12;
+
+		.LumosProtobuf.FannedPropertyValue delay = 20;
+		.LumosProtobuf.FannedPropertyValue delayDown = 21;
+		.LumosProtobuf.FannedPropertyValue fade = 22;
+		.LumosProtobuf.FannedPropertyValue fadeDown = 23;
+	}
+
+}
+
+message SetCueEntryValueRequest {
+	
+	string requestId = 2;
+	string parentEntryContainerId = 6;
+	string parentParentContainerId = 7;
+	string cueEntryId = 5;
+
+	oneof value {
+
+		.LumosProtobuf.FannedPropertyValue delay = 20;
+		.LumosProtobuf.Cue.SetCueEntryValueRequest.DeviceValue deviceDelay = 21;
+		.LumosProtobuf.FannedPropertyValue fade = 22;
+		.LumosProtobuf.Cue.SetCueEntryValueRequest.DeviceValue deviceFade = 23;
+		.LumosProtobuf.Cue.SetCueEntryValueRequest.EClearValue clear = 24;
+	}
+
+	message DeviceValue
+	{
+		string deviceId = 2;
+		int64 value = 3;
+		bool valueSet = 4;
+	}
+
+	enum EClearValue
+	{
+		Delay = 0;
+		Fade = 1;
+		DeviceDelay = 2;
+		DeviceFade = 3;
+	}
+}
+
+message GetCueStateRequest {
+
+	string requestId = 2;
+	string cueId = 3;
+	string parentContainerId = 4;
+
+	.LumosProtobuf.EViewMode mode = 5;
+
+}
+
+message GetCueStateResponse {
+	
+	string requestId = 2;
+
+	bool notFound = 4;
+	repeated .LumosProtobuf.GroupState states = 3;
+
+}
+
+message CueDeletionRequest
+{
+	string requestId = 2;
+	string parentContainerId = 3;
+	string cueId = 4;
+}
+
+message CueMoveRequest
+{
+	string requestId = 2;
+	string parentContainerId = 3;
+	string cueId = 4;
+	int32 targetIndex = 5;
+}
+
+message CueCopyRequest
+{
+	string requestId = 2;
+	string parentContainerId = 3;
+	string cueId = 4;
+
+	string targetParentContainerId = 5; //Can be same as parentContainerId to copy within same container
+	int32 targetIndex = 6;
+
+	string copyNameTemplate = 7;
+}
+
+message CueChangedMessage {
+
+	string parentContainerId = 4;
+	string cueId = 3;
+	CueDescriptor cueData = 5;
+
+	repeated string properties = 6;
+}
+
+message CueProgressStateMessage
+{
+	string cueId = 2;
+	int32 cueIndex = 3;
+
+	EFadeChangeType fadeType = 10;
+	int32 cueState = 11; //ESceneState Enum (flags)
+	double progress = 12;
+	string text = 13;
+	int64 msToWait = 14;
+	int64 fadeTimeLeft = 15;
+	int64 delayTimeLeft = 16;
+	int64 durationTimeLeft = 17;
+}
+

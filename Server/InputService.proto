@@ -1,0 +1,44 @@
+syntax = "proto3";
+
+package LumosProtobufServer;
+
+import "Common/Types/Input/InputServiceCRUDTypes.proto";
+import "Common/Types/CommonTypes.proto";
+
+option csharp_namespace = "UmbraKernel";
+
+service InputService {
+
+	rpc DoCreateBank(stream .LumosProtobuf.Input.BankCreationResponse) returns (stream .LumosProtobuf.Input.BankCreationRequest);
+	rpc DoDeleteBank(stream .LumosProtobuf.ConfirmedResponse) returns (stream .LumosProtobuf.Input.BankDeletionRequest);
+
+	rpc DoCreateConnectionSet(stream .LumosProtobuf.Input.ConnectionSetCreationResponse) returns (stream .LumosProtobuf.Input.ConnectionSetCreationRequest);
+	rpc DoDeleteConnectionSet(stream .LumosProtobuf.ConfirmedResponse) returns (stream .LumosProtobuf.Input.ConnectionSetDeletionRequest);
+	rpc DoMoveConnectionSet(stream .LumosProtobuf.ConfirmedResponse) returns (stream .LumosProtobuf.Input.ConnectionSetMoveRequest);
+	rpc DoModifyConnectionSet(stream.LumosProtobuf.Input.ConnectionSetModifyResponse) returns (stream .LumosProtobuf.Input.ConnectionSetModifyRequest);
+
+	rpc DoCreateOrReplacePort(stream .LumosProtobuf.Input.PortCreationOrReplaceResponse) returns (stream .LumosProtobuf.Input.PortCreationOrReplaceRequest);
+
+	rpc DoCreateOrUpdateOrDeleteSinkProxy (stream .LumosProtobuf.ConfirmedResponse) returns (stream .LumosProtobuf.Input.InputSinkProxyRequest);
+	rpc DoCreateOrUpdateOrDeleteSourceProxy (stream .LumosProtobuf.ConfirmedResponse) returns (stream .LumosProtobuf.Input.InputSourceProxyRequest);
+
+	rpc SendAvailableNodes(stream .LumosProtobuf.Input.GetAvailableNodesResponse) returns (stream .LumosProtobuf.GetRequest);
+	rpc SendInputClassProviders(stream .LumosProtobuf.Input.GetInputClassProvidersResponse) returns (stream .LumosProtobuf.GetMultipleRequest);
+		
+	rpc SendBanks(stream .LumosProtobuf.Input.GetBanksResponse) returns (stream .LumosProtobuf.GetMultipleRequest);
+	rpc SendConnectionSets(stream .LumosProtobuf.Input.GetConnectionSetResponse) returns (stream .LumosProtobuf.GetMultipleRequest);
+	rpc SendInputSinks(stream .LumosProtobuf.Input.GetInputSinksResponse) returns (stream .LumosProtobuf.GetMultipleRequest);
+	rpc SendInputSources(stream .LumosProtobuf.Input.GetInputSourcesResponse) returns (stream .LumosProtobuf.GetMultipleRequest);
+
+	rpc SendConnectionSetPreviewValues(stream .LumosProtobuf.Input.ConnectionSetPreviewValuesResponse) returns (stream .LumosProtobuf.GetRequest);
+
+	rpc SendGraphProcessedMessages(stream .LumosProtobuf.Input.ConnectionSetProcessedMessage) returns (stream .LumosProtobuf.Input.ConnectionSetProcessedRequest);
+	rpc SendInputSinkChanges(stream .LumosProtobuf.Input.InputSinkChangedMessage) returns (.LumosProtobuf.ConfirmedResponse);
+	rpc SendInputSourceChanges(stream .LumosProtobuf.Input.InputSourceChangedMessage) returns (.LumosProtobuf.ConfirmedResponse);
+	rpc SendInputClassProviderChanges(stream .LumosProtobuf.Input.InputClassProviderChangedMessage) returns (.LumosProtobuf.ConfirmedResponse);
+	rpc SendBankChanges(stream .LumosProtobuf.Input.BankChangedMessage) returns (.LumosProtobuf.ConfirmedResponse);
+	rpc SendConnectionSetChanges(stream .LumosProtobuf.Input.ConnectionSetChangedMessage) returns (.LumosProtobuf.ConfirmedResponse);
+
+	rpc SendSinkProxyChanges(stream .LumosProtobuf.Input.InputSinkProxyValuesChangedMessage) returns (.LumosProtobuf.ConfirmedResponse);
+}
+

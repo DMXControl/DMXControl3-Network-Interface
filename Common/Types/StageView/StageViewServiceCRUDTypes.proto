@@ -1,0 +1,139 @@
+syntax = "proto3";
+
+package LumosProtobuf;
+
+import "Common/Types/StageView/StageViewServiceTypes.proto";
+import "Common/Types/CommonTypes.proto";
+import "Common/Types/ValueTypes.proto";
+import "Common/Types/DependencyTypes.proto";
+
+message StageViewCreationRequest {
+
+	string requestId = 1;
+	string copyFromStageView = 10;
+	string stageViewNameTemplate = 11;
+}
+
+message StageViewDeletionRequest {
+
+	string requestId = 1;
+
+	string stageViewId = 2;
+
+}
+
+message StageViewDeletionResponse {
+
+	string requestId = 1;
+
+	oneof response 
+	{
+		string deletedStageViewId = 2;
+		string error = 3;
+	}
+
+}
+
+message StageViewModifyRequest {
+
+	string requestId = 1;
+
+	string stageViewId = 2;
+
+	EModType type = 3;
+
+	int32 targetIndex = 11;
+	repeated float transformationMatrix = 13;
+	StageViewDeviceModifyData device = 14;
+	StageViewDeviceGroupModifyData deviceGroup = 15;
+
+	AutoPositionData autoPositionData = 21;
+
+	enum EModType {
+		
+		UNKNOWN = 0;
+		MOVE = 1;
+		TRANSFORMATION_MATRIX = 2;
+		DEVICE = 3;
+		DEVICE_GROUP = 4;
+	}
+
+	message AutoPositionData {
+
+		PointData startPosition = 1;
+		int32 maxWidth = 2;
+
+	}
+
+}
+
+message StageViewDeviceModifyData {
+
+	EModType type = 3;
+
+	string deviceId = 6;
+	string aliasId = 7;
+	PointData position = 8;
+	SizeData size = 9;
+	EDeviceDisplayType displayType = 10;
+
+	enum EModType {
+		
+		UNKNOWN = 0;
+		ADD = 1;
+		REMOVE = 2;
+		ADD_ALIAS = 3;
+		REMOVE_ALIAS = 4;
+		POSITION = 5;
+		ALIAS_POSITION = 6;
+		SIZE = 7;
+		DISPLAY_TYPE = 8;
+	}
+
+}
+
+message StageViewDeviceGroupModifyData {
+
+	EModType type = 3;
+
+	string deviceGroupId = 7;
+	PointData position = 8;
+	SizeData size = 9;
+	EDeviceDisplayType displayType = 10;
+
+	enum EModType {
+		
+		UNKNOWN = 0;
+		ADD = 1;
+		REMOVE = 2;
+		POSITION = 3;
+		SIZE = 4;
+		DISPLAY_TYPE = 5;
+	}
+
+}
+
+message GetStageViewsResponse {
+
+	string requestId = 1;
+
+	repeated StageViewDescriptor stageViews = 2;
+
+}
+
+message StageViewChangedMessage {
+
+	EChangeType changeType = 3;
+	string stageViewId = 4;
+	StageViewDescriptor stageViewData = 5;
+
+	oneof change {
+	
+		string property = 6;
+		string parameter = 7;
+	
+	}
+
+	ObjectData newValue = 9;
+
+}

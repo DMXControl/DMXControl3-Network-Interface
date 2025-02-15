@@ -1,0 +1,224 @@
+﻿syntax = "proto3";
+
+package LumosProtobuf;
+
+message UmbraLoginRequest {
+	ClientProgramInfo client = 1;
+
+}
+
+enum EClientType
+{
+	EClientType_Unknown= 0;
+	Kernel = 1;
+	GUI = 2;
+	DMXInterfaceBroker = 3;
+	ExternalTool = 4;
+	Umbra = 5;
+}
+
+enum ELogoffReason
+{
+	ELogoffReason_Unknown = 0;
+	ClientLogoff = 1;
+	ClientTimeout = 2;
+	ClientKilled = 3;
+	UmbraShutdown = 4;
+}
+
+message UmbraLoginResponse {
+
+	string message = 2;
+	.LumosProtobuf.ClientProgramInfo umbraServer = 3;
+	string sessionId = 5;
+
+	enum EReturnCode {
+		NoError = 0;
+		AlreadyLoggedIn = 1;
+		InvalidLoginData = 2;
+		ClientLimitReached = 3;
+		AccessDenied = 4;
+		Error = 20;
+	}
+
+	EReturnCode returnCode = 7;
+}
+
+message UmbraLogoffRequest {
+
+	ClientProgramInfo client = 1;
+	string sessionId = 3;
+}
+
+message UmbraLogoffResponse {
+	string bye = 1;
+}
+
+message UmbraClientInfoMessage {
+
+	ClientProgramInfo client = 1;
+
+	oneof reason {
+		bool login = 2;
+		ELogoffReason logoff = 3;
+	}
+}
+
+message ReadyToWorkState {
+
+	bool readyToWork = 3;
+	bool receiveAndDisplayMessages = 4;
+
+}
+
+message UmbraClientReadyToWorkNotification {
+
+	ReadyToWorkState state = 5;
+
+}
+
+message UmbraClientProgramInfoResponse {
+
+	string requestId = 2;
+	string clientname = 3;
+
+	.LumosProtobuf.ClientProgramInfo info = 5;
+
+}
+
+//A user is a Logged in Program into the network
+message ClientInfo {
+
+	string hostname = 1;
+	repeated string ips = 6;
+	EClientType type = 3;
+	string clientname = 4; //Can be set individually
+	string projectName = 7;
+
+	string networkid = 20;
+	string runtimeid = 21;
+	string connectedToUmbra = 22; //Empty if not connected
+
+	ReadyToWorkState state = 31;
+	int32 umbraPort = 30;
+	int32 umbraSecurePort = 32;
+
+	int32 clientCapabilities = 40; //Flags of EClientCapabilities
+}
+
+enum EClientCapabilities
+{
+	EClientCapabilities_None = 0;
+	LatencyMeasure = 1;
+	ProvideProjectDirty = 2;
+	ProvideWarnings = 4;
+}
+
+message PingPong {
+
+	int64 requestCounter = 1;
+	string clientname = 2;
+
+	string responder = 3;
+
+	bool performanceTest = 4;
+	int32 performanceTTL = 5;
+}
+
+//A Programm is every Program in the network
+message ProgramInfo {
+
+	string programmName = 2;
+	string vendor = 3;
+	string programVersion = 5;
+	sint64 buildDate = 10;
+
+}
+
+message ClientProgramInfo {
+
+	ProgramInfo programInfo = 2;
+	ClientInfo clientInfo = 3;
+
+	int32 connectionLatencyMicroSeconds = 4;
+	sint64 clientTimestampUTC = 5; 
+	sint64 umbraTimestampUTC = 6;
+}
+
+message InformClientExistsRequest
+{
+	string requestId = 2;
+	ClientProgramInfo info = 3;
+
+}
+
+message InformClientExistsResponse
+{
+	string requestId = 2;
+	bool ok = 3;
+	repeated .LumosProtobuf.SetNetworkPropertyRequest requests = 4;
+
+	.LumosProtobuf.ClientProgramInfo umbra = 5;
+}
+
+message UmbraNetworkInfoResponse
+{
+	ClientProgramInfo umbraServer = 2;
+
+	repeated ClientProgramInfo connectedClients = 3;
+	repeated ClientProgramInfo knownClients = 4;
+}
+
+message UmbraUdpBroadcast
+{
+	ClientProgramInfo umbraServer = 2;
+	int64 broadcastTimestampUTC = 3;
+
+	string sourceEndPoint = 4;
+}
+
+//Used to Set the Network ID of a client, which will make the client connect in case it is not connected
+message SetNetworkPropertyRequest {
+
+	string clientRuntimeId = 2;
+	ClientInfo source = 3;
+
+	oneof property 
+	{
+		string targetNetworkId = 10;
+		string targetClientName = 11;
+	}
+		
+}
+
+message ClientControlRequest {
+
+	string requestId = 2;
+	ClientInfo source = 3;
+	string controlClientRuntimeId = 4;
+
+	oneof request {
+		EClientShutdownAction shutdownAction = 5;
+		EShowHideProcess showHideAction = 6;
+	}
+
+
+	enum EClientShutdownAction {
+		
+		EClientShutdownAction_NONE = 0;
+		EClientShutdownAction_NOW = 1;
+		EClientShutdownAction_NO_OTHER_CLIENT = 2;
+
+	}
+
+	enum EShowHideProcess {
+		EShowHideProcess_NONE = 0;
+		EShowHideProcess_SHOW = 1;
+		EShowHideProcess_HIDE = 2;
+
+	}
+
+
+}
+
+

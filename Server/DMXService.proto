@@ -1,0 +1,23 @@
+syntax = "proto3";
+
+package LumosProtobufServer;
+
+import "Common/Types/DMX/DMXServiceTypes.proto";
+import "Common/Types/CommonTypes.proto";
+
+option csharp_namespace = "UmbraKernel";
+
+service DMXService {
+
+	rpc SendDmxChanges (stream .LumosProtobuf.DMXResponse) returns (stream .LumosProtobuf.GetDMXRequest);
+
+	rpc DoGetDmxValues (stream .LumosProtobuf.DMXResponse) returns (stream .LumosProtobuf.GetDMXRequest);
+	rpc DoSetDMXValues (stream .LumosProtobuf.ConfirmedResponse) returns (stream .LumosProtobuf.SetDMXRequest);
+	rpc DoClearSetDMXValues (stream .LumosProtobuf.ConfirmedResponse) returns (stream .LumosProtobuf.ClearDMXRequest);
+
+	rpc DoGetDMXIn2OutMapping (stream .LumosProtobuf.DMXIn2OutMappingRequestResponse) returns (stream .LumosProtobuf.GetRequest);
+	rpc DoSetDMXIn2OutMapping (stream .LumosProtobuf.ConfirmedResponse) returns (stream .LumosProtobuf.DMXIn2OutMappingRequestResponse);
+
+
+}
+

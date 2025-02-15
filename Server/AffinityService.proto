@@ -1,0 +1,27 @@
+syntax = "proto3";
+
+package LumosProtobufServer;
+
+import "Common/Types/AffinityServiceTypes.proto";
+import "Common/Types/CommonTypes.proto";
+
+option csharp_namespace = "UmbraKernel";
+
+service AffinityService {
+
+	rpc SendAffinityClasses (stream .LumosProtobuf.GetAffinityClassesResponse) returns (stream .LumosProtobuf.GetRequest);
+
+	rpc SendAffinityClassReferenceList (stream .LumosProtobuf.GetAffinityClassReferenceListResponse) returns (stream .LumosProtobuf.GetRequest);
+
+	rpc SendAffinityList (stream .LumosProtobuf.GetAffinityListRequestResponse) returns (stream .LumosProtobuf.GetAffinityListRequestResponse);
+
+	rpc DoSetUserDefinedAffinityList(stream .LumosProtobuf.ConfirmedResponse) returns (stream .LumosProtobuf.SetUserDefinedAffinityListRequest);
+
+	rpc SendUserDefinedAffinityLists (stream .LumosProtobuf.GetUserDefinedAffinityListsResponse) returns (stream .LumosProtobuf.GetRequest);
+
+	//rpc DoMoveAffinityObjects (stream .LumosProtobuf.ConfirmedResponse) returns (stream .LumosProtobuf.MoveAffinityObjectsRequest);
+
+	//rpc DoResetAffinityObjects (stream .LumosProtobuf.ConfirmedResponse) returns (stream.LumosProtobuf.ResetAffinityObjectsRequest);
+
+}
+

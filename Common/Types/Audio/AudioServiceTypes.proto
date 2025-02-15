@@ -1,0 +1,76 @@
+﻿syntax = "proto3";
+
+//import "Common/Types/CommonTypes.proto";
+import "Common/Types/Resource/ResourceManagementTypes.proto";
+
+package LumosProtobuf;
+
+message AudioMetadataData {
+	
+	.LumosProtobuf.Resource.ResourceData resourceData = 2;
+
+	FFTMetadataData fft = 3;
+	EState fftState = 13;
+
+	WAVEMetadataData wave = 4;
+	EState waveState = 14;
+
+	string details = 5;
+	int64 duration = 6;
+	int32 channels = 7;
+	int32 maxFrequencie = 8;
+	int32 sampleRate = 9;
+
+	enum EState {
+		None = 0;
+		Done = 1;
+		Error = 2;
+	}
+}
+
+message AllAudioMetadataResponse {
+
+	string requestId = 2;
+
+	repeated AudioMetadataData audioMetadata = 3;
+
+}
+
+
+message ControlAudioRequest {
+
+	string requestId = 2;
+
+	string audioFile = 20;
+	EPlayMode playMode = 3;
+
+	double balance = 4; //-1 is full left, 1 is full right
+	bool balanceSet = 5;
+
+	double volume = 6; //0 silence, 1 full
+	bool volumeSet = 7;
+
+	enum EPlayMode {
+	
+		None = 0;
+		Play = 1;
+		Stop = 2;
+		Pause = 3;
+	
+	}
+}
+
+message FFTMetadataData {
+	string path = 1;
+	repeated string tiffPath = 2;
+	double binSize = 3;
+	int32 n = 4;
+	uint64 bins = 5;
+	int32 tiffSampleSize = 6;
+}
+
+message WAVEMetadataData {
+	string path = 1;
+	repeated string tiffPath = 2;
+	uint64 bins = 5;
+}

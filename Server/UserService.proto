@@ -1,0 +1,33 @@
+syntax = "proto3";
+
+package LumosProtobufServer;
+
+import "Common/Types/User/UserServiceTypes.proto";
+import "Common/Types/User/UserServiceCRUDTypes.proto";
+import "Common/Types/Executor/ExecutorServiceCRUDTypes.proto";
+import "Common/Types/CommonTypes.proto";
+
+option csharp_namespace = "UmbraKernel";
+
+service UserService {
+
+  rpc DoGetUserContext (stream .LumosProtobuf.User.GetUserContextResponse) returns (stream .LumosProtobuf.GetMultipleRequest);
+  rpc SendUserContextChanges (stream .LumosProtobuf.User.UserContextChangedMessage) returns (.LumosProtobuf.ConfirmedResponse);
+
+  rpc DoGetOrCreateUserContext(stream .LumosProtobuf.User.UserContextResponse) returns (stream .LumosProtobuf.User.UserContextRequest);
+
+  rpc DoDestroy(stream .LumosProtobuf.ConfirmedResponse) returns (stream .LumosProtobuf.User.UserContextDestructionRequest);
+  
+  //Devices
+  rpc DoSelectDevicesAndGroups (stream .LumosProtobuf.ConfirmedResponse) returns (stream .LumosProtobuf.GetMultipleRequest);
+
+  //Executors
+  rpc DoSelectExecutorPage (stream .LumosProtobuf.ConfirmedResponse) returns (stream .LumosProtobuf.GetMultipleRequest);
+  rpc DoSelectExecutor (stream .LumosProtobuf.ConfirmedResponse) returns (stream .LumosProtobuf.GetMultipleRequest);
+  rpc DoFixExecutors (stream .LumosProtobuf.ConfirmedResponse) returns (stream .LumosProtobuf.Executor.FixExecutorsRequest);
+  
+  //Timecodes
+  rpc DoSelectTimecode (stream .LumosProtobuf.ConfirmedResponse) returns (stream .LumosProtobuf.GetMultipleRequest);
+  rpc DoSelectTrack (stream .LumosProtobuf.ConfirmedResponse) returns (stream .LumosProtobuf.GetMultipleRequest);
+}
+

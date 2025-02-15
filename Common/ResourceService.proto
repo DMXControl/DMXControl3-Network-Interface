@@ -1,0 +1,30 @@
+syntax = "proto3";
+
+package LumosProtobufCommon;
+
+//import "Common/Types/Resource/ResourceManagementTypes.proto";
+import "Common/Types/Resource/ResourceManagementCRUDTypes.proto";
+import "Common/Types/CommonTypes.proto";
+
+option csharp_namespace = "UmbraCommon";
+
+service ResourceClient {
+
+	rpc RequestAllResources (.LumosProtobuf.Resource.AllResourcesRequestResponse) returns (.LumosProtobuf.Resource.AllResourcesRequestResponse);
+	rpc ExistsResource(.LumosProtobuf.Resource.ResourceExistsRequest) returns (.LumosProtobuf.ConfirmedResponse);
+	rpc LoadResource(.LumosProtobuf.Resource.ResourceLoadRequest) returns (.LumosProtobuf.Resource.ResourceLoadResponse);
+	rpc SaveResource(.LumosProtobuf.Resource.ResourceSaveRequest) returns (.LumosProtobuf.ConfirmedResponse);
+
+	rpc StreamData (stream .LumosProtobuf.Resource.StreamDataRequest) returns (stream .LumosProtobuf.Resource.StreamDataResponse);
+}
+
+service ResourceService {
+
+	rpc SendAllResources (stream .LumosProtobuf.Resource.AllResourcesRequestResponse) returns (stream .LumosProtobuf.Resource.AllResourcesRequestResponse);
+	rpc SendExistsResource(stream .LumosProtobuf.ConfirmedResponse) returns (stream .LumosProtobuf.Resource.ResourceExistsRequest);
+	rpc DoLoadResource(stream .LumosProtobuf.Resource.ResourceLoadResponse) returns (stream .LumosProtobuf.Resource.ResourceLoadRequest);
+	rpc DoSaveResource(stream .LumosProtobuf.ConfirmedResponse) returns (stream .LumosProtobuf.Resource.ResourceSaveRequest);
+
+	rpc StreamData (stream .LumosProtobuf.Resource.StreamDataResponse) returns (stream .LumosProtobuf.Resource.StreamDataRequest);
+}
+

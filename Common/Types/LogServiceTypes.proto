@@ -1,0 +1,58 @@
+syntax = "proto3";
+
+package LumosProtobuf;
+
+import "Common/Types/UmbraServiceTypes.proto";
+import "Common/Types/CommonTypes.proto";
+
+message LogData {
+
+	string message = 2;
+	string logger = 3;
+	ELogLevel level = 4;
+	string category = 5;
+	sint64 timestamp = 6;
+	bool debug = 7;
+
+	ClientInfo source = 8;
+
+}
+
+message UserNotificationData {
+
+	
+	TranslateableData message = 2;
+	ELogLevel level = 3;
+
+	ClientInfo source = 4;
+	TranslateableData sender = 5;
+	TranslateableData category = 6;
+
+	repeated string targetClientRuntimeIds = 10;
+
+}
+
+enum ELogLevel
+{
+	ELogLevel_DEBUG = 0;
+	ELogLevel_INFO = 1;
+	ELogLevel_WARNING = 2;
+	ELogLevel_ERROR = 3;
+	ELogLevel_FATAL = 4;
+}
+
+message GetLogDataRequest {
+
+	string requestId = 2;
+	string kernelRuntimeId = 3;
+	int32 logCount = 4;
+
+}
+
+message GetLogDataResponse {
+
+	string requestId = 2;
+	string kernelRuntimeId = 3;
+	repeated LogData logs = 4;
+
+}

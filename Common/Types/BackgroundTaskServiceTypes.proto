@@ -1,0 +1,49 @@
+﻿syntax = "proto3";
+
+import "Common/Types/CommonTypes.proto";
+
+package LumosProtobuf;
+
+enum EBackgroundTaskState
+{
+	EBackgroundTaskState_Idle = 0;
+	EBackgroundTaskState_Waiting = 1;
+	EBackgroundTaskState_Paused = 2;
+	EBackgroundTaskState_Running = 3;
+	EBackgroundTaskState_Finished = 4;
+	EBackgroundTaskState_Error = 5;
+}
+
+message BackgroundTaskManagementRequest
+{
+	string requestId = 2;
+	string backgroundTaskId = 3;
+
+	oneof action
+	{
+		bool pause = 10;
+		bool continue = 11;
+	}
+}
+
+message BackgroundTaskDescriptor
+{
+	string id = 1;
+	string name = 2;
+	EBackgroundTaskState state = 3;
+	double totalProgress = 4;
+	TranslateableData progressMessage = 5;
+	string formatedOutput = 6;
+
+	repeated BackgroundTaskDescriptor subProgress = 10;
+}
+
+message BackgroundTaskChangedMessage
+{
+	string id = 2;
+	EChangeType changeType = 3;
+	string name = 5;
+
+	BackgroundTaskDescriptor backgroundTaskData = 4;
+}
+

@@ -1,0 +1,18 @@
+syntax = "proto3";
+
+package LumosProtobufServer;
+
+import "Common/Types/MonitoringServiceTypes.proto";
+import "Common/Types/CommonTypes.proto";
+
+option csharp_namespace = "UmbraKernel";
+
+service MonitoringService {
+
+	rpc SendMonitorSlots (stream .LumosProtobuf.GetMonitorSlotsResponse) returns (stream .LumosProtobuf.GetRequest);
+
+	rpc SendDMXStatistics (stream .LumosProtobuf.DMXStatisticsResponse) returns (stream .LumosProtobuf.GetRequest);
+
+	rpc DoPerformEnd2EndLatency(stream .LumosProtobuf.End2EndLatencyRequestResponse) returns (stream .LumosProtobuf.End2EndLatencyRequestResponse);
+}
+

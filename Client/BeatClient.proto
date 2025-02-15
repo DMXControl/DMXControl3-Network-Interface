@@ -1,0 +1,24 @@
+syntax = "proto3";
+
+package LumosProtobufClient;
+
+import "Common/Types/BeatServiceTypes.proto";
+import "Common/Types/CommonTypes.proto";
+
+option csharp_namespace = "UmbraClient";
+
+service BeatClient {
+
+	rpc GetManualBeat(.LumosProtobuf.GetRequest) returns (.LumosProtobuf.ManualBeatIntervalRequestResponse);
+	rpc SetManualBeat(.LumosProtobuf.ManualBeatIntervalRequestResponse) returns (.LumosProtobuf.ConfirmedResponse);
+
+	rpc GetManualBeatFactor(.LumosProtobuf.GetRequest) returns (.LumosProtobuf.ManualBeatFactorRequestResponse);
+	rpc SetManualBeatFactor(.LumosProtobuf.ManualBeatFactorRequestResponse) returns (.LumosProtobuf.ConfirmedResponse);
+
+	rpc LearnManualBeat(.LumosProtobuf.ManualBeatLearnRequest) returns (.LumosProtobuf.ConfirmedResponse);
+	rpc SyncManualBeat(.LumosProtobuf.ManualBeatSyncRequest) returns (.LumosProtobuf.ConfirmedResponse);
+
+	rpc ReceiveManualBeatChanges(.LumosProtobuf.GetRequest) returns (stream .LumosProtobuf.ManualBeatMessage);
+
+}
+

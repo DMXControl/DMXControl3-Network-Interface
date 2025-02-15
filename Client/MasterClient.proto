@@ -1,0 +1,23 @@
+syntax = "proto3";
+
+package LumosProtobufClient;
+
+import "Common/Types/Master/MasterServiceTypes.proto";
+import "Common/Types/Master/MasterServiceCRUDTypes.proto";
+import "Common/Types/CommonTypes.proto";
+
+option csharp_namespace = "UmbraClient";
+
+service MasterClient {
+
+	rpc GetMasters (.LumosProtobuf.GetMultipleRequest) returns (.LumosProtobuf.Master.GetMastersResponse);
+	rpc MasterAction(.LumosProtobuf.Master.MasterActionRequest) returns (.LumosProtobuf.ConfirmedResponse);
+	rpc SetMasterValue(.LumosProtobuf.Master.SetMasterValueRequest) returns (.LumosProtobuf.ConfirmedResponse);
+
+	rpc CreateMaster(.LumosProtobuf.Master.MasterCreationRequest) returns (.LumosProtobuf.ConfirmedResponse);
+	rpc DeleteMaster(.LumosProtobuf.Master.MasterDeletionRequest) returns (.LumosProtobuf.Master.MasterDeletionResponse);
+
+	rpc ReceiveMasterChanges(.LumosProtobuf.GetRequest) returns (stream .LumosProtobuf.Master.MasterChangedMessage);
+
+}
+

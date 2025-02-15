@@ -1,0 +1,188 @@
+﻿syntax = "proto3";
+
+package LumosProtobuf.Resource;
+
+import "Common/Types/CommonTypes.proto";
+
+enum EResourceContentType {
+		
+	RAW = 0;
+	MANAGED_TREE = 1;
+	
+} 
+
+/// <summary>
+/// The Access Type describes how the File will be accessed
+/// </summary>
+enum EResourceAccess 
+{ 
+	READ = 0;
+	READ_WRITE = 1;
+	WRITE = 2;
+}
+
+/// <summary>
+/// The ResourceType descripes where the Files are stored,
+/// and where the ResourceManager looks for them.
+/// Application Files are stored under /APP_PATH/Resource
+/// Project Files are stored in the Zip File or Local (Look in Zip First)
+/// User Files are stored under /APP_PATH/Resource/{username}/
+/// Config Files are stored under /App_Path/Config
+/// </summary>
+enum EResourceType
+{ 
+	UNKNOWN_TYPE = 0;
+	APPLICATION = 1;
+	PROJECT = 2;
+	TEMP = 3;
+	KERNEL_TEMP = 4;
+	CONFIG = 5;
+	//PROJECT_STORE = 6;
+	//PROJECT_AUTOSAVE = 7;
+}
+
+/// <summary>
+/// The Enum descripes which files they are.
+/// All these Files are Application Files. Some of them are stored
+/// in the Project.
+/// ICON: DDF Property Icons for Gobos, Prismas, whatever. Used for all Properties that have an Image.
+/// DEVICE_IMAGE: Images for the Devices
+/// PICTURE: Various Pictures. For example LiveView Background.
+/// DDF: DDF Files
+/// SYMBOL: Symbols for the GUI
+/// SOUND: Various Sounds
+/// 
+/// </summary>
+enum EResourceDataType
+{ 
+	UNKNOWN_DATA_TYPE = 0;
+	/// <summary>
+	/// DDF Property Icons for Gobos, Prismas, whatever. Used for all Properties that have an Image.
+	/// </summary>
+	ICON = 1;
+	/// <summary>
+	/// Images for the Devices
+	/// </summary>
+	DEVICE_IMAGE = 2;
+	/// <summary>
+	/// Various Pictures. For example LiveView Background.
+	/// </summary>
+	PICTURE = 3;
+	/// <summary>
+	/// DDF Files
+	/// </summary>
+	DDF = 4;
+	/// <summary>
+	/// Symbols for the GUI
+	/// </summary>
+	SYMBOL = 5;
+	/// <summary>
+	/// Various Sounds
+	/// </summary>
+	SOUND = 6;
+	/// <summary>
+	/// The Log Files of the System
+	/// </summary>
+	LOG = 7;
+	/// <summary>
+	/// Projects in the Datastore Metadata
+	/// </summary>
+	//PROJECTS_IN_STORE = 8;
+
+	/// <summary>
+	/// Binary Files
+	/// </summary>
+	BINARY = 20;
+}
+
+enum EResourceSource
+{
+	/// <summary>
+	/// Look in Project, then Look in Application Store
+	/// </summary>
+	DEFAULT = 0;
+	/// <summary>
+	/// Look in Application Store, then Look in Project
+	/// </summary>
+	PREFER_APPLICATION_STORE = 1;
+
+	/// <summary>
+	/// When using in remote call to indicate force calling the Kernel
+	/// </summary>
+	KERNEL = 2;
+}
+
+enum EErrorType {
+
+	UNKNOWN_ERROR = 0;
+	INFORMATION = 1;
+	WARNING = 2;
+	ERROR = 3;
+
+}
+
+message ResourceData {
+
+	string name = 2;
+	EResourceContentType type = 3;
+	sint64 changeDate = 4;
+	bool changeDateSet = 5;
+
+	sint64 fileSize = 6;
+	bool fileSizeSet = 7;
+	
+	bool userImported = 8;
+	
+	oneof datatype {
+	
+		bytes rawData = 20;
+		ManagedTreeItemData managedData = 21;
+		bool justMetadata = 22;
+		DataAdditionalFields dataFields = 23;
+
+	}
+
+	map<string,.LumosProtobuf.ObjectData> tags = 30;
+
+	message DataAdditionalFields {
+	
+		sint32 width = 1;
+		sint32 height = 2;
+		bool sizeSet = 3;
+
+		bool isProjectFile = 4;
+		bool isUserProfileFile = 5;
+		bool isUserDDF = 6;
+	
+		//.LumosProtobuf.ProjectMetadata projectStoreMetadata = 9;
+	}
+} 
+
+message ManagedTreeItemData {
+
+	string name = 2;
+	map<string,.LumosProtobuf.ObjectData> values = 3;
+	repeated ManagedTreeItemData children = 4;
+
+}
+
+message IOErrorData {
+
+	EErrorType error = 2;
+
+	.LumosProtobuf.TranslateableData message = 4;
+	string source = 5;
+
+	repeated IOErrorData ioErrors = 6;
+
+	string rootCause = 7;
+	string errorCause = 8;
+}
+
+message ResourceReference {
+
+	EResourceDataType type = 2;
+	string name = 3;
+	EResourceSource source = 4;
+
+}

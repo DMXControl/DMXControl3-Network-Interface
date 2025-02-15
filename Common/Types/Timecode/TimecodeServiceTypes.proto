@@ -1,0 +1,112 @@
+﻿syntax = "proto3";
+
+package LumosProtobuf.Timecode;
+
+message TimecodeDescriptor {
+
+	string id = 2;
+	uint32 number = 3;
+	string name = 8;
+
+	sint64 duration = 4;
+	sint64 timeElapsed = 5;
+
+	int32 timecodeState = 6; //ETimecodeState Enum. Due to Flags, convert to int is required
+	int32 timecodeTimer = 7; //ETimecodeTimer Enum
+	bool timecodeIsRecording = 9;
+
+	repeated string tracks = 10;
+	repeated string markers = 11;
+
+	uint32 soundOutputDevice = 21;
+	uint32 latency = 23;
+	repeated string possibleSoundOutputDevices = 22;
+}
+
+message TrackDescriptor {
+
+	string id = 2;
+	string parentId = 3;
+	uint32 number = 4;
+	string name = 5;
+	sint64 duration = 6;
+
+	int32 trackType = 7; //ETrackType Enum. Due to Translation Strings, convert to int is required as it cant be ported to Protobuf
+	int32 trackOptions = 8; //ETrackOptions Enum. Due to Flags, convert to int is required
+
+	bool minimized = 9; 
+	bool locked = 10; 
+	bool on = 11; 
+	bool solo = 12;
+
+	string selectedFaderKey=21;
+	repeated ActionNodeDescriptor actions = 31;
+	repeated PossibleActionNode possibleActions = 32;
+	oneof children
+	{
+		string executor = 33;
+		SnipDescriptorList snips = 34;
+		ScenelistTimeslotDescriptorList scenelistTimeslots = 35;
+	}
+}
+message SnipDescriptorList{
+	repeated SnipDescriptor list = 1;
+}
+message ScenelistTimeslotDescriptorList{
+	repeated ScenelistTimeslotDescriptor list = 1;
+}
+
+message MarkerDescriptor {
+	string id = 2;
+	uint32 number = 3;
+	string name = 4;
+	uint64 Ticks = 5;
+	uint64 TicksEnd = 6;
+	int32 markerType = 7;
+	bool selected = 8;
+}
+
+message ActionNodeDescriptor {
+	string id = 2;
+	EActionNodeType type = 3;
+	string key = 4;
+	uint64 tick = 5;
+	bool selected = 6;
+	oneof value {
+		bool valueBool = 11;
+		float valueFloat = 12;
+		sint32 valueInt32 = 13;
+		string valueString = 14;
+	}
+}
+message SnipDescriptor {
+	string id = 2;
+	string name = 3;
+	string soundFileName = 4;
+	uint64 tick = 5;
+	bool selected = 6;
+	uint64 snipDuration = 11;
+	uint64 trimmedDuration = 12;
+	uint64 startTrim = 13;
+	uint64 endTrim = 14;	
+}
+message ScenelistTimeslotDescriptor {
+	string id = 2;
+	string scenelist = 4;
+	int64 tick = 5;
+	bool selected = 6;
+}
+
+enum EActionNodeType {
+	BOOL = 0;
+	FLOAT = 1;
+	INT = 2;
+	STRING = 3;
+}
+
+message PossibleActionNode {
+	EActionNodeType type = 1;
+	string key = 2;
+	string description = 3;
+	string displayName = 4;
+}

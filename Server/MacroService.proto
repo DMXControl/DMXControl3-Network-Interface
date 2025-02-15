@@ -1,0 +1,18 @@
+syntax = "proto3";
+
+package LumosProtobufServer;
+
+import "Common/Types/Macro/MacroServiceCRUDTypes.proto";
+import "Common/Types/CommonTypes.proto";
+
+option csharp_namespace = "UmbraKernel";
+
+service MacroService {
+	rpc SendMacros(stream .LumosProtobuf.Macro.GetMacrosResponse) returns (stream .LumosProtobuf.GetMultipleRequest);
+	rpc DoCreateMacro(stream .LumosProtobuf.ConfirmedResponse) returns (stream .LumosProtobuf.Macro.MacroCreationRequest);
+	rpc DoSetMacroButtonState(stream .LumosProtobuf.ConfirmedResponse) returns (stream .LumosProtobuf.Macro.MacroSetButtonStateRequest);
+	rpc DoSetMacroFaderState(stream .LumosProtobuf.ConfirmedResponse) returns (stream .LumosProtobuf.Macro.MacroSetFaderStateRequest);
+	rpc DoDeleteMacro(stream .LumosProtobuf.Macro.MacroDeletionResponse) returns (stream .LumosProtobuf.Macro.MacroDeletionRequest);
+	rpc SendMacroChanges(stream .LumosProtobuf.Macro.MacroChangedMessage) returns (.LumosProtobuf.ConfirmedResponse);
+}
+

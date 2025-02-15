@@ -1,0 +1,45 @@
+syntax = "proto3";
+
+package LumosProtobufClient;
+
+//import "Common/Types/Timecode/TimecodeServiceTypes.proto";
+import "Common/Types/Timecode/TimecodeServiceCRUDTypes.proto";
+import "Common/Types/CommonTypes.proto";
+
+option csharp_namespace = "UmbraClient";
+
+service TimecodeClient {
+
+	rpc GetTimecodes (.LumosProtobuf.GetMultipleRequest) returns (.LumosProtobuf.Timecode.GetTimecodesResponse);
+
+	rpc TimecodeAction (.LumosProtobuf.Timecode.TimecodeActionRequest) returns (.LumosProtobuf.ConfirmedResponse);
+	rpc CreateTimecode(.LumosProtobuf.Timecode.TimecodeCreationRequest) returns (.LumosProtobuf.ConfirmedResponse);
+	rpc DeleteTimecode(.LumosProtobuf.Timecode.TimecodeDeletionRequest) returns (.LumosProtobuf.Timecode.TimecodeDeletionResponse);
+
+	
+	rpc ReceiveTimecodeChanges (.LumosProtobuf.GetRequest) returns (stream .LumosProtobuf.Timecode.TimecodeChangedMessage);
+	rpc ReceiveTimecodeStateChanges (.LumosProtobuf.GetRequest) returns (stream .LumosProtobuf.Timecode.TimecodeStateChangedMessage);
+
+	
+	rpc GetTracks (.LumosProtobuf.GetMultipleRequest) returns (.LumosProtobuf.Timecode.GetTracksResponse);
+	rpc CreateTrack(.LumosProtobuf.Timecode.TrackCreationRequest) returns (.LumosProtobuf.ConfirmedResponse);
+	rpc DeleteTrack(.LumosProtobuf.Timecode.TrackDeletionRequest) returns (.LumosProtobuf.Timecode.TrackDeletionResponse);
+	rpc AddChildrenToTrack(.LumosProtobuf.Timecode.TrackAddChildrenRequest) returns (.LumosProtobuf.ConfirmedResponse);
+	rpc ReceiveTrackChanges (.LumosProtobuf.GetRequest) returns (stream .LumosProtobuf.Timecode.TrackChangedMessage);
+	rpc EditTrack(.LumosProtobuf.Timecode.TrackEditRequest) returns (.LumosProtobuf.ConfirmedResponse);
+
+	
+	rpc GetMarkers (.LumosProtobuf.GetMultipleRequest) returns (.LumosProtobuf.Timecode.GetMarkersResponse);
+	rpc CreateMarker(.LumosProtobuf.Timecode.MarkerCreationRequest) returns (.LumosProtobuf.ConfirmedResponse);
+	rpc DeleteMarker(.LumosProtobuf.Timecode.MarkerDeletionRequest) returns (.LumosProtobuf.Timecode.MarkerDeletionResponse);
+	rpc ReceiveMarkerChanges (.LumosProtobuf.GetRequest) returns (stream .LumosProtobuf.Timecode.MarkerChangedMessage);
+	rpc EditMarker(.LumosProtobuf.Timecode.MarkerEditRequest) returns (.LumosProtobuf.ConfirmedResponse);
+	
+	rpc GetSnips (.LumosProtobuf.GetMultipleRequest) returns (.LumosProtobuf.Timecode.GetSnipsResponse);
+	rpc CreateSnip(.LumosProtobuf.Timecode.SnipCreationRequest) returns (.LumosProtobuf.ConfirmedResponse);
+	rpc DeleteSnip(.LumosProtobuf.Timecode.SnipDeletionRequest) returns (.LumosProtobuf.Timecode.SnipDeletionResponse);
+	rpc ReceiveSnipChanged (.LumosProtobuf.GetRequest) returns (stream .LumosProtobuf.Timecode.SnipChangedMessage);
+
+	rpc ReceiveActionNodeChanges (.LumosProtobuf.GetRequest) returns (stream .LumosProtobuf.Timecode.ActionNodeChangedMessage);
+}
+

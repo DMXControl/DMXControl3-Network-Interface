@@ -1,0 +1,166 @@
+syntax = "proto3";
+
+package LumosProtobuf;
+
+import "Common/Types/CommonTypes.proto";
+
+message DefaultConfigurationData {
+
+	string id = 3;
+	string name = 4;
+
+	bool project = 5; //true Project, false Application
+
+}
+
+message GetDefaultConfigurationRequest {
+
+	string requestId = 2;
+
+	string name = 3; //Filter for Name. Leave Empty to get all
+	bool project = 4;
+
+}
+
+message GetDefaultConfigurationResponse {
+
+	string requestId = 2;
+
+	repeated DefaultConfigurationData requestedData = 3;
+	repeated string registeredDefaultConfigurations = 4;
+
+}
+
+message DefaultConfigurationChangeMessage {
+
+	EChangeType type = 2;
+	string defaultConfigurationId = 3;
+	DefaultConfigurationData defaultConfigurationData = 4;
+
+}
+
+enum ESettingValueType {
+	Unknown = 0;
+	String = 1;
+	Int = 2;
+	Bool = 3;
+	Double = 4;
+}
+
+message GetSettingRequest {
+
+	string path = 3;
+	bool project = 4;
+
+	ESettingValueType type = 5;
+
+	bool registered = 6;
+}
+
+message SetSettingRequest {
+
+	string path = 3;
+	bool project = 4;
+
+	bool registered = 6;
+
+	oneof value {
+	
+		string stringValue = 10;
+		bool boolValue = 11;
+		int32 intValue = 12;
+		double doubleValue = 13;
+	
+	}
+
+}
+
+message GetSettingResponse {
+
+	string path = 3;
+	bool project = 4;
+
+	bool registered = 6;
+
+	oneof value {
+	
+		string stringValue = 10;
+		bool boolValue = 11;
+		int32 intValue = 12;
+		double doubleValue = 13;
+	
+	}
+
+}
+
+message GetSettingTypeResponse {
+
+	string path = 3;
+
+	ESettingValueType type = 4;
+
+}
+
+message GetRegisteredSettingsResponse {
+
+	string requestId = 2;
+
+	repeated .LumosProtobuf.SettingsMetadataData settings = 3;
+
+}
+
+message RegisterSettingRequest {
+
+	string requestId = 2;
+
+	.LumosProtobuf.SettingsMetadataData setting = 3;
+
+	oneof defaultValue {
+	
+		string stringValue = 10;
+		bool boolValue = 11;
+		int32 intValue = 12;
+		double doubleValue = 13;
+	
+	}
+}
+
+message SettingsDynamicEnumData {
+
+	string path = 3;
+
+	repeated ObjectData enumValues = 9;
+
+}
+
+message SettingsMetadataData {
+
+	string path = 3;
+	bool hidden = 4;
+	string name = 5;
+	string categoryId = 6;
+	repeated string subCategories = 7;
+	string description = 8;
+	repeated ObjectData enumValues = 9;
+
+	//Setting can be both Application and Project Setting
+	bool application = 10;
+	bool project = 11;
+
+	double min = 13;
+	double max = 14;
+
+	int32 settingsOptions = 21; //ESettingsOptions
+
+}
+
+message SettingChangedMessage {
+
+	string settingsPath = 2;
+	int32 type = 3; //ESettingsType
+	ObjectData newValue = 4;
+	bool registered = 5;
+
+}
+
+

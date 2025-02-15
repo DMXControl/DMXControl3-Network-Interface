@@ -1,0 +1,17 @@
+syntax = "proto3";
+
+package LumosProtobufClient;
+
+import "Common/Types/BackgroundTaskServiceTypes.proto";
+import "Common/Types/CommonTypes.proto";
+
+option csharp_namespace = "UmbraClient";
+
+service BackgroundTaskClient {
+
+	rpc ManageBackgroundTask (.LumosProtobuf.BackgroundTaskManagementRequest) returns (.LumosProtobuf.ConfirmedResponse);
+
+	rpc ReceiveBackgroundTaskChanges(.LumosProtobuf.GetRequest) returns (stream .LumosProtobuf.BackgroundTaskChangedMessage);
+
+}
+

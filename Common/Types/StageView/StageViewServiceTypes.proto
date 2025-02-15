@@ -1,0 +1,71 @@
+syntax = "proto3";
+
+package LumosProtobuf;
+
+import "Common/Types/ValueTypes.proto";
+import "Common/Types/CommonTypes.proto";
+
+enum EDeviceDisplayType
+{
+	IMAGE = 0;
+	PREVIEW = 1;
+	CUSTOM = 2;
+}
+
+enum EImageLayout
+{
+	None = 0;
+	Center = 2;
+	Stretch = 3;
+	Tile = 1;
+	Zoom = 4;
+}
+
+message StageViewDescriptor {
+
+	string id = 2;
+	string name = 3;
+	
+	int32 orderIndex = 20;
+	bool orderIndexSet = 21;
+
+	repeated float transformationMatrix = 22;
+	
+	repeated StageViewDeviceDescriptor devices = 30;
+	repeated StageViewDeviceGroupDescriptor deviceGroups = 31;
+
+	string background = 4;
+	EImageLayout backgroundLayout = 5; //EImageLayout
+	int32 options = 6; //ELiveViewOptions
+	int32 overlayDisplay = 7; //ELiveViewOverlayDisplay
+	double gridSpace = 8;
+	string beamDisplayType = 9;
+
+	ColorData foreColor = 10;
+	ColorData foreColorSelected = 11;
+	ColorData backColor = 12;
+	ColorData backColorSelected = 13;
+	ColorData backColorRelatedSelected = 14;
+	
+
+	message StageViewDeviceDescriptor {
+
+		string deviceId = 2;
+		PointData position = 5;
+		SizeData size = 6;
+		EDeviceDisplayType displayType = 7;
+
+		repeated string aliases = 3;
+		map<string, PointData> aliasPositions = 4;
+
+	}
+
+	message StageViewDeviceGroupDescriptor {
+
+		string deviceGroupId = 2;
+		PointData position = 5;
+		SizeData size = 6;
+		EDeviceDisplayType displayType = 7;
+	}
+}
+

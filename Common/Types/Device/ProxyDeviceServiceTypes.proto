@@ -1,0 +1,58 @@
+syntax = "proto3";
+
+package LumosProtobuf;
+
+//import "Common/Types/ValueTypes.proto";
+//import "Common/Types/CommonTypes.proto";
+import "Common/Types/Device/DeviceServiceTypes.proto";
+
+
+message ProxyDeviceMetadataData {
+
+	DeviceMetadataData deviceMetadata = 2;
+
+	string id = 3; 
+
+	string name = 4;
+
+
+	repeated .LumosProtobuf.ProxyDevicePropertyDescriptor properties = 10;
+
+}
+
+message ProxyDevicePropertyDescriptor
+{
+
+	string id = 2;
+
+	EProxyPropertyType proxyPropertyType = 3;
+
+	int32 rows = 4; //For Matrix
+	int32 columns = 5; //For Matrix
+}
+
+message ProxyDeviceCreationRequest {
+
+	string requestId = 1;
+
+	ProxyDeviceMetadataData device = 2;
+}
+
+message ProxyDeviceDeletionRequest {
+
+	string requestId = 1;
+
+	string proxyDeviceId = 2;
+
+}
+
+enum EProxyPropertyType
+{
+	NONE = 0;
+	INTENSITY = 1;
+	COLOR = 2;
+	MATRIX = 3;
+}
+
+
+

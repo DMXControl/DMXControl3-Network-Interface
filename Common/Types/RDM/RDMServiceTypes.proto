@@ -1,0 +1,142 @@
+﻿syntax = "proto3";
+
+package LumosProtobuf.RDM;
+
+message RDMDeviceDescriptor {
+
+	string uid = 2;
+
+    string dmxInterfaceId = 6;
+    int32 outputPort = 7;
+
+    bool present = 9;
+	
+	.LumosProtobuf.RDM.RDMInfo info = 11;
+	repeated LumosProtobuf.RDM.RDMSensor sensors = 12;
+}
+message RDMInfo {
+    uint32 rdmProtocolVersionMajor = 2;
+    uint32 rdmProtocolVersionMinor = 3;
+    uint32 deviceModelId= 4;
+    uint32 productCategoryCoarse= 5;
+    uint32 productCategoryFine = 6;
+    uint32 softwareVersionId = 7;
+    uint32 dmx512Footprint = 8;
+    uint32 dmx512CurrentPersonality = 9;
+    uint32 dmx512NumberOfPersonalities = 10;
+    uint32 dmx512StartAddress = 11;
+    uint32 subDeviceCount = 12;
+    uint32 sensorCount = 13;
+}
+message RDMSensor {
+    uint32 sensorId = 1;
+    int32 lowestValue = 2;
+    int32 value = 3;
+    bool isValid = 4;
+    string description = 5;
+    bool recordedValueSupported = 6;
+    bool lowestHighestValueSupported = 7;
+    int32 normalMaximum = 8;
+    int32 normalMinimum = 9;
+    int32 rangeMaximum = 10;
+    int32 rangeMinimum = 11;
+    ERDM_UnitPrefix prefix = 12;
+    ERDM_SensorUnit unit = 13;
+    ERDM_SensorType type = 14;
+    int32 highestValue = 15;
+    int32 recordedValue = 16;
+}
+enum ERDM_UnitPrefix
+{
+    NONE_UNIT_PREFIX = 0;
+    DECI = 1;
+    CENTI = 2;
+    MILLI = 3;
+    MICRO = 4;
+    NANO = 5;
+    PICO = 6;
+    FEMPTO = 7;
+    ATTO = 8;
+    ZEPTO = 9;
+    YOCTO = 10;
+    DECA = 17;
+    HECTO = 18;
+    KILO = 19;
+    MEGA = 20;
+    GIGA = 21;
+    TERRA = 22;
+    PETA = 23;
+    EXA = 24;
+    ZETTA = 25;
+    YOTTA = 26;
+}
+enum ERDM_SensorUnit
+{
+    NONE_SENSOR_UNIT = 0;
+    CENTIGRADE = 1;
+    VOLTS_DC = 2;
+    VOLTS_AC_PEAK = 3;
+    VOLTS_AC_RMS = 4;
+    AMPERE_DC = 5;
+    AMPERE_AC_PEAK = 6;
+    AMPERE_AC_RMS = 7;
+    HERTZ = 8;
+    OHM = 9;
+    WATT = 10;
+    KILOGRAM = 11;
+    METERS = 12;
+    METERS_SQUARED = 13;
+    METERS_CUBED = 14;
+    KILOGRAMMES_PER_METER_CUBED = 15;
+    METERS_PER_SECOND = 16;
+    METERS_PER_SECOND_SQUARED = 17;
+    NEWTON = 18;
+    JOULE = 19;
+    PASCAL = 20;
+    SECOND = 21;
+    DEGREE = 22;
+    STERADIAN = 23;
+    CANDELA = 24;
+    LUMEN = 25;
+    LUX = 26;
+    IRE = 27;
+    BYTE = 28;
+}
+enum ERDM_SensorType
+{
+    TEMPERATURE = 0;
+    VOLTAGE = 1;
+    CURRENT = 2;
+    FREQUENCY = 3;
+    RESISTANCE = 4;
+    POWER = 5;
+    MASS = 6;
+    LENGTH = 7;
+    AREA = 8;
+    VOLUME = 9;
+    DENSITY = 10;
+    VELOCITY = 11;
+    ACCELERATION = 12;
+    FORCE = 13;
+    ENERGY = 14;
+    PRESSURE = 15;
+    TIME = 16;
+    ANGLE = 17;
+    POSITION_X = 18;
+    POSITION_Y = 19;
+    POSITION_Z = 20;
+    ANGULAR_VELOCITY = 21;
+    LUMINOUS_INTENSITY = 22;
+    LUMINOUS_FLUX = 23;
+    ILLUMINANCE = 24;
+    CHROMINANCE_RED = 25;
+    CHROMINANCE_GREEN = 26;
+    CHROMINANCE_BLUE = 27;
+    CONTACTS = 28;
+    MEMORY = 29;
+    ITEMS = 30;
+    HUMIDITY = 31;
+    COUNTER_16BIT = 32;
+    OTHER = 127;
+}
+

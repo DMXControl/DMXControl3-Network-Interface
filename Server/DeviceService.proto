@@ -1,0 +1,46 @@
+syntax = "proto3";
+
+package LumosProtobufServer;
+
+import "Common/Types/Device/DeviceServiceTypes.proto";
+import "Common/Types/Device/DeviceServiceCRUDTypes.proto";
+import "Common/Types/Device/ProxyDeviceServiceTypes.proto";
+import "Common/Types/CommonTypes.proto";
+
+option csharp_namespace = "UmbraKernel";
+
+service DeviceService {
+
+  rpc SendDevicePropertyChanges (stream .LumosProtobuf.DevicePropertyChangeMessage) returns (stream .LumosProtobuf.DevicePropertyChangeRequest);
+
+  rpc SendDevicePropertyCurrentValue(stream .LumosProtobuf.DevicePropertyValueResponse) returns (stream .LumosProtobuf.DevicePropertyValueRequest); 
+  rpc SendDevicePropertiesCurrentValues(stream .LumosProtobuf.DevicePropertyValueBulkResponse) returns (stream .LumosProtobuf.DevicePropertyValueBulkRequest); 
+
+  rpc SendDescriptor (stream .LumosProtobuf.DescriptorResponse) returns (stream .LumosProtobuf.DescriptorRequest);
+
+  rpc SendAvailableDevices (stream .LumosProtobuf.AvailableDevicesResponse) returns (stream .LumosProtobuf.GetRequest);
+
+  rpc GetDevices (stream .LumosProtobuf.GetDevicesResponse) returns (stream .LumosProtobuf.GetMultipleRequest);
+  
+  rpc CreateDevices (stream .LumosProtobuf.DeviceCreationResponse) returns (stream .LumosProtobuf.DeviceCreationRequest);
+  rpc CreateProxyDevices (stream.LumosProtobuf.ConfirmedResponse) returns (stream .LumosProtobuf.ProxyDeviceCreationRequest);
+
+  rpc ReplaceDevices (stream .LumosProtobuf.ConfirmedResponse) returns (stream .LumosProtobuf.DeviceReplacementRequest);
+  rpc DeleteDevices (stream .LumosProtobuf.DeviceDeletionResponse) returns (stream .LumosProtobuf.DeviceDeletionRequest);
+  //rpc DeleteProxyDevice(stream .LumosProtobuf.ConfirmedResponse) returns (stream .LumosProtobuf.ProxyDeviceDeletionRequest);
+
+  rpc GetDeviceGroups (stream .LumosProtobuf.GetDeviceGroupsResponse) returns (stream .LumosProtobuf.GetMultipleRequest);
+  rpc CreateDeviceGroups (stream .LumosProtobuf.ConfirmedResponse) returns (stream .LumosProtobuf.DeviceGroupCreationRequest);
+  rpc GetTemporaryDeviceGroup (stream .LumosProtobuf.ConfirmedResponse) returns (stream .LumosProtobuf.GetTemporaryDeviceGroupRequest);
+  rpc DeleteDeviceGroups (stream .LumosProtobuf.DeviceGroupDeletionResponse) returns (stream .LumosProtobuf.DeviceGroupDeletionRequest);
+  rpc ModifyDeviceGroups (stream .LumosProtobuf.ConfirmedResponse) returns (stream .LumosProtobuf.DeviceGroupModifyRequest);
+
+  rpc GetSetGlobalFunction(stream .LumosProtobuf.GlobalFunctionRequestResponse) returns (stream LumosProtobuf.GlobalFunctionRequestResponse);
+  rpc ExecuteProcedure(stream .LumosProtobuf.ConfirmedResponse) returns (stream .LumosProtobuf.ProcedureExecutionRequest);
+
+  
+  rpc SendDeviceChanges (stream .LumosProtobuf.DeviceChangedMessage) returns (.LumosProtobuf.ConfirmedResponse);
+  rpc SendDeviceGroupChanges (stream .LumosProtobuf.DeviceGroupChangedMessage) returns (.LumosProtobuf.ConfirmedResponse);
+  rpc SendProcedureExecutionChanges (stream .LumosProtobuf.ProcedureExecutionMessage) returns (.LumosProtobuf.ConfirmedResponse);
+}
+

@@ -1,0 +1,38 @@
+syntax = "proto3";
+
+package LumosProtobufServer;
+
+import "Common/Types/Device/DeviceServiceTypes.proto";
+import "Common/Types/ProgrammerServiceTypes.proto";
+import "Common/Types/CommonTypes.proto";
+
+option csharp_namespace = "UmbraKernel";
+
+service ProgrammerService {
+
+  rpc SendProgrammerValue(stream .LumosProtobuf.DevicePropertyValueResponse) returns (stream .LumosProtobuf.DevicePropertyValueRequest); 
+
+  rpc SetProgrammerValue(stream .LumosProtobuf.DevicePropertyValueResponse) returns (stream .LumosProtobuf.SetProgrammerValueRequest);
+
+  rpc SetProgrammerAttachable(stream .LumosProtobuf.SetProgrammerAttachableRequestResponse) returns (stream .LumosProtobuf.SetProgrammerAttachableRequestResponse);
+
+  rpc DoDeleteProgrammerAttachable(stream .LumosProtobuf.ConfirmedResponse) returns (stream .LumosProtobuf.DeleteProgrammerAttachableRequest);
+
+  rpc DoDeleteProgrammerValue (stream .LumosProtobuf.ConfirmedResponse) returns (stream .LumosProtobuf.DeleteProgrammerValueRequest);
+
+  rpc SendProgrammerState(stream .LumosProtobuf.CueStateResponse) returns (stream .LumosProtobuf.CueStateRequest);
+  rpc SendAttachableState(stream .LumosProtobuf.AttachableStateResponse) returns (stream .LumosProtobuf.AttachableStateRequest);
+
+  rpc SetProgrammerOutput(stream .LumosProtobuf.ConfirmedResponse) returns (stream .LumosProtobuf.SetProgrammerOutputRequest);
+
+  rpc DoEditCueInProgrammer(stream .LumosProtobuf.ConfirmedResponse) returns (stream .LumosProtobuf.EditCueInProgrammerRequest);
+  rpc DoModProgrammerSnapshot(stream .LumosProtobuf.ConfirmedResponse) returns (stream .LumosProtobuf.ProgrammerSnapshotsRequest);
+  rpc SendSnapshots(stream .LumosProtobuf.GetProgrammerSnapshotsRequestResponse) returns (stream .LumosProtobuf.GetProgrammerSnapshotsRequestResponse);
+
+  rpc DoCopyProgrammerValues(stream .LumosProtobuf.ConfirmedResponse) returns (stream .LumosProtobuf.CopyProgrammerValuesRequest);
+  rpc DoUpdateOriginOfProgrammer(stream .LumosProtobuf.UpdateOriginOfProgrammerResponse) returns (stream .LumosProtobuf.UpdateOriginOfProgrammerRequest);
+
+  rpc SendProgrammerProperty(stream .LumosProtobuf.ProgrammerPropertyRequestResponse) returns (stream .LumosProtobuf.ProgrammerPropertyRequestResponse);
+  rpc SendProgrammerChanges(stream .LumosProtobuf.ProgrammerChangeMessage) returns (.LumosProtobuf.ConfirmedResponse);
+}
+

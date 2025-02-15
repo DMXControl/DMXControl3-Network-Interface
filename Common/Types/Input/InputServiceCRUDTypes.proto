@@ -1,0 +1,372 @@
+﻿syntax = "proto3";
+
+package LumosProtobuf.Input;
+
+import "Common/Types/Input/InputServiceTypes.proto";
+import "Common/Types/CommonTypes.proto";
+import "Common/Types/ValueTypes.proto";
+
+message GetBanksResponse {
+
+	string requestId = 2;
+
+	repeated BankDescriptor banks = 3;
+
+}
+
+message BankCreationRequest {
+
+	string requestId = 2;
+
+	string copyFromBank = 10;
+	string bankNameTemplate = 11;
+
+}
+
+message BankCreationResponse {
+
+	string requestId = 2;
+
+	bool ok = 3;
+	string message = 4;
+	string bankId = 5;
+
+	string copyFromBank = 6;
+
+	repeated .LumosProtobuf.Input.ConnectionSetCopyMap copyFromConnectionSets = 7;
+
+}
+
+message BankDeletionRequest {
+
+	string requestId = 2;
+	string bankId = 3;
+
+}
+
+message GetConnectionSetResponse {
+
+	string requestId = 2;
+
+	repeated ConnectionSetDescriptor connectionSets = 3;
+
+}
+
+message ConnectionSetCreationRequest {
+
+	string requestId = 2;
+
+	string copyFromConnectionSet = 10;
+	string targetBankId = 11;
+	string connectionSetNameTemplate = 12;
+
+	string sourceOrElementId = 20;
+	string sinkOrElementId = 21;
+	bool addFeedback = 22;
+
+}
+
+message ConnectionSetCreationResponse {
+
+	string requestId = 2;
+
+	bool ok = 3;
+	string message = 4;
+
+	string connectionSetId = 5;
+	.LumosProtobuf.Input.ConnectionSetCopyMap copyFrom = 6;
+
+}
+
+message ConnectionSetCopyMap {
+
+	string connectionSetId = 2;
+
+	string copyFromConnectionSet = 6;
+	repeated .LumosProtobuf.Input.ConnectionSetCopyMap.Mapping copyNodeMap = 7;
+
+
+	message Mapping
+	{
+		GraphNodeIDData originalNode = 1;
+		GraphNodeIDData copyNode = 2;
+	}
+}
+
+message ConnectionSetDeletionRequest {
+
+	string requestId = 2;
+	repeated string connectionSetIds = 3;
+	
+}
+
+message ConnectionSetModifyRequest {
+
+	string requestId = 2;
+	string connectionSetId = 3;
+
+	oneof modification {
+	
+		GraphNodeIDData nodeToDelete = 10;
+		string nodeToCreateTypeId = 11;
+		string targetConnectionSetForCopyNodes = 15;
+
+		.LumosProtobuf.Input.ConnectionSetModifyRequest.EdgeData edgeToDelete = 12;
+		.LumosProtobuf.Input.ConnectionSetModifyRequest.EdgeData edgeToCreate = 13;
+	}
+
+	PointData positionToAdd = 4;
+
+	repeated GraphNodeIDData nodesToCopy = 14;
+
+	message EdgeData {
+	
+		GraphNodePortIDData from = 1;
+		GraphNodePortIDData to = 2;
+	
+	}
+ 
+}
+
+message ConnectionSetModifyResponse {
+
+	string requestId = 2;
+	string connectionSetId = 3;
+
+	oneof result {
+	
+		bool nodeDeleted = 10;
+		GraphNodeIDData nodeCreated = 11;
+		bool edgeDeleted = 12;
+		bool edgeCreated = 13;
+		bool connectionSetNotFound = 14;
+	}
+
+}
+
+message ConnectionSetMoveRequest {
+
+	string requestId = 2;
+	repeated string connectionSetIds = 3;
+	string targetBankId = 4;
+
+}
+
+message PortCreationOrReplaceRequest {
+
+	string requestId = 2;
+
+	string connectionSetId = 3;
+
+	oneof id {
+
+		string sourceOrElementIdToCreate = 4; //ToCreate Input
+		string sourceIdAsReplacement = 5; //ToReplace Input
+
+		string sinkOrElementIdToCreate = 6; //ToCreate Output
+		string sinkIdAsReplacement = 7; //ToReplace Output
+
+	}
+
+	GraphNodeIDData toReplace = 10;
+
+	PointData positionToAdd = 11; //If new Created, use this position
+
+}
+
+message PortCreationOrReplaceResponse {
+
+	string requestId = 2;
+
+	oneof id {
+
+		string sourceOrElementIdToCreate = 4; //ToCreate Input
+		string sourceIdAsReplacement = 5; //ToReplace Input
+
+		string sinkOrElementIdToCreate = 6; //ToCreate Output
+		string sinkIdAsReplacement = 7; //ToReplace Output
+
+	}
+
+	oneof result {
+	
+		GraphNodeIDData replacementResult = 10;
+		GraphNodePortIDData creationResult = 11;
+		bool connectionSetNotFound = 12;
+	
+	}
+
+}
+
+message GetAvailableNodesResponse {
+
+	string requestId = 2;
+
+	repeated NodeMetadataData nodes = 3;
+
+}
+
+message GetInputClassProvidersResponse {
+
+	string requestId = 2;
+
+	repeated InputClassProviderDescriptor providers = 3;
+
+}
+
+message GetInputSinksResponse {
+
+	string requestId = 2;
+
+	repeated InputSinkDescriptor sinks = 3;
+
+}
+
+message GetInputSourcesResponse {
+
+	string requestId = 2;
+
+	repeated InputSourceDescriptor sources = 3;
+
+}
+
+message InputClassProviderChangedMessage {
+
+	LumosProtobuf.EChangeType changeType = 3;
+	string inputClassProviderId = 4;
+
+	InputClassProviderDescriptor provider = 5;
+
+}
+
+message BankChangedMessage {
+
+	LumosProtobuf.EChangeType changeType = 3;
+	string bankId = 4;
+
+	BankDescriptor bank = 5;
+
+	oneof change {
+	
+		string property = 6;
+		string parameter = 7;
+	
+	}
+
+	LumosProtobuf.ObjectData newValue = 9;
+}
+
+message ConnectionSetChangedMessage {
+
+	LumosProtobuf.EChangeType changeType = 3;
+	string connectionSetId = 4;
+
+	ConnectionSetDescriptor set = 5;
+
+	oneof change {
+	
+		string property = 6;
+		string parameter = 7;
+		string nodeParameter = 8;
+	
+	}
+
+	GraphNodeIDData nodeId = 10;
+
+	LumosProtobuf.ObjectData newValue = 9;
+}
+
+message InputSinkChangedMessage {
+
+	LumosProtobuf.EChangeType changeType = 3;
+	string inputSinkId = 4;
+
+	InputSinkDescriptor sink = 5;
+
+	oneof change {
+	
+		string property = 6;
+		//string parameter = 7;
+	
+	}
+
+	LumosProtobuf.ObjectData newValue = 9;
+}
+
+message InputSourceChangedMessage {
+
+	LumosProtobuf.EChangeType changeType = 3;
+	string inputSourceId = 4;
+
+	InputSourceDescriptor source = 5;
+
+	oneof change {
+	
+		string property = 6;
+		//string parameter = 7;
+	
+	}
+
+	LumosProtobuf.ObjectData newValue = 9;
+}
+
+message ConnectionSetProcessedRequest {
+
+	repeated string connectionSetIds = 1;
+
+}
+
+message ConnectionSetProcessedMessage {
+
+	string connectionSetId = 2;
+
+	repeated PortValue values = 3;
+}
+
+message InputSinkProxyRequest {
+
+	string requestId = 2;
+	string inputSinkId = 3;
+
+	LumosProtobuf.EChangeType changeType = 4;
+
+	InputSinkDescriptor sink = 5;
+
+	string userContextId = 6;
+	string runtimeId = 7;
+}
+
+message InputSinkProxyValuesChangedMessage {
+
+	repeated ProxyValue changedValues = 2;
+
+	message ProxyValue {
+		string inputSinkId = 3;
+
+		.LumosProtobuf.ObjectData newValue = 4;
+	}
+
+}
+
+message InputSourceProxyRequest {
+
+	string requestId = 2;
+	string inputSourceId = 3;
+
+	LumosProtobuf.EChangeType changeType = 4;
+
+	InputSourceDescriptor source = 5;
+	.LumosProtobuf.ObjectData sourceValue = 6;
+
+	string userContextId = 7;
+	string runtimeId = 8;
+}
+
+message ConnectionSetPreviewValuesResponse {
+
+	string connectionSetId = 2;
+	bool notFound = 4;
+
+	repeated PortValue values = 3;
+
+}

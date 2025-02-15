@@ -1,0 +1,37 @@
+syntax = "proto3";
+
+package LumosProtobufServer;
+
+import "Common/Types/Executor/ExecutorServiceCRUDTypes.proto";
+import "Common/Types/CommonTypes.proto";
+
+option csharp_namespace = "UmbraKernel";
+
+service ExecutorService {
+
+	rpc SendExecutors(stream .LumosProtobuf.Executor.GetExecutorsResponse) returns (stream .LumosProtobuf.GetMultipleRequest);
+	rpc SendExecutorPages(stream .LumosProtobuf.Executor.GetExecutorPagesResponse) returns (stream .LumosProtobuf.GetMultipleRequest);
+	rpc SendExecutorMemberWrappers(stream .LumosProtobuf.Executor.GetExecutorMemberWrappersResponse) returns (stream .LumosProtobuf.GetMultipleRequest);
+
+	
+    //Not allowed anymore since 3.3 due to Executor Refactoring pgrote 15.08.2021
+	//rpc DoCreateExecutor(stream .LumosProtobuf.ConfirmedResponse) returns (stream .LumosProtobuf.Executor.ExecutorCreationRequest);
+	rpc DoCreateExecutorPage(stream .LumosProtobuf.ConfirmedResponse) returns (stream .LumosProtobuf.Executor.ExecutorPageCreationRequest);	
+    //Not allowed anymore since 3.3 due to Executor Refactoring pgrote 15.08.2021
+	//rpc DoCreateExecutorPageSet(stream .LumosProtobuf.ConfirmedResponse) returns (stream .LumosProtobuf.Executor.ExecutorPageSetCreationRequest);
+	
+    //Not allowed anymore since 3.3 due to Executor Refactoring pgrote 15.08.2021
+	//rpc DoDeleteExecutor(stream .LumosProtobuf.Executor.ExecutorDeletionResponse) returns (stream .LumosProtobuf.Executor.ExecutorDeletionRequest);
+	rpc DoDeleteExecutorPage(stream .LumosProtobuf.Executor.ExecutorPageDeletionResponse) returns (stream .LumosProtobuf.Executor.ExecutorPageDeletionRequest);
+	
+	rpc DoModifyExecutor(stream .LumosProtobuf.Executor.ExecutorModifyResponse) returns (stream .LumosProtobuf.Executor.ExecutorModifyRequest);
+	//Not allowed anymore since 3.3 due to Executor Refactoring pgrote 15.08.2021
+	//rpc DoModifyExecutorPage(stream .LumosProtobuf.Executor.ExecutorPageModifyResponse) returns (stream .LumosProtobuf.Executor.ExecutorPageModifyRequest);
+
+	rpc DoSetExecutorValues(stream .LumosProtobuf.ConfirmedResponse) returns (stream .LumosProtobuf.Executor.SetExecutorValuesRequest);
+
+	rpc SendExecutorChanges(stream .LumosProtobuf.Executor.ExecutorChangedMessage) returns (.LumosProtobuf.ConfirmedResponse);
+	rpc SendExecutorPageChanges(stream .LumosProtobuf.Executor.ExecutorPageChangedMessage) returns (.LumosProtobuf.ConfirmedResponse);
+	rpc SendExecutorMemberWrapperChanges(stream .LumosProtobuf.Executor.ExecutorMemberWrapperChangedMessage) returns (.LumosProtobuf.ConfirmedResponse);
+}
+

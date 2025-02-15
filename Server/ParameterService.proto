@@ -1,0 +1,18 @@
+syntax = "proto3";
+
+package LumosProtobufServer;
+
+import "Common/Types/ParameterServiceTypes.proto";
+import "Common/Types/CommonTypes.proto";
+
+option csharp_namespace = "UmbraKernel";
+
+service ParameterService {
+
+  rpc SendParameters(stream .LumosProtobuf.GetParametersResponse) returns (stream .LumosProtobuf.GetParametersRequest); 
+
+  rpc GetParameterValue(stream .LumosProtobuf.GetParameterValueResponse) returns (stream .LumosProtobuf.GetParameterValueRequest);
+  rpc SetParameterValue(stream .LumosProtobuf.ConfirmedResponse) returns (stream .LumosProtobuf.SetTestParameterValueRequest);
+  rpc TestParameterValue(stream .LumosProtobuf.ConfirmedResponse) returns (stream .LumosProtobuf.SetTestParameterValueRequest);
+}
+

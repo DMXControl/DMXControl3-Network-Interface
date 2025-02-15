@@ -1,0 +1,213 @@
+syntax = "proto3";
+
+package LumosProtobuf;
+
+import "Common/Types/CommonTypes.proto";
+
+message LumosColorData {
+	
+	double r = 1;
+	double g = 2;
+	double b = 3;
+
+	double h = 4;
+	double s = 5;
+	double v = 6;
+
+	ColorData color = 7;
+
+	enum EColorSet {
+		NONE = 0;
+		RGB = 1;
+		COLOR = 2;
+		HSV = 3;
+	}
+
+	EColorSet colorSet = 8;
+
+	map<sint32, EnumColorData> colorwheel = 9;
+	map<string, ColorchannelData> colorchannel = 10;
+
+	ColorData calculatedColor = 20;
+	ColorData visualizationColor = 21;
+}
+
+message ColorData {
+
+	int32 r = 1; //0 - 255
+	int32 g = 2; //0 - 255
+	int32 b = 3; //0 - 255
+	int32 a = 4; //0 - 255
+}
+
+message PointData {
+
+	float x = 2;
+	float y = 3;
+
+}
+
+message SizeData {
+	
+	int32 width = 2;
+	int32 height = 3;
+
+}
+
+message EnumColorData {
+	string caption = 1;
+	string id = 2;
+	sint32 colorwheel = 3;
+	sint32 colorindex = 4;
+
+	ColorData color = 5;
+	bool excludeFromMixing = 6;
+	bool excludeFromHAL = 7;
+}
+
+message ColorchannelData {
+	double value = 1;
+	bool halcalculated = 2;
+
+}
+
+message LumosPositionData {
+
+	double pan = 1;
+	double tilt = 2;
+
+	bool panset = 3;
+	bool tiltset = 4;
+
+}
+
+message EnumPositionData {
+
+	LumosPositionData position = 2;
+
+}
+
+message GoboData {
+
+	string goboname = 1;
+	string caption = 2;
+	sint32 gobowheel = 3;
+	sint32 goboindex = 4;
+	bool open = 5;
+	sint32 sourcewheel = 6;
+}
+
+message LumosGoboData {
+
+	map<sint32, GoboData> gobovalues = 1;
+
+}
+
+message LumosDoubleData {
+
+	map<sint32, double> doublevalues = 1;
+
+}
+
+message DeviceEffectData {
+
+	string imagefile = 1;
+	string caption = 2;
+	sint32 effectwheel = 3;
+	sint32 effectindex = 4;
+	bool open = 5;
+	string type = 6;
+
+}
+
+message LumosStrobeData {
+
+	double speed = 1;
+	EnumStringData type = 2;
+
+	double duration = 7;
+	bool durationset = 8;
+
+}
+
+message LumosBooleanData {
+
+	bool value = 2;
+	string trueText = 3;
+	string falseText = 4;
+
+}
+
+message LumosMatrixData {
+
+	int32 columns = 2;
+	int32 rows = 3;
+	bool empty = 4;
+
+	repeated int32 colorsSerialized = 6; //Row wise serialized ARGB Values
+}
+
+message LumosRadixData {
+
+	repeated int32 colors = 1; //From inside to outside serialized ARGB Values
+	int32 rings = 2;
+	repeated int32 segments = 3;
+	bool empty = 4;
+
+}
+
+message LumosBladesData {
+
+	BladeData first = 2;
+	BladeData second = 3;
+	BladeData third = 4;
+	BladeData forth = 5;
+
+	message BladeData {
+	
+		double angle = 2;
+		double trust = 3;
+	
+	}
+
+}
+
+message LumosRawData {
+
+	
+	double value = 2;
+	EnumStringData type = 3;
+
+}
+
+message IEnumObjectData {
+
+	oneof value {
+		
+		EnumColorData enumColor = 1;
+		EnumStringData enumString = 2;
+		GoboData gobo = 3;
+		LumosGoboData lumosgobo = 4;
+		EnumPositionData enumPosition = 5;
+		DeviceEffectData deviceEffect = 6;
+
+		ObjectData fallback = 40;
+
+	}
+
+}
+
+message EnumStringData {
+	string caption = 1;
+	sint32 index = 2; 
+}
+
+message LumosRotationData {
+	
+	double speed = 2;
+	EnumStringData type = 3;
+
+
+}
+
+

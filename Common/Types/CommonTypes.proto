@@ -1,0 +1,135 @@
+syntax = "proto3";
+
+package LumosProtobuf;
+
+enum EChangeType {
+
+	EChangeType_Unknown = 0;
+	Changed = 1;
+	Added = 2;
+	Removed = 3;
+}
+
+enum ENullableBool {
+
+	NullBoolValue = 0;
+	True = 1;
+	False = 2;
+
+}
+
+message GetRequest {
+
+	string requestId = 1;
+
+}
+
+message GetMultipleRequest {
+
+	string requestId = 2;
+	repeated string idFilter = 3;
+	string userContextId = 4;
+
+}
+
+message ActionRequest {
+
+	string requestId = 2;
+
+}
+
+message ConfirmedResponse {
+
+	bool ok = 1;
+	string id = 2;
+	TranslateableData message = 3;
+	string requestId = 4;
+
+}
+
+message TranslateableData {
+
+	string formatString = 4;
+	string pluralFormatString = 6;
+
+	repeated TranslateableObject parameters = 5;
+
+
+	message TranslateableObject {
+	
+		oneof value {
+		
+			TranslateableData translateable = 1;
+			ObjectData objectData = 2;
+
+		}
+	
+	
+	}
+
+}
+
+message ObjectData {
+
+	oneof value {
+	
+		string stringValue = 2;
+		double doubleValue = 3;
+		float floatValue = 4;
+		sint32 intValue = 5;
+		sint64 longValue = 6;
+		uint32 uintValue = 7;
+		uint64 ulongValue = 8;
+		bool boolValue = 9;
+
+		//Added 16 and 8 bit values to make distinction possible
+		sint32 shortValue = 10;
+		sint32 sbyteValue = 11;
+		uint32 ushortValue = 12;
+		uint32 byteValue = 13;
+	}
+
+	oneof fallback {
+			bytes fallbackNet = 51;
+			bytes fallbackProtobuf = 52;
+	
+	}
+
+	string fallbackType_AQ = 40;
+	string protobufType_AQ = 41;
+}
+
+message TwoDimArrayData {
+
+	repeated ArrayRow rows = 2;
+	string typeName_AQ = 3;
+
+	message ArrayRow {
+	
+		repeated ObjectData values = 2;
+
+	}
+	
+}
+
+message DMXAddressData {
+
+	repeated .LumosProtobuf.DMXAddressData.DMXAddressValuePairData addresses = 1;
+
+	message DMXAddressValueData {
+	
+		int32 dmxAddress = 1;
+		int32 dmxUniverse = 2;
+		bool dmxUniverseSet = 3;
+
+	}
+
+	message DMXAddressValuePairData {
+	
+		DMXAddressValueData min = 1;
+		DMXAddressValueData max = 2;
+
+	}
+
+}
+

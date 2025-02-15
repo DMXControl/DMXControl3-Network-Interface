@@ -1,0 +1,23 @@
+syntax = "proto3";
+
+package LumosProtobufServer;
+
+import "Common/Types/ItemListServiceTypes.proto";
+import "Common/Types/CommonTypes.proto";
+
+option csharp_namespace = "UmbraKernel";
+
+service ItemListService {
+
+	rpc SendItemLists (stream .LumosProtobuf.GetItemListsResponse) returns (stream .LumosProtobuf.GetMultipleRequest);
+	rpc SendAvailableItemListTypes (stream .LumosProtobuf.GetAvailableItemListTypesResponse) returns (stream .LumosProtobuf.GetRequest);
+
+	rpc SendPossibleItems (stream .LumosProtobuf.GetPossibleItemsResponse) returns (stream .LumosProtobuf.GetRequest);
+
+	rpc DoCreateItemList (stream .LumosProtobuf.ConfirmedResponse) returns (stream .LumosProtobuf.ItemListCreationRequest);
+	rpc DoDeleteItemList (stream .LumosProtobuf.ConfirmedResponse) returns (stream .LumosProtobuf.ItemListDeletionRequest);
+	rpc DoModifyItemList (stream .LumosProtobuf.ConfirmedResponse) returns (stream .LumosProtobuf.ItemListModifyRequest);
+
+	rpc SendItemListChanges (stream .LumosProtobuf.ItemListChangedMessage) returns (.LumosProtobuf.ConfirmedResponse);
+}
+

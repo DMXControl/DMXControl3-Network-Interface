@@ -1,0 +1,108 @@
+﻿syntax = "proto3";
+
+import "Common/Types/CommonTypes.proto";
+import "Common/Types/DependencyTypes.proto";
+import "Common/Types/ProgrammerServiceTypes.proto";
+import "Common/Types/Preset/PresetServiceTypes.proto";
+
+package LumosProtobuf;
+
+message PresetDeletionRequest {
+
+	string requestId = 2;
+
+	string presetId = 3;
+
+	DependencyData dependencies = 4; //Can be null in 1st call
+
+}
+
+message PresetDeletionResponse {
+
+	string requestId = 2;
+
+	oneof response 
+	{
+		string deletedPresetId = 3;
+
+		DependencyData dependencies = 4;
+	}
+
+}
+
+message PresetCreationRequest {
+
+	string requestId = 2;
+	string userContextId = 4;
+
+	oneof source {
+	
+		string copyFromPreset = 3;
+		.LumosProtobuf.ProgrammerFilterPredicate predicate = 7;
+
+	}
+
+	bool propertyPreset = 8;
+	string presetNameTemplate = 6;
+}
+
+message PresetMergeAppendRequest {
+
+	string requestId = 2;
+	string userContextId = 4;
+
+	string presetId = 6;
+	bool append = 5; //True = Append, False = Merge
+
+	.LumosProtobuf.ProgrammerFilterPredicate predicate = 7;
+}
+
+message PresetReplaceSubtractRequest {
+
+	string requestId = 2;
+	string userContextId = 5;
+
+	string presetId = 3;
+	bool subtract = 6; //True = Subtract, False = Replace
+
+	DependencyData dependencies = 4; //Can be null in 1st call
+
+	.LumosProtobuf.ProgrammerFilterPredicate predicate = 7;
+
+}
+
+message PresetReplaceSubtractResponse {
+
+	string requestId = 2;
+
+	oneof response 
+	{
+		string processedPresetId = 3;
+
+		DependencyData dependencies = 4;
+
+		string error = 5;
+	}
+}
+
+message GetPresetsResponse {
+
+	string requestId = 2;
+
+	repeated PresetDescriptor presets = 3;
+
+}
+
+message PresetChangedMessage {
+
+	.LumosProtobuf.EChangeType changeType = 3;
+	string presetId = 4;
+	PresetDescriptor presetData = 5;
+
+	repeated string properties = 6;
+
+	.LumosProtobuf.ObjectData newValue = 9;
+
+}
+
+

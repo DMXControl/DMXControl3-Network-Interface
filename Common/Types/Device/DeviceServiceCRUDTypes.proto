@@ -1,0 +1,217 @@
+syntax = "proto3";
+
+package LumosProtobuf;
+
+import "Common/Types/Device/DeviceServiceTypes.proto";
+import "Common/Types/CommonTypes.proto";
+import "Common/Types/DependencyTypes.proto";
+
+//Defines which Changes the Client is interessted in
+message DevicePropertyChangeRequest {
+	repeated string devicePropertyIds = 1; //PropertyID#DeviceID
+}
+
+
+message DevicePropertyChangeMessage {
+	repeated DevicePropertyValue changes = 1;
+}
+
+message DeviceCreationRequest {
+
+	string requestId = 1;
+	DeviceMetadataData device = 2;
+	int32 numberOfDevices = 3;
+	repeated string addToDevices = 4; //In case Subdevices are created
+	string nameTemplate = 5;
+
+	oneof group {
+	
+		string groupNameTemplate = 11;
+		string existingGroupId = 12;
+
+	}
+
+	DMXAddressData startAddress = 20;
+	uint32 space = 21;
+}
+
+message DeviceCreationResponse {
+
+	string requestId = 1;
+	
+	EReturnCode returnCode = 2;
+
+	repeated string deviceId = 3;
+	string NewDeviceGroupId = 4; //In case new Group was created
+	map<string,string> subDeviceMapping = 5; //In case Subdevices were created. Key is parent device, Value is created sub device
+
+	DMXAddressData nextFreeAddress = 6;
+
+	XmlParseErrorData errorData = 7;
+
+	enum EReturnCode {
+		
+		NoError = 0;
+		OutOfAddressSpace = 1;
+		ParameterError = 2;
+		XmlError = 3;
+	
+	}
+
+}
+
+message DeviceReplacementRequest {
+
+	string requestId = 1;
+
+	string deviceId = 2;
+	string replacementId = 3;
+
+}
+
+message DeviceDeletionRequest {
+
+	string requestId = 1;
+
+	string deviceId = 2;
+
+	string parentDeviceId = 3; //In case of Sub Device
+
+	DependencyData dependencies = 4; //Can be null in 1st call
+
+}
+
+message DeviceDeletionResponse {
+
+	string requestId = 1;
+
+	oneof response 
+	{
+		string deletedDeviceId = 2;
+		string error = 3;
+		DependencyData dependencies = 4;
+	}
+
+}
+
+message DeviceGroupCreationRequest {
+
+	string requestId = 1;
+
+	string copyFromGroup = 10;
+	string groupNameTemplate = 11;
+
+}
+
+message GetTemporaryDeviceGroupRequest {
+
+	string requestId = 2;
+	string userContextId = 3;
+
+	repeated string deviceAndGroupIDs = 4;
+}
+
+message DeviceGroupDeletionRequest {
+
+	string requestId = 1;
+
+	string deviceGroupId = 2;
+
+	DependencyData dependencies = 4;
+
+}
+
+message DeviceGroupDeletionResponse {
+
+	string requestId = 1;
+
+	oneof response 
+	{
+		string deletedDeviceGroupId = 2;
+
+		DependencyData dependencies = 4;
+	}
+}
+
+message DeviceGroupModifyRequest {
+
+	string requestId = 1;
+
+	string deviceGroupId = 2;
+
+	EModType type = 3;
+
+	repeated string deviceIds = 6;
+	repeated string deviceGroupIds = 7;
+	repeated string deviceAndGroupIds = 8;
+	int32 targetIndex = 11;
+
+	enum EModType {
+		
+		UNKNOWN = 0;
+		ADD = 1;
+		REMOVE = 2;
+		MOVE = 3;
+		MOVE_ALL = 4;
+	
+	}
+
+}
+
+message XmlParseErrorData {
+
+	TranslateableData errorMessage = 2;
+	string filename = 3;
+	repeated int32 linenumbers = 4;
+
+}
+
+message GetDevicesResponse {
+
+	string requestId = 1;
+
+	repeated DeviceDescriptor devices = 2;
+
+}
+
+message GetDeviceGroupsResponse {
+
+	string requestId = 1;
+
+	repeated DeviceGroupDescriptor deviceGroups = 2;
+
+}
+
+message DeviceChangedMessage {
+
+	EChangeType changeType = 3;
+	string deviceId = 4;
+	DeviceDescriptor deviceData = 5;
+
+	oneof change {
+	
+		string property = 6;
+		string parameter = 7;
+	
+	}
+
+	ObjectData newValue = 9;
+
+}
+
+message DeviceGroupChangedMessage {
+
+	EChangeType changeType = 3;
+	string deviceGroupId = 4;
+	DeviceGroupDescriptor deviceGroupData = 5;
+
+	oneof change {
+	
+		string property = 6;
+		string parameter = 7;
+	
+	}
+
+	ObjectData newValue = 9;
+
+}

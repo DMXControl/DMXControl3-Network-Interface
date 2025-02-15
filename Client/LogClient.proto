@@ -1,0 +1,18 @@
+syntax = "proto3";
+
+package LumosProtobufClient;
+
+import "Common/Types/LogServiceTypes.proto";
+import "Common/Types/CommonTypes.proto";
+
+option csharp_namespace = "UmbraClient";
+
+service LogClient {
+
+	rpc ReceiveLogDataChanges(.LumosProtobuf.GetRequest) returns (stream .LumosProtobuf.LogData);
+	rpc ReceiveUserNotifications(.LumosProtobuf.GetRequest) returns (stream .LumosProtobuf.UserNotificationData);
+
+	rpc GetLogData(.LumosProtobuf.GetLogDataRequest) returns (.LumosProtobuf.GetLogDataResponse);
+
+}
+

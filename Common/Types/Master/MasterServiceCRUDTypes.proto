@@ -1,0 +1,93 @@
+﻿syntax = "proto3";
+
+import "Common/Types/ValueTypes.proto";
+import "Common/Types/CommonTypes.proto";
+import "Common/Types/DependencyTypes.proto";
+import "Common/Types/Master/MasterServiceTypes.proto";
+
+package LumosProtobuf.Master;
+
+message MasterActionRequest {
+
+	string requestId = 2;
+
+	EAction action = 3;
+	string masterId = 4;
+
+	enum EAction {
+	
+		UNKNOWN = 0;
+		DOUBLE_TIMES = 1;
+		HALF_TIMES = 2;
+		LEARN = 3;
+		SYNC = 4;
+		FULL = 5;
+		BLACK = 6;
+	
+	}
+
+}
+
+message SetMasterValueRequest {
+
+	string requestId = 2;	
+	string masterId = 3;
+	string userContextId = 4;
+
+	oneof action
+	{
+		MasterFaderDescriptor fader = 5;
+		MasterButtonDescriptor button = 6;
+	}
+}
+
+message GetMastersResponse {
+
+	string requestId = 2;
+	repeated MasterDescriptor masters = 3;
+
+}
+
+message MasterCreationRequest {
+
+	string requestId = 2;
+	EMasterType type = 3;
+
+	string copyFromMaster = 4;
+	string masterNameTemplate = 5;
+
+}
+
+message MasterDeletionRequest {
+
+	string requestId = 2;
+	string masterId = 3;
+
+	DependencyData dependencies = 4;
+
+}
+
+message MasterDeletionResponse {
+
+	string requestId = 2;
+
+	oneof response 
+	{
+		string deletedMasterId = 3;
+
+		DependencyData dependencies = 4;
+
+		string error = 5;
+	}
+
+}
+
+message MasterChangedMessage {
+
+	.LumosProtobuf.EChangeType changeType = 3;
+	string masterId = 4;
+	MasterDescriptor masterData = 5;
+	
+	repeated string properties = 6;
+	map<string,.LumosProtobuf.ObjectData> parameters = 7;
+}
