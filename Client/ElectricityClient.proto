@@ -10,6 +10,7 @@ option csharp_namespace = "UmbraClient";
 service ElectricityClient {
 
 	rpc GetPowerSources (.LumosProtobuf.GetMultipleRequest) returns (.LumosProtobuf.GetPowerSourcesResponse);
+	rpc GetPowerSourceUsages (.LumosProtobuf.GetMultipleRequest) returns (.LumosProtobuf.GetPowerSourceUsageResponse);
 
 	rpc CreatePowerSource(.LumosProtobuf.PowerSourceCreationRequest) returns (.LumosProtobuf.ConfirmedResponse);
 	rpc DeletePowerSource(.LumosProtobuf.PowerSourceDeletionRequest) returns (.LumosProtobuf.ConfirmedResponse);

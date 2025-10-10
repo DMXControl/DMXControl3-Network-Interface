@@ -2,11 +2,11 @@
 
 //import "Common/Types/CommonTypes.proto";
 import "Common/Types/Resource/ResourceManagementTypes.proto";
+import "Common/Types/CommonTypes.proto";
 
-package LumosProtobuf;
+package LumosProtobuf.Audio;
 
-message AudioMetadataData {
-	
+message AudioMetadataDescriptor {	
 	.LumosProtobuf.Resource.ResourceData resourceData = 2;
 
 	FFTMetadataData fft = 3;
@@ -27,36 +27,82 @@ message AudioMetadataData {
 		Error = 2;
 	}
 }
+message PlayerThreadDescriptor {
+	string id = 2;
+	string name = 3;
+	int64 currentTime = 4;
+	int64 totalTime = 5;
+	int64 length = 6;
+	int64 position = 7;
 
-message AllAudioMetadataResponse {
+	EPlaybackState playbackState = 8;
+	double volume = 9; //0 silence, 1 full
+	double balance = 10; //-1 is full left, 1 is full right
 
+	enum EPlaybackState {
+		Stopped = 0;
+		Playing = 1;
+		Paused = 2;
+	}
+}
+message GetPlayerThreadsResponse {
 	string requestId = 2;
 
-	repeated AudioMetadataData audioMetadata = 3;
+	repeated PlayerThreadDescriptor playerThreads = 3;
+}
+message PlayerThreadChangedMessage {
 
+	.LumosProtobuf.EChangeType changeType = 3;
+	string playerThreadId = 4;
+	PlayerThreadDescriptor PlayerThreadData = 5;
+
+	repeated string properties = 6;
+}
+
+message AllAudioMetadataResponse {
+	string requestId = 2;
+
+	repeated AudioMetadataDescriptor audioMetadata = 3;
+}
+
+message SoundOutputInfo {	
+	string guid = 2;
+	string description = 3;
+	string moduleName = 4;
+}
+
+message AllSoundOutputInfosResponse {
+	string requestId = 2;
+	repeated SoundOutputInfo soundOutputInfos = 3;
 }
 
 
-message ControlAudioRequest {
-
+message ControlPlayerThreadRequest {
 	string requestId = 2;
-
-	string audioFile = 20;
-	EPlayMode playMode = 3;
-
-	double balance = 4; //-1 is full left, 1 is full right
-	bool balanceSet = 5;
-
-	double volume = 6; //0 silence, 1 full
-	bool volumeSet = 7;
-
-	enum EPlayMode {
 	
+	string audioFile = 3;
+	string playerThreadId = 4;
+
+	EPlayMode playMode = 8;
+
+	double balance = 11; //-1 is full left, 1 is full right
+	bool balanceSet = 12;
+
+	double volume = 13; //0 silence, 1 full
+	bool volumeSet = 14;
+	
+	int64 time = 15; 
+	bool timeSet = 16;
+
+	SoundOutputInfo soundOutputInfo = 17;
+	bool soundOutputInfoSet = 18;
+
+	enum EPlayMode {	
 		None = 0;
 		Play = 1;
 		Stop = 2;
 		Pause = 3;
-	
+		Buffer = 4;	
 	}
 }
 

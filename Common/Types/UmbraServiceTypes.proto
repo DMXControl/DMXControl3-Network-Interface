@@ -46,8 +46,9 @@ message UmbraLoginResponse {
 
 message UmbraLogoffRequest {
 
+	reserved 3; //Former SessionID, which is in Header Field
+
 	ClientProgramInfo client = 1;
-	string sessionId = 3;
 }
 
 message UmbraLogoffResponse {

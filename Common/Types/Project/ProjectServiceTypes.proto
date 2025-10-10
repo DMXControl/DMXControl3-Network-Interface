@@ -39,6 +39,9 @@ message ProjectVersionData {
 	bool isAutosave = 10;
 	bool isDeleteLocked = 11;
 
+	int32 projectVersion = 12;
+	string projectSoftwareVersion = 13;
+
 	.LumosProtobuf.EItemInfoSeveraty error = 30;
 	TranslateableData errorMessage = 31;
 }

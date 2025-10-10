@@ -147,12 +147,11 @@ namespace LumosProtobuf.ConnectionClient
                 var client = new ClientService.ClientServiceClient(DataProvider.UmbraChannel);
                 var request = new UmbraLogoffRequest()
                 {
-                    SessionId = SessionID,
                     Client = DataProvider.ClientProgramInfo
                 };
                 try
                 {
-                    var response = client.Logoff(request);
+                    var response = client.Logoff(request, headers: DataProvider.HostMetadata);
                     Logger?.InfoFormat("Disconnected from Umbra Server: {0}", response.Bye);
                 }
                 catch (Exception e)

@@ -25,6 +25,8 @@ enum ESceneType
 	SCENELIST_REFERENCE = 2;
 	ACTION = 3;
 	AUDIO = 4;
+	MACRO = 5;
+	TIMECODE = 6;
 }
 
 enum ESceneEntryType

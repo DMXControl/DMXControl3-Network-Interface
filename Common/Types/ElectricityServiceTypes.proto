@@ -15,7 +15,8 @@ message PowerSourceDescriptor {
 
 	uint32 possibleAmps = 10;
 	bool displayed = 11;
-	double sumUsageAmps = 12;
+
+	double voltage = 13;
 }
 
 message GetPowerSourcesResponse {
@@ -63,6 +64,14 @@ message PowerSourceChangedMessage {
 	}
 
 	ObjectData newValue = 9;
+
+}
+
+message GetPowerSourceUsageResponse {
+
+	string requestId = 2;
+
+	map<string, double> sumUsageAmps = 3;
 
 }
 

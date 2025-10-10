@@ -127,9 +127,7 @@ message CuelistActionRequest {
 		LOAD = 8;
 		REASSIGN_SCENE_NUMBERS = 9;
 
-
 	}
-
 }
 
 message SpecialCueInsertRequest
@@ -140,6 +138,7 @@ message SpecialCueInsertRequest
 
 	sint32 index = 5;
 	int32 specialEnum = 6; //Casted to Enum Value, depending on specialCue Case
+	.LumosProtobuf.ObjectData specialValue = 7; //Value to be set depending on specialCue Case
 
 	oneof specialCue {
 	
@@ -148,9 +147,15 @@ message SpecialCueInsertRequest
 		string otherCuelistId = 12;
 		string sum = 13;
 		string psum = 14;
+		macroCue macro = 15;
+		string timecodeId = 16;
 
 	}
 
+	message macroCue {
+		string macroId = 1;
+		uint32 elementIndex = 2;
+	}
 }
 
 message CueAddFromProgrammerRequest
@@ -175,9 +180,7 @@ message CueAddFromProgrammerRequest
 		APPEND = 5;
 		SUBTRACT = 6;
 
-
 	}
-
 }
 
 message GetPropertyValueSourceRequest {
@@ -212,7 +215,6 @@ message AllCuelistActionRequest {
 		STOP = 1;
 
 	}
-
 }
 
 message AllCuelistActionResponse {

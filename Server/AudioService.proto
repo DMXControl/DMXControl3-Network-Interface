@@ -8,10 +8,12 @@ import "Common/Types/CommonTypes.proto";
 option csharp_namespace = "UmbraKernel";
 
 service AudioService {
+	rpc GetPlayerThreads (stream .LumosProtobuf.Audio.GetPlayerThreadsResponse) returns (stream .LumosProtobuf.GetMultipleRequest);
+	rpc SendAllAudioMetadata(stream .LumosProtobuf.Audio.AllAudioMetadataResponse) returns (stream .LumosProtobuf.GetMultipleRequest);
+	rpc SendAllSoundOutputInfosResponse(stream .LumosProtobuf.Audio.AllSoundOutputInfosResponse) returns (stream .LumosProtobuf.GetMultipleRequest);
 
-	rpc SendAllAudioMetadata(stream .LumosProtobuf.AllAudioMetadataResponse) returns (stream .LumosProtobuf.GetMultipleRequest);
+	rpc DoControlPlayerThread(stream .LumosProtobuf.ConfirmedResponse) returns (stream .LumosProtobuf.Audio.ControlPlayerThreadRequest);
 
-	rpc DoControlAudio(stream .LumosProtobuf.ConfirmedResponse) returns (stream .LumosProtobuf.ControlAudioRequest);
-
+	rpc SendPlayerThreadChanges (stream .LumosProtobuf.Audio.PlayerThreadChangedMessage) returns (.LumosProtobuf.ConfirmedResponse);
 }
 

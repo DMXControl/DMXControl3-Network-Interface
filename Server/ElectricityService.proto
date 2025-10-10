@@ -10,6 +10,7 @@ option csharp_namespace = "UmbraKernel";
 service ElectricityService {
 
 	rpc SendPowerSources (stream .LumosProtobuf.GetPowerSourcesResponse) returns (stream .LumosProtobuf.GetMultipleRequest);
+	rpc SendPowerSourceUsages (stream .LumosProtobuf.GetPowerSourceUsageResponse) returns (stream .LumosProtobuf.GetMultipleRequest);
 
 	rpc DoCreatePowerSource(stream .LumosProtobuf.ConfirmedResponse) returns (stream .LumosProtobuf.PowerSourceCreationRequest);
 	rpc DoDeletePowerSource(stream .LumosProtobuf.ConfirmedResponse) returns (stream .LumosProtobuf.PowerSourceDeletionRequest);
