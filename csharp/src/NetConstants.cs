@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Net;
 
 namespace LumosProtobuf
 {
@@ -20,9 +15,7 @@ namespace LumosProtobuf
         /// </summary>
         public static readonly IPAddress DMXCNET_MULTICAST_ADDRESS = IPAddress.Parse("225.68.67.3");
 
-
         public static readonly int NETMANAGER_KERNEL_JSON_SEND_PORT = 23242;
-
 
         /// <summary>
         /// 17474 is the Port used for Discovery

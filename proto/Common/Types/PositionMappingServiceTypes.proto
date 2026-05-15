@@ -1,0 +1,80 @@
+syntax = "proto3";
+
+package LumosProtobuf;
+
+import "Common/Types/ValueTypes.proto";
+
+message StartPreviewPositionMappingRequest {
+	
+	string requestId = 2;
+
+	string userContextId = 3;
+
+	repeated DeviceIntensityAndPosition devices = 4;
+}
+
+message StopPreviewPositionMappingRequest {
+
+	string requestId = 2;
+
+	string userContextId = 3;
+}
+
+message SetPreviewPositionMappingIntensityRequest {
+	
+	string requestId = 2;
+
+	string userContextId = 3;
+
+	repeated DeviceIntensity deviceIntensities = 4;
+}
+
+message SetPreviewPositionMappingRequest {
+	
+	string requestId = 2;
+
+	string userContextId = 3;
+
+	repeated DevicePosition devicePositions = 4;
+}
+
+message GetStatusPositionMappingRequest {
+
+	string requestId = 2;
+
+	string userContextId = 3;
+}
+
+message GetStatusPositionMappingResponse {
+
+	string requestId = 2;
+
+	string userContextId = 3;
+
+	bool isPreviewActive = 4;
+
+	repeated string deviceIds = 5;
+}
+
+message DeviceIntensityAndPosition {
+
+	string deviceId = 1;
+
+	int32 intensity = 2;
+
+	LumosPositionData position = 3;
+}
+
+message DeviceIntensity {
+
+	string deviceId = 1;
+
+	int32 intensity = 2;
+}
+
+message DevicePosition {
+
+	string deviceId = 1;
+
+	LumosPositionData position = 2;
+}

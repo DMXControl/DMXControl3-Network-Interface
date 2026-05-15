@@ -1,16 +1,14 @@
-﻿using System;
+﻿using Grpc.Core;
+using log4net;
+using LumosProtobuf.Udp;
+using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Net;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using Grpc.Core;
-using log4net;
-using log4net.Core;
-using LumosProtobuf.Udp;
 using UmbraCommon;
 using T = LumosProtobuf.I18N.TranslatableDataBuilder;
 
@@ -28,7 +26,7 @@ namespace LumosProtobuf.ConnectionClient
 
         public ILog Logger { get; set; }
 
-        public string SessionID { get; private set; } 
+        public string SessionID { get; private set; }
 
         public ClientProgramInfo ConnectedToUmbra { get; private set; }
 
@@ -61,7 +59,8 @@ namespace LumosProtobuf.ConnectionClient
                     switch (response.ReturnCode)
                     {
                         case UmbraLoginResponse.Types.EReturnCode.NoError:
-                        case UmbraLoginResponse.Types.EReturnCode.AlreadyLoggedIn: break;
+                        case UmbraLoginResponse.Types.EReturnCode.AlreadyLoggedIn:
+                            break;
 
                         default:
                             throw new LoginException(response.Message, response.ReturnCode, response.SessionId);
@@ -115,7 +114,8 @@ namespace LumosProtobuf.ConnectionClient
 
         public async Task<ConfirmedResponse> SendClientControlRequest(ClientControlRequest request)
         {
-            if (String.IsNullOrEmpty(request?.ControlClientRuntimeId)) return null;
+            if (String.IsNullOrEmpty(request?.ControlClientRuntimeId))
+                return null;
 
             var cinfo = DataProvider.ClientProgramInfo.ClientInfo;
 
@@ -168,7 +168,8 @@ namespace LumosProtobuf.ConnectionClient
 
         public bool SendBroadcast(BroadcastMessage m)
         {
-            if (m == null || _broadcastQueue == null || _broadcastQueue.IsAddingCompleted) return false;
+            if (m == null || _broadcastQueue == null || _broadcastQueue.IsAddingCompleted)
+                return false;
 
             _broadcastQueue.Add(m);
             return true;
@@ -198,7 +199,7 @@ namespace LumosProtobuf.ConnectionClient
             var client = new ConnectedClientService.ConnectedClientServiceClient(DataProvider.UmbraChannel);
 
             var call = client.ReceiveClientChanges(new GetRequest(), DataProvider.HostMetadata);
-            
+
             Task.Run(async () =>
             {
                 try
@@ -218,6 +219,7 @@ namespace LumosProtobuf.ConnectionClient
                                     Logger?.Debug("Strange User Info call. Reason is Login, but Login is false???. Ignoring.");
                                     continue;
                                 }
+
                                 login = true;
                                 goto default;
                             case UmbraClientInfoMessage.ReasonOneofCase.Logoff:
@@ -226,6 +228,7 @@ namespace LumosProtobuf.ConnectionClient
                                     Logger?.Debug("Strange User Info call. Reason is Logoff, but value is unknown???. Ignoring.");
                                     continue;
                                 }
+
                                 login = false;
                                 goto default;
                         }
@@ -242,9 +245,11 @@ namespace LumosProtobuf.ConnectionClient
                 }
                 catch (OperationCanceledException)
                 {
+                    /*Ignore*/
                 }
                 catch (RpcException e) when (token.IsCancellationRequested || e.StatusCode == StatusCode.Unavailable)
                 {
+                    /*Ignore*/
                 }
                 catch (RpcException e) when (e.StatusCode == StatusCode.Unknown || e.StatusCode == StatusCode.Cancelled)
                 {
@@ -305,6 +310,7 @@ namespace LumosProtobuf.ConnectionClient
                 }
                 catch (OperationCanceledException)
                 {
+                    /*Ignore*/
                 }
                 catch (Exception ex)
                 {
@@ -320,6 +326,7 @@ namespace LumosProtobuf.ConnectionClient
                             Logger?.Error($"Ping Sender failed: {ex.Message}", ex);
                             break;
                     }
+
                     if (pingpong != null)
                     {
                         var a = pingpong;
@@ -334,7 +341,8 @@ namespace LumosProtobuf.ConnectionClient
                     try
                     {
                         var x = pingpong?.RequestStream.CompleteAsync();
-                        if (x != null) await x;
+                        if (x != null)
+                            await x;
                         pingpong = null;
                     }
                     finally
@@ -351,8 +359,9 @@ namespace LumosProtobuf.ConnectionClient
                     while (true)
                     {
                         var t = pingpong?.ResponseStream.MoveNext(token);
-                        if (t == null || !await t) break;
-                        
+                        if (t == null || !await t)
+                            break;
+
                         var pong = pingpong.ResponseStream.Current;
                         var n = DataProvider.Clientname;
                         if (pong.Clientname != n)
@@ -374,9 +383,11 @@ namespace LumosProtobuf.ConnectionClient
                 }
                 catch (OperationCanceledException)
                 {
+                    /*Ignore*/
                 }
                 catch (RpcException e) when (token.IsCancellationRequested || e.StatusCode == StatusCode.Unavailable)
                 {
+                    /*Ignore*/
                 }
                 catch (RpcException e) when (e.StatusCode == StatusCode.Unknown || e.StatusCode == StatusCode.Cancelled)
                 {
@@ -403,14 +414,14 @@ namespace LumosProtobuf.ConnectionClient
             var broadcast = client.SendBroadcast(DataProvider.HostMetadata);
             var broadcastQueue = new BlockingCollection<BroadcastMessage>();
 
-            var old = _broadcastQueue; 
+            var old = _broadcastQueue;
             _broadcastQueue = broadcastQueue;
             while (reconnect && old != null && old.Count > 0)
             {
                 //Takeover Elements from Last connection request
                 broadcastQueue.Add(old.Take());
             }
-            
+
             Task.Run(async () =>
             {
                 try
@@ -426,14 +437,17 @@ namespace LumosProtobuf.ConnectionClient
                                     await t;
                             }
                         }
+
                         await Task.Delay(100, token);
                     }
                 }
                 catch (OperationCanceledException)
                 {
+                    /*Ignore*/
                 }
                 catch (RpcException e) when (token.IsCancellationRequested || e.StatusCode == StatusCode.Unavailable)
                 {
+                    /*Ignore*/
                 }
                 catch (RpcException e) when (e.StatusCode == StatusCode.Unknown || e.StatusCode == StatusCode.Cancelled)
                 {
@@ -454,7 +468,8 @@ namespace LumosProtobuf.ConnectionClient
                 finally
                 {
                     var x = broadcast?.RequestStream.CompleteAsync();
-                    if (x != null) await x;
+                    if (x != null)
+                        await x;
                 }
             });
 
@@ -465,7 +480,8 @@ namespace LumosProtobuf.ConnectionClient
                     while (true)
                     {
                         var t = broadcast?.ResponseStream.MoveNext(token);
-                        if (t == null || !await t) break;
+                        if (t == null || !await t)
+                            break;
 
                         var bc = broadcast.ResponseStream.Current;
                         BroadcastReceived?.Invoke(this, new BroadcastEventArgs(bc));
@@ -473,9 +489,11 @@ namespace LumosProtobuf.ConnectionClient
                 }
                 catch (OperationCanceledException)
                 {
+                    /*Ignore*/
                 }
                 catch (RpcException e) when (token.IsCancellationRequested || e.StatusCode == StatusCode.Unavailable)
                 {
+                    /*Ignore*/
                 }
                 catch (RpcException e) when (e.StatusCode == StatusCode.Unknown || e.StatusCode == StatusCode.Cancelled)
                 {
@@ -521,7 +539,7 @@ namespace LumosProtobuf.ConnectionClient
                         var resp = new ConfirmedResponse()
                         {
                             RequestId = req.RequestId,
-                            Message =  timeout ? T._("Timeout") : 
+                            Message = timeout ? T._("Timeout") :
                                 args.Processed ? T._(args.Message ?? String.Empty) : T._("Not processed"),
                             Ok = !timeout && args.Processed && args.OK
                         };
@@ -531,9 +549,11 @@ namespace LumosProtobuf.ConnectionClient
                 }
                 catch (OperationCanceledException)
                 {
+                    /*Ignore*/
                 }
                 catch (RpcException e) when (token.IsCancellationRequested || e.StatusCode == StatusCode.Unavailable)
                 {
+                    /*Ignore*/
                 }
                 catch (RpcException e) when (e.StatusCode == StatusCode.Unknown || e.StatusCode == StatusCode.Cancelled)
                 {
@@ -550,7 +570,8 @@ namespace LumosProtobuf.ConnectionClient
                 finally
                 {
                     var x = clientControls?.RequestStream.CompleteAsync();
-                    if (x != null) await x;
+                    if (x != null)
+                        await x;
                 }
             });
         }
@@ -607,22 +628,25 @@ namespace LumosProtobuf.ConnectionClient
             var remoteEndpoint = args.EndPoint;
 
             var umbra = dgram.UmbraServer?.ClientInfo;
-            if (umbra == null) return;
+            if (umbra == null)
+                return;
 
             var clientInfo = await DoTryAllIPs(InformUmbraAskForActions);
 
             //Are we already connected?
             if (!String.IsNullOrEmpty(SessionID))
             {
-                if (Equals(umbra.Runtimeid, this.ConnectedToUmbra?.ClientInfo?.Runtimeid))
+                if (Equals(umbra.Runtimeid, ConnectedToUmbra?.ClientInfo?.Runtimeid))
                 {
                     if (!Equals(ConnectedToUmbra, dgram.UmbraServer))
                         ConnectedToUmbra = dgram.UmbraServer;
                 }
+
                 return;
             }
 
-            if (autoconnectFunction == null) return;
+            if (autoconnectFunction == null)
+                return;
 
             var nid = DataProvider.NetworkID;
             var unid = String.IsNullOrWhiteSpace(umbra.Networkid) ? clientInfo?.Networkid : umbra.Networkid;
@@ -674,7 +698,6 @@ namespace LumosProtobuf.ConnectionClient
                 return result;
             }
 
-
             async Task<(bool?, ClientInfo)> InformUmbraAskForActions(string targetUmbra, int port)
             {
                 //Otherwise inform that we are here and read commands
@@ -702,13 +725,24 @@ namespace LumosProtobuf.ConnectionClient
                 {
                     Logger?.Debug($"Timeout when connecting to Umbra {umbra.Clientname} @ {targetUmbra}");
                 }
-                catch (RpcException e) when (e.StatusCode == StatusCode.Unavailable)
+                catch (RpcException e)
                 {
-                    Logger?.Info($"Unable to connect to Umbra {umbra.Clientname} @ {targetUmbra}");
+                    switch (e.StatusCode)
+                    {
+                        case StatusCode.Unavailable:
+                            Logger?.Info($"Unable to connect to Umbra {umbra.Clientname} @ {targetUmbra}");
+                            break;
+                        case StatusCode.Cancelled:
+                            //Ignore
+                            break;
+                        default:
+                            Logger?.Debug($"Unable to inform Source Umbra {umbra.Clientname} @ {targetUmbra}...", e);
+                            break;
+                    }
                 }
                 catch (Exception e)
                 {
-                    Logger?.Warn($"Unable to inform Source Umbra {umbra.Clientname} @ {targetUmbra}...", e);
+                    Logger?.Debug($"Unable to inform Source Umbra {umbra.Clientname} @ {targetUmbra}...", e);
                 }
                 finally
                 {
@@ -726,8 +760,10 @@ namespace LumosProtobuf.ConnectionClient
                     var erg = await autoconnectFunction(targetUmbra, umbra.UmbraPort);
                     switch (erg)
                     {
-                        case EAutoconnectResult.OK: return (true, null);
-                        case EAutoconnectResult.NotReady: return (false, null);
+                        case EAutoconnectResult.OK:
+                            return (true, null);
+                        case EAutoconnectResult.NotReady:
+                            return (false, null);
                     }
                 }
                 catch (LoginException e)
@@ -746,8 +782,6 @@ namespace LumosProtobuf.ConnectionClient
                 return (null, null);
             }
         }
-
-        
     }
 
     public class ClientEventArgs : EventArgs
@@ -758,8 +792,8 @@ namespace LumosProtobuf.ConnectionClient
 
         public ClientEventArgs(ClientInfo client, bool? login = null)
         {
-            this.Client = client;
-            this._login = login;
+            Client = client;
+            _login = login;
         }
 
         public bool Login => _login == true;
@@ -772,7 +806,7 @@ namespace LumosProtobuf.ConnectionClient
 
         public BroadcastEventArgs(BroadcastMessage m)
         {
-            this.Message = m;
+            Message = m;
         }
     }
 
@@ -783,8 +817,8 @@ namespace LumosProtobuf.ConnectionClient
 
         public LoginException(string message, UmbraLoginResponse.Types.EReturnCode returnCode, string sessionId) : base(message)
         {
-            this.ReturnCode = returnCode;
-            this.SessionID = sessionId;
+            ReturnCode = returnCode;
+            SessionID = sessionId;
         }
     }
 
@@ -794,7 +828,7 @@ namespace LumosProtobuf.ConnectionClient
 
         public ClientControlEventArgs(ClientControlRequest req)
         {
-            this.Request = req;
+            Request = req;
         }
 
         public bool Processed { get; set; }

@@ -1,13 +1,10 @@
-﻿using System;
-using System.Collections.Concurrent;
+﻿using Google.Protobuf;
+using log4net;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.NetworkInformation;
-using System.Text;
-using System.Threading.Tasks;
-using Google.Protobuf;
-using log4net;
 
 namespace LumosProtobuf.Udp
 {
@@ -17,7 +14,7 @@ namespace LumosProtobuf.Udp
 
         public event EventHandler<UmbraDiscoveryBroadcastEventArgs> UmbraDiscoveryBroadcastReceived;
 
-        private readonly Queue<UmbraUdpBroadcast> _receivedBroadcasts = new Queue<UmbraUdpBroadcast>(); 
+        private readonly Queue<UmbraUdpBroadcast> _receivedBroadcasts = new Queue<UmbraUdpBroadcast>();
 
         public int BroadcastHistoryMax { get; set; } = 100;
 
@@ -84,11 +81,10 @@ namespace LumosProtobuf.Udp
                         Logger?.WarnFormat("Unable to Listen on IP Address: {0}", a);
                     }
                 }
-
             }
+
             _umbraBroadcastListener.UdpDataReceived += _umbraBroadcastListener_UdpDataReceived;
         }
-
 
         public void Dispose()
         {
@@ -125,7 +121,6 @@ namespace LumosProtobuf.Udp
                 Logger?.Debug($"Unable to deserialize Data: {e.Message}", e);
             }
         }
-
     }
 
     public class UmbraDiscoveryBroadcastEventArgs : EventArgs
@@ -135,8 +130,8 @@ namespace LumosProtobuf.Udp
 
         public UmbraDiscoveryBroadcastEventArgs(UmbraUdpBroadcast bc, IPEndPoint ep)
         {
-            this.Broadcast = bc;
-            this.EndPoint = ep;
+            Broadcast = bc;
+            EndPoint = ep;
         }
     }
 }

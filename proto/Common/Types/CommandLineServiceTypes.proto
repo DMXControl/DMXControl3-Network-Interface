@@ -1,0 +1,116 @@
+syntax = "proto3";
+
+package LumosProtobuf;
+
+import "Common/Types/UmbraServiceTypes.proto";
+import "Common/Types/CommonTypes.proto";
+
+message ExecuteOrModifyCommandLineCommandRequest {
+
+	reserved 5;
+
+	string requestId = 2;
+
+	string userContextId = 3; //Filled by Umbra
+
+	oneof command 
+	{
+		string takethis = 4;
+		string appendthis = 7;
+		bool takecurrentcontext = 6;
+	}
+
+	EExecutionType executionType = 11;
+
+	enum EExecutionType 
+	{
+		No = 0;
+		DryRun = 1;
+		Run = 2;
+	}
+
+}
+
+message ExecuteOrModifyCommandLineCommandResponse {
+
+	string requestId = 2;
+
+	string userContextId = 3;
+
+	// 0 = No error, 1 = Warning, 2 = General Error, 3 = userContextId not found, 4 = parser initialization error
+	int32 returnCode = 10;
+
+	string currentCommandLine = 5;
+
+	oneof result
+	{
+		ErrorInformation error = 11;
+		TranslateableData response = 12;
+		AutocompleteInformation autocomplete = 13;
+	}
+
+	message ErrorInformation {
+
+		TranslateableData message = 2;
+
+		int32 position = 3;
+		int32 length = 4;
+
+	}
+
+	message AutocompleteInformation {
+
+		repeated string proposedCommands = 2;
+
+	}
+}
+
+message GetCurrentCommandLineResponse {
+
+	string requestId = 2; 
+	string userContextId = 3;
+
+	string currentCommandLine = 4;
+
+}
+
+message GetCommandLineHistoryResponse {
+
+	string requestId = 2; 
+	string userContextId = 3;
+
+	repeated CommandLineHistoryItem history = 4;
+}
+
+message CurrentCommandLineChangedMessage {
+
+	string userContextId = 4; 
+
+	string newCurrentCommandLine = 6;
+}
+
+message CommandLineHistoryChangedMessage {
+
+	string userContextId = 4;
+
+	repeated CommandLineHistoryItem newHistory = 5;
+}
+
+message CommandLineHistoryItem {
+
+	string commandLine = 2;
+
+	TranslateableData message = 3;
+
+	EItemStatus status = 4;
+
+	enum EItemStatus
+	{
+		Success = 0;
+		Information = 1;
+		RequestResponse = 2;
+		Warning = 3;
+		Error = 4;
+	}
+
+}

@@ -412,10 +412,10 @@ message HighlightData {
 
 	oneof value {
 		bool enabled = 6;
-		EHighliteItem itemType = 5;
+		EHighlightItem itemType = 5;
 	}
-	
-	enum EHighliteItem {
+
+	enum EHighlightItem {
 	
 		UNKNOWN = 0;
 		DEVICE = 1;

@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 
 namespace LumosProtobuf
 {
@@ -14,7 +12,6 @@ namespace LumosProtobuf
     //    {
     //        return ProjectVersion + "." + ProjectBuild.ToString().PadLeft(2, '0');
     //    }
-
 
     //    public void updateToSave()
     //    {
@@ -28,12 +25,13 @@ namespace LumosProtobuf
 
         public ProjectVersionData FindVersion(ProjectVersionID id, bool compareGuid = true)
         {
-            if (id == null) return null;
+            if (id == null)
+                return null;
             if (compareGuid)
-                return this.Versions.FirstOrDefault(c => Equals(c.Id, id));
+                return Versions.FirstOrDefault(c => Equals(c.Id, id));
 
             var vs = id.ToVersionString();
-            return this.Versions.FirstOrDefault(c => Equals(c.Id.ToVersionString(), vs));
+            return Versions.FirstOrDefault(c => Equals(c.Id.ToVersionString(), vs));
         }
     }
 
@@ -46,7 +44,8 @@ namespace LumosProtobuf
 
         public static ProjectVersionID FromString(string combined)
         {
-            if (combined == null || !Regex.IsMatch(combined, "^([^#]+)(#[0-9]+(\\.[0-9]+(\\.[0-9]+)?)?)?$")) return null;
+            if (combined == null || !Regex.IsMatch(combined, "^([^#]+)(#[0-9]+(\\.[0-9]+(\\.[0-9]+)?)?)?$"))
+                return null;
 
             var ret = new ProjectVersionID()
             {
@@ -60,9 +59,10 @@ namespace LumosProtobuf
                 var tmp = v[1].Split('.');
                 switch (tmp.Length)
                 {
-                    default: return null;
+                    default:
+                        return null;
 
-                    case 3: 
+                    case 3:
                         ret.Revision = Int32.Parse(tmp[2]);
                         goto case 2;
                     case 2:
@@ -72,14 +72,14 @@ namespace LumosProtobuf
                         ret.Major = Int32.Parse(tmp[0]);
                         break;
                 }
-
             }
+
             return ret;
         }
 
         public string ToCombinedString()
         {
-            var a = this.Guid;
+            var a = Guid;
             var v = ToVersionString();
             if (!String.IsNullOrEmpty(v))
                 a += "#" + v;
@@ -95,17 +95,22 @@ namespace LumosProtobuf
 
         public int CompareTo(ProjectVersionID other)
         {
-            if (ReferenceEquals(this, other)) return 0;
-            if (ReferenceEquals(null, other)) return 1;
+            if (ReferenceEquals(this, other))
+                return 0;
+            if (other is null)
+                return 1;
 
             var ret = string.Compare(Guid, other.Guid, StringComparison.Ordinal);
-            if (ret != 0) return ret;
+            if (ret != 0)
+                return ret;
 
             ret = Major.CompareTo(other.Major);
-            if (ret != 0) return ret;
+            if (ret != 0)
+                return ret;
 
             ret = Minor.CompareTo(other.Minor);
-            if (ret != 0) return ret;
+            if (ret != 0)
+                return ret;
 
             ret = Revision.CompareTo(other.Revision);
             return ret;
@@ -116,14 +121,17 @@ namespace LumosProtobuf
     {
         public static IEnumerable<ProjectTodoDescriptor> MergeToDos(IEnumerable<ProjectTodoDescriptor> existing, IEnumerable<ProjectTodoDescriptor> createdOrUpdated)
         {
-            if (existing == null) return createdOrUpdated ?? Enumerable.Empty<ProjectTodoDescriptor>();
-            if (createdOrUpdated == null) return existing; //Existing can't be null here
+            if (existing == null)
+                return createdOrUpdated ?? Enumerable.Empty<ProjectTodoDescriptor>();
+            if (createdOrUpdated == null)
+                return existing; //Existing can't be null here
 
             var dict = existing.ToDictionary(c => c.Id);
             foreach (var n in createdOrUpdated)
             {
                 dict[n.Id] = n;
             }
+
             return dict.Values;
         }
     }

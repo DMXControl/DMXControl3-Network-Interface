@@ -1,5 +1,4 @@
 ﻿using System.Reflection;
-using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
 // Allgemeine Informationen über eine Assembly werden über die folgenden 
@@ -10,7 +9,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("DMXControl Projects e.V.")]
 [assembly: AssemblyProduct("LumosProtobuf")]
-[assembly: AssemblyCopyright("Copyright © DMXControl Projects e.V. 2025")]
+[assembly: AssemblyCopyright("Copyright © DMXControl Projects e.V. 2026")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

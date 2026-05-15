@@ -1,0 +1,20 @@
+syntax = "proto3";
+
+package LumosProtobufClient;
+
+import "Common/Types/CommandLineServiceTypes.proto";
+import "Common/Types/CommonTypes.proto";
+
+option csharp_namespace = "UmbraClient";
+
+service CommandLineClient {
+
+    rpc GetCurrentCommandLine(.LumosProtobuf.GetRequest) returns (.LumosProtobuf.GetCurrentCommandLineResponse);
+	rpc GetCommandLineHistory(.LumosProtobuf.GetRequest) returns (.LumosProtobuf.GetCommandLineHistoryResponse);
+
+	rpc ExecuteOrModifyCommandLineCommand(.LumosProtobuf.ExecuteOrModifyCommandLineCommandRequest) returns (.LumosProtobuf.ExecuteOrModifyCommandLineCommandResponse);
+
+	rpc ReceiveCurrentCommandLineChanges(.LumosProtobuf.GetRequest) returns (stream .LumosProtobuf.CurrentCommandLineChangedMessage);
+	rpc ReceiveCommandLineHistoryChanges (.LumosProtobuf.GetRequest) returns (stream .LumosProtobuf.CommandLineHistoryChangedMessage);	 
+}
+

@@ -1,0 +1,21 @@
+syntax = "proto3";
+
+package LumosProtobufServer;
+
+import "Common/Types/PositionMappingServiceTypes.proto";
+import "Common/Types/CommonTypes.proto";
+
+option csharp_namespace = "UmbraKernel";
+
+service PositionMappingService {
+
+	rpc StartPreviewPositionMapping(stream .LumosProtobuf.ConfirmedResponse) returns (stream .LumosProtobuf.StartPreviewPositionMappingRequest);
+	rpc StopPreviewPositionMapping(stream .LumosProtobuf.ConfirmedResponse) returns (stream .LumosProtobuf.StopPreviewPositionMappingRequest);
+
+	rpc SetPreviewPositionMappingIntensity(stream .LumosProtobuf.ConfirmedResponse) returns (stream .LumosProtobuf.SetPreviewPositionMappingIntensityRequest);
+	rpc SetPreviewPositionMapping(stream .LumosProtobuf.ConfirmedResponse) returns (stream .LumosProtobuf.SetPreviewPositionMappingRequest);
+
+	rpc GetStatusPositionMapping(stream .LumosProtobuf.GetStatusPositionMappingResponse) returns (stream .LumosProtobuf.GetStatusPositionMappingRequest);
+
+}
+

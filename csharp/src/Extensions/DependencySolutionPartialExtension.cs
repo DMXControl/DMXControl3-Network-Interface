@@ -27,7 +27,8 @@ namespace LumosProtobuf
     {
         public string ToTreeString(Func<string, string> translator)
         {
-            if (translator == null) translator = c => c;
+            if (translator == null)
+                translator = c => c;
 
             string s = translator(Type) + ": " + Name;
             if (Solution != null)
@@ -38,9 +39,9 @@ namespace LumosProtobuf
 
         public void AddPossibleSolution(DependencySolution s)
         {
-            this.PossibleSolutions.Add(s);
-            if (this.Solution == null)
-                this.Solution = s;
+            PossibleSolutions.Add(s);
+            if (Solution == null)
+                Solution = s;
         }
     }
 }

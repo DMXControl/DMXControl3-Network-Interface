@@ -1,0 +1,21 @@
+syntax = "proto3";
+
+package LumosProtobufServer;
+
+import "Common/Types/CommandLineServiceTypes.proto";
+import "Common/Types/CommonTypes.proto";
+
+option csharp_namespace = "UmbraKernel";
+
+service CommandLineService {
+
+  rpc SendCurrentCommandLine(stream .LumosProtobuf.GetCurrentCommandLineResponse) returns (stream .LumosProtobuf.GetRequest);
+  rpc SendCommandLineHistory(stream .LumosProtobuf.GetCommandLineHistoryResponse) returns (stream .LumosProtobuf.GetRequest);
+
+  rpc ProcessOrModifyCommandLineCommands(stream .LumosProtobuf.ExecuteOrModifyCommandLineCommandResponse) returns (stream .LumosProtobuf.ExecuteOrModifyCommandLineCommandRequest);
+
+  rpc SendCurrentCommandLineChanges(stream .LumosProtobuf.CurrentCommandLineChangedMessage) returns (.LumosProtobuf.ConfirmedResponse);
+  rpc SendCommandLineHistoryChanges(stream .LumosProtobuf.CommandLineHistoryChangedMessage) returns (.LumosProtobuf.ConfirmedResponse);
+
+}
+

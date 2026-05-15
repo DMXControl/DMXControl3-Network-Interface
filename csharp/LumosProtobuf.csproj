@@ -1,0 +1,19 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+	<PropertyGroup>
+		<TargetFramework>netstandard2.0</TargetFramework>
+		<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+		<Deterministic>False</Deterministic>
+	</PropertyGroup>
+	<ItemGroup>
+		<PackageReference Include="Google.Protobuf" Version="3.34.1" />
+		<PackageReference Include="Grpc.Core.Api" Version="2.76.0" />
+		<PackageReference Include="Grpc.Tools" Version="2.80.0">
+			<PrivateAssets>all</PrivateAssets>
+			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+		</PackageReference>
+		<PackageReference Include="log4net" Version="3.3.1" />
+	</ItemGroup>
+	<ItemGroup>
+    	<Protobuf Include="..\proto\**\*.proto" Link="%(RecursiveDir)%(Filename)%(Extension)" ProtoRoot="..\proto" />
+  	</ItemGroup>
+</Project>

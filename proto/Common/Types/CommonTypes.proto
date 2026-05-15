@@ -21,6 +21,7 @@ enum ENullableBool {
 message GetRequest {
 
 	string requestId = 1;
+	string userContextId = 4;
 
 }
 
@@ -35,6 +36,7 @@ message GetMultipleRequest {
 message ActionRequest {
 
 	string requestId = 2;
+	string userContextId = 4;
 
 }
 
@@ -87,6 +89,8 @@ message ObjectData {
 		sint32 sbyteValue = 11;
 		uint32 ushortValue = 12;
 		uint32 byteValue = 13;
+
+		OneDimArrayData arrayValue = 20;
 	}
 
 	oneof fallback {
@@ -97,6 +101,12 @@ message ObjectData {
 
 	string fallbackType_AQ = 40;
 	string protobufType_AQ = 41;
+}
+
+message OneDimArrayData {
+
+	repeated ObjectData values = 2;
+
 }
 
 message TwoDimArrayData {

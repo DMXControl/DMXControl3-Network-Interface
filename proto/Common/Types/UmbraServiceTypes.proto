@@ -126,10 +126,10 @@ message PingPong {
 	int32 performanceTTL = 5;
 }
 
-//A Programm is every Program in the network
+//A program is every program in the network
 message ProgramInfo {
 
-	string programmName = 2;
+	string programName = 2;
 	string vendor = 3;
 	string programVersion = 5;
 	sint64 buildDate = 10;

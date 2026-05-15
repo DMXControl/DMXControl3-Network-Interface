@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace LumosProtobuf.I18N
 {
@@ -16,7 +12,8 @@ namespace LumosProtobuf.I18N
                 FormatString = formatString ?? String.Empty
             };
 
-            if (parameters == null || parameters.Length == 0) return r;
+            if (parameters == null || parameters.Length == 0)
+                return r;
 
             foreach (var parameter in parameters)
             {
