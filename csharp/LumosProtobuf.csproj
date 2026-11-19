@@ -4,6 +4,24 @@
 		<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
 		<Deterministic>False</Deterministic>
 	</PropertyGroup>
+	<PropertyGroup>
+		<!-- NuGet package; the version is set from the git tag by the release workflow -->
+		<PackageId>LumosProtobuf</PackageId>
+		<Authors>DMXControl Projects e.V.</Authors>
+		<Company>DMXControl Projects e.V.</Company>
+		<Description>gRPC client library for the DMXControl 3 network interface</Description>
+		<PackageTags>dmxcontrol;dmx;grpc;protobuf</PackageTags>
+		<PackageLicenseExpression>MIT</PackageLicenseExpression>
+		<PackageProjectUrl>https://github.com/DMXControl/DMXControl3-Network-Interface</PackageProjectUrl>
+		<RepositoryUrl>https://github.com/DMXControl/DMXControl3-Network-Interface.git</RepositoryUrl>
+		<RepositoryType>git</RepositoryType>
+		<PackageReadmeFile>README.md</PackageReadmeFile>
+		<IncludeSymbols>true</IncludeSymbols>
+		<SymbolPackageFormat>snupkg</SymbolPackageFormat>
+	</PropertyGroup>
+	<ItemGroup>
+		<None Include="..\README.md" Pack="true" PackagePath="\" />
+	</ItemGroup>
 	<ItemGroup>
 		<PackageReference Include="Google.Protobuf" Version="3.34.1" />
 		<PackageReference Include="Grpc.Core.Api" Version="2.76.0" />

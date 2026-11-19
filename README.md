@@ -10,11 +10,13 @@ Client libraries generated from the Protobuf files are built and published autom
 | Language | Package | Source |
 |---|---|---|
 | TypeScript / JavaScript | [`@dmxcontrolprojects/dmxc-grpc-client`](https://www.npmjs.com/package/@dmxcontrolprojects/dmxc-grpc-client) (npm) | [`npm/`](npm) |
+| C# / .NET | [`LumosProtobuf`](https://www.nuget.org/packages/LumosProtobuf) (NuGet) | [`csharp/`](csharp) |
 | Python | [`dmxc_protobuf`](https://pypi.org/project/dmxc_protobuf/) (PyPI) | [`python/dmxc_protobuf/`](python/dmxc_protobuf) |
 
-Besides the generated code, both packages contain ports of the helpers in [`csharp/`](csharp) (`UmbraConnectionClient`, `UmbraDiscoveryClient`, `NetConstants`, the `TranslateableData` builder and the message extensions). See the package READMEs for details.
+Besides the generated code, the npm and Python packages contain ports of the helpers in [`csharp/`](csharp) (`UmbraConnectionClient`, `UmbraDiscoveryClient`, `NetConstants`, the `TranslateableData` builder and the message extensions). See the package READMEs for details.
 
-To build locally (requires `protoc`):
+To build locally (npm and Python require `protoc`; the NuGet build brings its own via `Grpc.Tools`):
+- NuGet: `cd csharp && dotnet pack -c Release`
 - npm: `cd npm && npm ci && npm run build && npm test`
 - Python: `cd python/dmxc_protobuf && poetry install && poetry run ./build.sh && poetry run python -m unittest discover -s tests -t . && poetry build`
 
