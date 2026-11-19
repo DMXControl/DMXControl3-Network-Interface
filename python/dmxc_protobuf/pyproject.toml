@@ -1,0 +1,23 @@
+[tool.poetry]
+name = "dmxc_protobuf"
+version = "0.1.0"
+description = "gRPC client library for DMXControl 3"
+authors = ["Samuel Hufen <samuel@hufen.xyz>"]
+license = "MIT"
+readme = "README.md"
+repository = "https://github.com/DMXControl/DMXControl3-Network-Interface"
+packages = [{ include = "dmxc_protobuf" }]
+# generated code is git-ignored, so it must be included explicitly
+include = [{ path = "dmxc_protobuf/**/*", format = ["sdist", "wheel"] }]
+
+[tool.poetry.dependencies]
+python = "^3.12"
+grpcio = "^1.71.0"
+protobuf = ">=5.29.0,<6"
+
+[tool.poetry.group.dev.dependencies]
+grpcio-tools = {version = "^1.71.0"}
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
