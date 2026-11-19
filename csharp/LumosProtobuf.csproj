@@ -1,11 +1,15 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 	<PropertyGroup>
 		<TargetFramework>netstandard2.0</TargetFramework>
-		<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
 		<Deterministic>False</Deterministic>
+		<!-- assembly attributes are generated from these properties; the version comes from
+		     -p:Version, set from the git tag by the release workflow (local builds: 1.0.0) -->
+		<AssemblyTitle>LumosProtobuf</AssemblyTitle>
+		<Product>LumosProtobuf</Product>
+		<Copyright>Copyright © DMXControl Projects e.V. 2026</Copyright>
 	</PropertyGroup>
 	<PropertyGroup>
-		<!-- NuGet package; the version is set from the git tag by the release workflow -->
+		<!-- NuGet package -->
 		<PackageId>DMXControl3-Network-Interface</PackageId>
 		<Authors>DMXControl Projects e.V.</Authors>
 		<Company>DMXControl Projects e.V.</Company>

@@ -1,6 +1,6 @@
 {
   "name": "@dmxcontrolprojects/dmxcontrol3-network-interface",
-  "version": "1.0.2",
+  "version": "0.0.0",
   "description": "Protobuf client library for DMXC 3",
   "scripts": {
     "build": "./gen-source.sh && tsc",

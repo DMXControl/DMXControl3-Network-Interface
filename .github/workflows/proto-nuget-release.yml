@@ -39,7 +39,7 @@ jobs:
           echo "VERSION=$V" >> "$GITHUB_ENV"
 
       - name: Pack
-        run: dotnet pack -c Release -o ../nupkgs -p:PackageVersion="$VERSION"
+        run: dotnet pack -c Release -o ../nupkgs -p:Version="$VERSION"
 
       # exchanges the OIDC token for a short-lived API key using the trusted
       # publishing policy configured on nuget.org — no long-lived API key secret needed

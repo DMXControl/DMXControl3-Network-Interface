@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "dmxcontrol3-network-interface"
-version = "0.1.0"
+version = "0.0.0"  # set from the git tag by the release workflow
 description = "gRPC client library for DMXControl 3"
 authors = ["Samuel Hufen <samuel@hufen.xyz>"]
 license = "MIT"
