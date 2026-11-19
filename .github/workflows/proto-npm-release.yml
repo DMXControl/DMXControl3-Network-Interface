@@ -3,6 +3,11 @@ on:
   push:
     tags:
       - 'v*'
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Version to publish, e.g. 3.3.3 (builds the selected branch or tag)'
+        required: true
 
 permissions:
   contents: read
@@ -27,10 +32,22 @@ jobs:
           version: "29.x"
           repo-token: ${{ secrets.GITHUB_TOKEN }}
 
+      - name: Determine version
+        env:
+          VERSION_INPUT: ${{ inputs.version }}
+        run: |
+          V="${VERSION_INPUT:-$GITHUB_REF_NAME}"
+          V="${V#v}"
+          if ! [[ "$V" =~ ^[0-9]+\.[0-9]+\.[0-9]+(-[0-9A-Za-z.-]+)?$ ]]; then
+            echo "::error::Invalid version '$V'"
+            exit 1
+          fi
+          echo "VERSION=$V" >> "$GITHUB_ENV"
+
       - name: Build
         run: |
           npm ci
-          npm version --no-git-tag-version "${GITHUB_REF_NAME#v}"
+          npm version --no-git-tag-version "$VERSION"
           npm run build
           npm test
 

@@ -3,6 +3,11 @@ on:
   push:
     tags:
       - 'v*'
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Version to publish, e.g. 3.3.3 (builds the selected branch or tag)'
+        required: true
 
 jobs:
   release:
@@ -21,13 +26,25 @@ jobs:
         with:
           python-version: '3.13'
 
+      - name: Determine version
+        env:
+          VERSION_INPUT: ${{ inputs.version }}
+        run: |
+          V="${VERSION_INPUT:-$GITHUB_REF_NAME}"
+          V="${V#v}"
+          if ! [[ "$V" =~ ^[0-9]+\.[0-9]+\.[0-9]+(-[0-9A-Za-z.-]+)?$ ]]; then
+            echo "::error::Invalid version '$V'"
+            exit 1
+          fi
+          echo "VERSION=$V" >> "$GITHUB_ENV"
+
       - name: Build
         run: |
           pip install poetry
           poetry install
           poetry run ./build.sh
           poetry run python -m unittest discover -s tests -t .
-          poetry version "${GITHUB_REF_NAME#v}"
+          poetry version "$VERSION"
           poetry build
 
       - uses: pypa/gh-action-pypi-publish@release/v1
