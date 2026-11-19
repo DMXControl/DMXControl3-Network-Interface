@@ -6,7 +6,7 @@ on:
   workflow_dispatch:
     inputs:
       version:
-        description: 'Version to publish, e.g. 3.3.3 (builds the selected branch or tag)'
+        description: 'Version to publish: 3.3.3, 3.3.3-rc.0, or 3.3.3.1 for a dependency-only fix (builds the selected branch or tag)'
         required: true
 
 permissions:
@@ -35,16 +35,10 @@ jobs:
       - name: Determine version
         env:
           VERSION_INPUT: ${{ inputs.version }}
-        run: |
-          V="${VERSION_INPUT:-$GITHUB_REF_NAME}"
-          V="${V#v}"
-          if ! [[ "$V" =~ ^[0-9]+\.[0-9]+\.[0-9]+(-[0-9A-Za-z.-]+)?$ ]]; then
-            echo "::error::Invalid version '$V'"
-            exit 1
-          fi
-          echo "VERSION=$V" >> "$GITHUB_ENV"
+        run: bash "$GITHUB_WORKSPACE/.github/scripts/release-version.sh" npm
 
       - name: Build
+        if: env.SKIP_PUBLISH != 'true'
         run: |
           npm ci
           npm version --no-git-tag-version --allow-same-version "$VERSION"
@@ -54,6 +48,7 @@ jobs:
       # authenticates via OIDC (id-token: write) using the trusted publisher
       # configured on npmjs.com — no NPM_TOKEN secret needed
       - name: Publish
+        if: env.SKIP_PUBLISH != 'true'
         # pre-releases (e.g. 3.3.4-rc.1) go to the "next" dist-tag, so they are not installed by default
         run: |
           TAG=latest

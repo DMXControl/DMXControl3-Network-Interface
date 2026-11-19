@@ -7,6 +7,16 @@ Starting with DMXControl 3.3.0, there is a commit for every final release versio
 # Packages
 Client libraries generated from the Protobuf files are built and published automatically by GitHub Actions whenever a version tag (`v*`) is pushed. The package version is taken from the tag (e.g. `v3.3.2` → `3.3.2`).
 
+The first three parts of the version always match the DMXControl version. Releases that only update dependencies (e.g. for security fixes) add a fourth part, which is mapped per registry:
+
+| Tag | NuGet | PyPI | npm |
+|---|---|---|---|
+| `v3.3.3` | `3.3.3` | `3.3.3` | `3.3.3` |
+| `v3.3.3.1` | `3.3.3.1` | `3.3.3.post1` | not published (semver has no fourth part; the npm dependency ranges already pick up fixed versions) |
+| `v3.3.3-rc.0` | `3.3.3-rc.0` | `3.3.3rc0` | `3.3.3-rc.0` (dist-tag `next`) |
+
+The mapping is done by [`.github/scripts/release-version.sh`](.github/scripts/release-version.sh).
+
 | Language | Package | Source |
 |---|---|---|
 | TypeScript / JavaScript | [`@dmxcontrolprojects/dmxcontrol3-network-interface`](https://www.npmjs.com/package/@dmxcontrolprojects/dmxcontrol3-network-interface) (npm) | [`npm/`](npm) |
