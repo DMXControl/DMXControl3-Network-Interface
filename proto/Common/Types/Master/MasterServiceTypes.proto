@@ -1,8 +1,6 @@
 ﻿syntax = "proto3";
 
 import "Common/Types/ValueTypes.proto";
-import "Common/Types/CommonTypes.proto";
-import "Common/Types/DependencyTypes.proto";
 
 package LumosProtobuf.Master;
 
