@@ -54,4 +54,8 @@ jobs:
       # authenticates via OIDC (id-token: write) using the trusted publisher
       # configured on npmjs.com — no NPM_TOKEN secret needed
       - name: Publish
-        run: npm publish --provenance ${RUNNER_DEBUG:+--loglevel verbose}
+        # pre-releases (e.g. 3.3.4-rc.1) go to the "next" dist-tag, so they are not installed by default
+        run: |
+          TAG=latest
+          [[ "$VERSION" == *-* ]] && TAG=next
+          npm publish --provenance --tag "$TAG" ${RUNNER_DEBUG:+--loglevel verbose}
