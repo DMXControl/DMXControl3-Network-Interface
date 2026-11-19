@@ -1,8 +1,8 @@
-# @dmxcontrolprojects/dmxc-grpc-client
+# @dmxcontrolprojects/dmxcontrol3-network-interface
 
 Generated gRPC/protobuf client library for DMXControl 3 (via [ts-proto](https://github.com/stephenh/ts-proto) and `@grpc/grpc-js`), plus TypeScript ports of the helpers from the C# `LumosProtobuf` library.
 
-The generated code is exported per protobuf package (`LumosProtobuf`, `LumosProtobufClient`, `LumosProtobufCommon`, `LumosProtobufServer`, ...), also as subpaths such as `@dmxcontrolprojects/dmxc-grpc-client/LumosProtobuf`.
+The generated code is exported per protobuf package (`LumosProtobuf`, `LumosProtobufClient`, `LumosProtobufCommon`, `LumosProtobufServer`, ...), also as subpaths such as `@dmxcontrolprojects/dmxcontrol3-network-interface/LumosProtobuf`.
 
 ## Helpers
 
@@ -16,7 +16,7 @@ Exported from the package root:
 
 ```ts
 import { Metadata } from "@grpc/grpc-js";
-import { createUmbraChannel, LumosProtobuf, UmbraConnectionClient } from "@dmxcontrolprojects/dmxc-grpc-client";
+import { createUmbraChannel, LumosProtobuf, UmbraConnectionClient } from "@dmxcontrolprojects/dmxcontrol3-network-interface";
 
 const client = new UmbraConnectionClient({
   umbraChannel: createUmbraChannel("127.0.0.1"),

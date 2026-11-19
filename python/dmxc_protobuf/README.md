@@ -1,6 +1,12 @@
-# dmxc_protobuf
+# dmxcontrol3-network-interface
 
 Generated gRPC/protobuf client library for DMXControl 3, plus Python ports of the helpers from the C# `LumosProtobuf` library.
+
+```sh
+pip install dmxcontrol3-network-interface
+```
+
+The import package is `dmxc_protobuf`:
 
 ```python
 import grpc

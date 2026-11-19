@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "dmxc_protobuf"
+name = "dmxcontrol3-network-interface"
 version = "0.1.0"
 description = "gRPC client library for DMXControl 3"
 authors = ["Samuel Hufen <samuel@hufen.xyz>"]

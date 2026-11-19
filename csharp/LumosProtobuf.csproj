@@ -6,7 +6,7 @@
 	</PropertyGroup>
 	<PropertyGroup>
 		<!-- NuGet package; the version is set from the git tag by the release workflow -->
-		<PackageId>LumosProtobuf</PackageId>
+		<PackageId>DMXControl3-Network-Interface</PackageId>
 		<Authors>DMXControl Projects e.V.</Authors>
 		<Company>DMXControl Projects e.V.</Company>
 		<Description>gRPC client library for the DMXControl 3 network interface</Description>

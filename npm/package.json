@@ -1,5 +1,5 @@
 {
-  "name": "@dmxcontrolprojects/dmxc-grpc-client",
+  "name": "@dmxcontrolprojects/dmxcontrol3-network-interface",
   "version": "1.0.2",
   "description": "Protobuf client library for DMXC 3",
   "scripts": {

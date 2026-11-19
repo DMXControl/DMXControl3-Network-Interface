@@ -9,9 +9,9 @@ Client libraries generated from the Protobuf files are built and published autom
 
 | Language | Package | Source |
 |---|---|---|
-| TypeScript / JavaScript | [`@dmxcontrolprojects/dmxc-grpc-client`](https://www.npmjs.com/package/@dmxcontrolprojects/dmxc-grpc-client) (npm) | [`npm/`](npm) |
-| C# / .NET | [`LumosProtobuf`](https://www.nuget.org/packages/LumosProtobuf) (NuGet) | [`csharp/`](csharp) |
-| Python | [`dmxc_protobuf`](https://pypi.org/project/dmxc_protobuf/) (PyPI) | [`python/dmxc_protobuf/`](python/dmxc_protobuf) |
+| TypeScript / JavaScript | [`@dmxcontrolprojects/dmxcontrol3-network-interface`](https://www.npmjs.com/package/@dmxcontrolprojects/dmxcontrol3-network-interface) (npm) | [`npm/`](npm) |
+| C# / .NET | [`DMXControl3-Network-Interface`](https://www.nuget.org/packages/DMXControl3-Network-Interface) (NuGet, namespace `LumosProtobuf`) | [`csharp/`](csharp) |
+| Python | [`dmxcontrol3-network-interface`](https://pypi.org/project/dmxcontrol3-network-interface/) (PyPI, import `dmxc_protobuf`) | [`python/dmxc_protobuf/`](python/dmxc_protobuf) |
 
 Besides the generated code, the npm and Python packages contain ports of the helpers in [`csharp/`](csharp) (`UmbraConnectionClient`, `UmbraDiscoveryClient`, `NetConstants`, the `TranslateableData` builder and the message extensions). See the package READMEs for details.
 
