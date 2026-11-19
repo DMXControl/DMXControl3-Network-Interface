@@ -18,6 +18,9 @@ service ConnectedClientService {
   //Simple Ping that is triggered by Umbra to check whether Clients are still alive and measure latency (mandatory to implement, otherwise Umbra will drop you after ~5 mins)
   rpc Ping (stream .LumosProtobuf.PingPong) returns (stream .LumosProtobuf.PingPong);
 
+  //Alternative for the BiDi Stream Ping for Clients that don't support BiDi Streams like gRPC Web
+  rpc PingUnary (.LumosProtobuf.PingPong) returns (.LumosProtobuf.PingPong);
+
   //Broadcast Function to Send Messages to all Clients in the Network and receive Messages sent by other clients (optional if you don't want to send / receive)
   rpc SendBroadcast (stream .LumosProtobuf.BroadcastMessage) returns (stream .LumosProtobuf.BroadcastMessage);
 

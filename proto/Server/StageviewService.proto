@@ -2,7 +2,6 @@ syntax = "proto3";
 
 package LumosProtobufServer;
 
-import "Common/Types/StageView/StageViewServiceTypes.proto";
 import "Common/Types/StageView/StageViewServiceCRUDTypes.proto";
 import "Common/Types/CommonTypes.proto";
 

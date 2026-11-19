@@ -3,7 +3,6 @@ syntax = "proto3";
 package LumosProtobuf;
 
 import "Common/Types/ValueTypes.proto";
-import "Common/Types/CommonTypes.proto";
 
 enum EDeviceDisplayType
 {

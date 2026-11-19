@@ -2,7 +2,6 @@ syntax = "proto3";
 
 package LumosProtobufClient;
 
-import "Common/Types/Master/MasterServiceTypes.proto";
 import "Common/Types/Master/MasterServiceCRUDTypes.proto";
 import "Common/Types/CommonTypes.proto";
 
