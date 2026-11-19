@@ -20,5 +20,8 @@ To build locally (npm and Python require `protoc`; the NuGet build brings its ow
 - npm: `cd npm && npm ci && npm run build && npm test`
 - Python: `cd python/dmxc_protobuf && poetry install && poetry run ./build.sh && poetry run python -m unittest discover -s tests -t . && poetry build`
 
+# License
+This repository and the packages built from it are licensed under the [MIT License](LICENSE).
+
 # Important Notice
 **We will not directly accept PRs here** because this repository is a read-only copy of the internal Protobuf specification repository. However, if approved, we will copy the changes to the internal repository, and they will then appear in the commit for one of the following DMXControl 3 releases.

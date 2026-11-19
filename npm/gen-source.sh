@@ -4,6 +4,9 @@ shopt -s globstar
 cd "$(dirname "$0")"
 
 rm -rf dist
+
+# npm only packs a LICENSE from the package directory
+cp ../LICENSE .
 mkdir dist
 
 # src/lib holds the hand-written helpers; everything else in src is generated

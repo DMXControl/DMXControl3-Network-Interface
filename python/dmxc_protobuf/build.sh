@@ -6,6 +6,9 @@ cd "$(dirname "$0")"
 PROTO_DIR=../../proto
 OUT=dmxc_protobuf
 
+# poetry only bundles a LICENSE from the project directory
+cp ../../LICENSE .
+
 rm -rf "$OUT/Client" "$OUT/Common" "$OUT/Server"
 
 python -m grpc_tools.protoc -I "$PROTO_DIR" \

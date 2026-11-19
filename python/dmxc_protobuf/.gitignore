@@ -183,3 +183,6 @@ cython_debug/
 dmxc_protobuf/Client
 dmxc_protobuf/Common
 dmxc_protobuf/Server
+
+# copied from the repository root by the build
+LICENSE
