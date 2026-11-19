@@ -1,0 +1,53 @@
+name: Release NuGet package
+on:
+  push:
+    tags:
+      - 'v*'
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Version to publish, e.g. 3.3.3 (builds the selected branch or tag)'
+        required: true
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    environment: nuget
+    permissions:
+      contents: read
+      id-token: write   # NuGet trusted publishing
+    defaults:
+      run:
+        working-directory: csharp
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '10.0.x'
+
+      - name: Determine version
+        env:
+          VERSION_INPUT: ${{ inputs.version }}
+        run: |
+          V="${VERSION_INPUT:-$GITHUB_REF_NAME}"
+          V="${V#v}"
+          if ! [[ "$V" =~ ^[0-9]+\.[0-9]+\.[0-9]+(-[0-9A-Za-z.-]+)?$ ]]; then
+            echo "::error::Invalid version '$V'"
+            exit 1
+          fi
+          echo "VERSION=$V" >> "$GITHUB_ENV"
+
+      - name: Pack
+        run: dotnet pack -c Release -o ../nupkgs -p:PackageVersion="$VERSION"
+
+      # exchanges the OIDC token for a short-lived API key using the trusted
+      # publishing policy configured on nuget.org — no long-lived API key secret needed
+      - uses: NuGet/login@v1
+        id: login
+        with:
+          user: ${{ secrets.NUGET_USER }}
+
+      - name: Publish
+        working-directory: nupkgs
+        run: dotnet nuget push "*.nupkg" --api-key "${{ steps.login.outputs.NUGET_API_KEY }}" --source https://api.nuget.org/v3/index.json --skip-duplicate
