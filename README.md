@@ -26,6 +26,8 @@ The mapping is done by [`.github/scripts/release-version.sh`](.github/scripts/re
 
 Besides the generated code, the npm and Python packages contain ports of the helpers in [`csharp/`](csharp) (`UmbraConnectionClient`, `UmbraDiscoveryClient`, `NetConstants`, the `TranslateableData` builder and the message extensions). See the package READMEs for details.
 
+To write your own client, see [Building a gRPC client for DMXControl 3](docs/building-a-grpc-client.md). It explains discovery, login, the keepalive, user binding and calling the domain services, with examples for every package.
+
 To build locally (npm and Python require `protoc`; the NuGet build brings its own via `Grpc.Tools`):
 - NuGet: `cd csharp && dotnet pack -c Release`
 - npm: `cd npm && npm ci && npm run build && npm test`
