@@ -17,7 +17,10 @@ jobs:
   release:
     runs-on: ubuntu-latest
     strategy:
-      # npm (Node, @grpc/grpc-js) and npm-web (gRPC-Web, nice-grpc-web) are published with the same version
+      # npm (Node, @grpc/grpc-js) and npm-web (gRPC-Web, nice-grpc-web) are published with the same version;
+      # a failure in one package must not cancel the other mid-publish (re-run the workflow to retry it,
+      # the already published package is skipped)
+      fail-fast: false
       matrix:
         package: [npm, npm-web]
     defaults:
@@ -40,6 +43,23 @@ jobs:
         env:
           VERSION_INPUT: ${{ inputs.version }}
         run: bash "$GITHUB_WORKSPACE/.github/scripts/release-version.sh" npm
+
+      # skip packages that already have this version, e.g. when a newly added package is
+      # published for an existing release, or when re-running after one package failed
+      - name: Check if already published
+        if: env.SKIP_PUBLISH != 'true'
+        run: |
+          name=$(node -p 'require("./package.json").name')
+          if published=$(npm view "$name@$VERSION" version 2>"$RUNNER_TEMP/npm-view.err"); then
+            if [[ -n "$published" ]]; then
+              echo "::notice::$name@$VERSION is already published, skipping"
+              echo "SKIP_PUBLISH=true" >> "$GITHUB_ENV"
+            fi
+          elif ! grep -q E404 "$RUNNER_TEMP/npm-view.err"; then
+            # E404 means the package does not exist yet; anything else is a real error
+            cat "$RUNNER_TEMP/npm-view.err" >&2
+            exit 1
+          fi
 
       - name: Build
         if: env.SKIP_PUBLISH != 'true'
