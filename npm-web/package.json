@@ -1,0 +1,47 @@
+{
+  "name": "@dmxcontrolprojects/dmxcontrol3-network-interface-web",
+  "version": "0.0.0",
+  "description": "gRPC-Web protobuf client library for DMXC 3 (browsers, also works in Node, Deno and Bun)",
+  "type": "module",
+  "sideEffects": false,
+  "scripts": {
+    "build": "./gen-source.sh && tsc",
+    "test": "node --test \"test/**/*.test.js\"",
+    "test:live": "node --test test/live/*.live.js"
+  },
+  "author": "Samuel Hufen",
+  "license": "MIT",
+  "types": "dist/index.d.ts",
+  "devDependencies": {
+    "@types/node": "^24.19.2",
+    "ts-proto": "^2.8.3",
+    "typescript": "^5.9.3",
+    "undici": "^7.30.2"
+  },
+  "dependencies": {
+    "@bufbuild/protobuf": "^2.10.0",
+    "nice-grpc-common": "^2.0.4",
+    "nice-grpc-web": "^3.3.13"
+  },
+  "files": [
+    "dist"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/DMXControl/DMXControl3-Network-Interface.git",
+    "directory": "npm-web"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    },
+    "./*": {
+      "types": "./dist/index.*.d.ts",
+      "default": "./dist/index.*.js"
+    }
+  }
+}

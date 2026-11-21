@@ -16,9 +16,13 @@ permissions:
 jobs:
   release:
     runs-on: ubuntu-latest
+    strategy:
+      # npm (Node, @grpc/grpc-js) and npm-web (gRPC-Web, nice-grpc-web) are published with the same version
+      matrix:
+        package: [npm, npm-web]
     defaults:
       run:
-        working-directory: npm
+        working-directory: ${{ matrix.package }}
     steps:
       - uses: actions/checkout@v4
 

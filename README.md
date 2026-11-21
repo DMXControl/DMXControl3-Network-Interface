@@ -20,6 +20,7 @@ The mapping is done by [`.github/scripts/release-version.sh`](.github/scripts/re
 | Language | Package | Source |
 |---|---|---|
 | TypeScript / JavaScript | [`@dmxcontrolprojects/dmxcontrol3-network-interface`](https://www.npmjs.com/package/@dmxcontrolprojects/dmxcontrol3-network-interface) (npm) | [`npm/`](npm) |
+| TypeScript / JavaScript (browser, gRPC-Web) | [`@dmxcontrolprojects/dmxcontrol3-network-interface-web`](https://www.npmjs.com/package/@dmxcontrolprojects/dmxcontrol3-network-interface-web) (npm) | [`npm-web/`](npm-web) |
 | C# / .NET | [`DMXControl3-Network-Interface`](https://www.nuget.org/packages/DMXControl3-Network-Interface) (NuGet, namespace `LumosProtobuf`) | [`csharp/`](csharp) |
 | Python | [`dmxcontrol3-network-interface`](https://pypi.org/project/dmxcontrol3-network-interface/) (PyPI, import `dmxc_protobuf`) | [`python/dmxc_protobuf/`](python/dmxc_protobuf) |
 
@@ -28,6 +29,7 @@ Besides the generated code, the npm and Python packages contain ports of the hel
 To build locally (npm and Python require `protoc`; the NuGet build brings its own via `Grpc.Tools`):
 - NuGet: `cd csharp && dotnet pack -c Release`
 - npm: `cd npm && npm ci && npm run build && npm test`
+- npm (gRPC-Web): `cd npm-web && npm ci && npm run build && npm test`
 - Python: `cd python/dmxc_protobuf && poetry install && poetry run ./build.sh && poetry run python -m unittest discover -s tests -t . && poetry build`
 
 # License
